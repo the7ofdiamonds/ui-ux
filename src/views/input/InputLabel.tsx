@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react'
 
-import { Label } from '@/label/Label';
+import { Label } from '@/views/label/Label';
 import { Input } from './Input';
 
 import styles from './Input.module.scss';
