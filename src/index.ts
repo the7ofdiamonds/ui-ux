@@ -12,4 +12,8 @@ export * from '@/views/label/Label';
 
 export * from '@/views/loading/LoadingComponent';
 
+export * from '@/views/main/Main';
+
+export * from '@/views/section/Section';
+
 export * from '@/views/status_bar/StatusBar';
