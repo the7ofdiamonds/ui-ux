@@ -1,7 +1,15 @@
+
 export * from '@/model/Image';
 
 export * from '@/views/buttons/Button';
 export * from '@/views/buttons/ButtonSubmit';
+
+export * from '@/views/checklist/CheckListComponent';
+export * from '@/views/colors/Colors';
+// export * from '@/views/content/ContentComponent';
+export * from '@/views/gallery/GalleryComponent';
+
+export * from '@/views/icon/IconComponent';
 
 export * from '@/views/image/ImageComponent';
 

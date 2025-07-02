@@ -9,60 +9,60 @@ import styles from './Content.module.scss';
 
 interface ContentComponentProps {
   title: string | null;
-  content: ContentURL;
+  url: string;
 }
 
-export const ContentComponent: React.FC<ContentComponentProps> = ({ title, content }) => {
+export const ContentComponent: React.FC<ContentComponentProps> = ({ title, url }) => {
   const [query, setQuery] = useState<RepoContentQuery | null>(null);
   const [file, setFile] = useState<string | null>(null);
   const [html, setHTML] = useState<string | object | null>(null);
 
-  useEffect(() => {
-    if (content) {
-      setQuery(content.toRepoContentQuery())
-    }
-  }, [content]);
+  // useEffect(() => {
+  //   if (content) {
+  //     setQuery(content.toRepoContentQuery())
+  //   }
+  // }, [content]);
 
-  useEffect(() => {
-    let isMounted = true;
+  // useEffect(() => {
+  //   let isMounted = true;
 
-    if (query) {
-      try {
-        getRepoFile(query)
-          .then((file) => {
-            const regex = /<(\w+)[^>]*>(.*?)<\/\1>/;
-            const match = file.match(regex);
+  //   if (query) {
+  //     try {
+  //       getRepoFile(query)
+  //         .then((file) => {
+  //           const regex = /<(\w+)[^>]*>(.*?)<\/\1>/;
+  //           const match = file.match(regex);
 
-            if (match && match[2]) {
-              setFile(file)
-            } else {
-              return null;
-            }
-          })
-          .catch(console.error);
-      } catch (error) {
-        console.error(error)
-      }
-    }
+  //           if (match && match[2]) {
+  //             setFile(file)
+  //           } else {
+  //             return null;
+  //           }
+  //         })
+  //         .catch(console.error);
+  //     } catch (error) {
+  //       console.error(error)
+  //     }
+  //   }
 
-    return () => {
-      isMounted = false;
-    };
-  }, [query]);
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [query]);
 
-  useEffect(() => {
-    if (file) {
-      try {
-        const htmlContent = content.fromMdtoHTML(file);
+  // useEffect(() => {
+  //   if (file) {
+  //     try {
+  //       const htmlContent = content.fromMdtoHTML(file);
 
-        if (htmlContent) {
-          setHTML(htmlContent);
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }, [file]);
+  //       if (htmlContent) {
+  //         setHTML(htmlContent);
+  //       }
+  //     } catch (error) {
+  //       console.error(error)
+  //     }
+  //   }
+  // }, [file]);
 
   return (
     <>

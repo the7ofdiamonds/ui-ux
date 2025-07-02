@@ -1,14 +1,14 @@
 import React, { useState, ChangeEvent } from 'react';
 import { useDispatch } from 'react-redux';
 
-import type { AppDispatch, RootState } from '../../../model/store';
+import type { AppDispatch, RootState } from '@/model/store';
 
-import { sendEmail } from '../../../controllers/contactSlice';
+import { sendEmail } from '@/controllers/contactSlice';
 import {
   setMessage,
   setMessageType,
   setShowStatusBar,
-} from '../../../controllers/messageSlice';
+} from '@/controllers/messageSlice';
 
 interface MessageCardComponentProps {
   page: string;

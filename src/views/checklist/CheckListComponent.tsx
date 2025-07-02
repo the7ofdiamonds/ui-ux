@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import TaskComponent from './task/TaskComponent';
+import TaskComponent from '@/views/task/TaskComponent';
 
 import { Task } from '@/model/Task';
 import { CheckList } from '@/model/CheckList';
