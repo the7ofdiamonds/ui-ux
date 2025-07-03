@@ -4,12 +4,15 @@ import styles from './Button.module.scss';
 
 interface ButtonProps {
     title: string;
-    action: () => void
+    description?: string;
+    action: () => void;
+    children?: React.ReactNode;
 }
 
-export const Button: React.FC<ButtonProps> = ({ action, title }) => {
+export const Button: React.FC<ButtonProps> = ({ action, description, children, title }) => {
     return (
-        <button className={styles.button} onClick={action}>
+        <button className={styles.button} onClick={action} title={description}>
+            {children}
             <h3 className={`${styles.title} ${styles.h3}`}>{title}</h3>
         </button>
     )

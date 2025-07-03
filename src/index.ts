@@ -7,6 +7,7 @@ export * from '@/model/Taxonomy';
 export * from '@/utils/String';
 
 export * from '@/views/buttons/Button';
+export * from '@/views/buttons/ButtonImage';
 export * from '@/views/buttons/ButtonSubmit';
 
 export * from '@/views/checklist/CheckListComponent';
