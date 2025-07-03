@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Image } from '../../model/Image';
+import { Image } from '@/model/Image';
 
 import styles from './Icon.module.scss';
 

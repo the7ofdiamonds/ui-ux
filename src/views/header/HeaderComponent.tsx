@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { User } from '@/model/User';
-
 import styles from './Header.module.scss';
 
 interface HeaderComponentProps {

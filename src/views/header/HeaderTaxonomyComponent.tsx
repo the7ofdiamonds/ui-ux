@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Taxonomy } from '@/model/Taxonomy'
 
-import { IconComponent } from '@/views/components/IconComponent'
+import { IconComponent } from '@/views/icon/IconComponent'
 
 import styles from './Header.module.scss';
 

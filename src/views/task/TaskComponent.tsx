@@ -1,25 +1,23 @@
 import React from 'react'
 
 import { Task } from '@/model/Task'
-import { ProjectQuery } from '@/model/ProjectQuery';
 
-import TaskCheckbox from './TaskCheckbox';
-import TaskDescription from './TaskDescription';
+import { TaskCheckbox } from './TaskCheckbox';
+import { TaskDescription } from './TaskDescription';
 
 import styles from './Task.module.scss';
 
 type TaskComponentProps = {
     task: Task;
-    query: ProjectQuery;
 }
 
-const TaskComponent: React.FC<TaskComponentProps> = ({ task, query }) => {
+const TaskComponent: React.FC<TaskComponentProps> = ({ task }) => {
     return (
         <>
             <div className={styles.task} key={task.id}>
                 <span className={styles['task-row']}>
                     <TaskCheckbox task={task} />
-                    <TaskDescription task={task} query={query} />
+                    <TaskDescription task={task} />
                 </span>
 
                 {task.subTasks && Array.isArray(task.subTasks) &&
@@ -29,7 +27,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({ task, query }) => {
                             <div className={styles.task} key={task.id}>
                                 <span className={styles['task-row']}>
                                     <TaskCheckbox task={task} />
-                                    <TaskDescription task={task} query={query} />
+                                    <TaskDescription task={task} />
                                 </span>
                             </div>
                         ))}

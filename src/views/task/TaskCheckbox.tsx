@@ -8,7 +8,7 @@ type TaskCheckboxProps = {
     task: Task;
 }
 
-const TaskCheckbox: React.FC<TaskCheckboxProps> = ({ task }) => {
+export const TaskCheckbox: React.FC<TaskCheckboxProps> = ({ task }) => {
     return (
         <input
             className={styles.input}
@@ -20,5 +20,3 @@ const TaskCheckbox: React.FC<TaskCheckboxProps> = ({ task }) => {
         />
     )
 }
-
-export default TaskCheckbox

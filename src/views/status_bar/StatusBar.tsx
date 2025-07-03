@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
 
+import { Modal } from '@/views/modal/Modal';
+
 import styles from './StatusBar.module.scss';
 
 interface StatusBarProps {
-  show: string;
+  show: 'show' | 'hide';
   messageType: string;
   message: string;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message }) => {
-  const [showModal, setShowModal] = useState(show);
+  const [showModal, setShowModal] = useState<'show' | 'hide'>(show);
 
   const minimize = () => {
-    if (show == 'show') {
+    if (showModal == 'show') {
       setShowModal('hide');
+    }
+
+    if (showModal == 'hide') {
+      setShowModal('show');
     }
   };
 
   return (
     message && (
-      <span className={`${styles['modal-overlay']} ${showModal}`}>
+      <Modal show={showModal}>
         <div className={styles.status}>
           <div className={styles.close}>
             <button onClick={minimize}>
@@ -31,7 +37,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message
             <span>{message}</span>
           </div>
         </div>
-      </span>
+      </Modal>
     )
   );
 }

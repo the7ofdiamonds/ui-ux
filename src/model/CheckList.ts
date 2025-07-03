@@ -1,4 +1,3 @@
-import { Model } from './Model';
 import { Task, TaskDataObject, TaskObject } from './Task';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -17,7 +16,7 @@ export type CheckListDataObject = {
   weight: number;
 };
 
-export class CheckList extends Model {
+export class CheckList {
   id: string;
   title: string | null;
   tasks: Set<Task>;
@@ -25,8 +24,6 @@ export class CheckList extends Model {
   totalWeight: number;
 
   constructor(data: Record<string, any> | CheckListObject = {}) {
-    super();
-
     this.id = data?.id ?? uuidv4();
     this.title = data?.title ?? null;
 

@@ -1,18 +1,16 @@
 import React from 'react'
 
 import { Task } from '@/model/Task'
-import { ProjectQuery } from '@/model/ProjectQuery';
 
 import styles from './Task.module.scss';
 
 type TaskDescriptionProps = {
     task: Task;
-    query: ProjectQuery;
 }
 
-const TaskDescription: React.FC<TaskDescriptionProps> = ({ task, query }) => {
+export const TaskDescription: React.FC<TaskDescriptionProps> = ({ task }) => {
     return (<>
-        {task.link && !task.fromSameProject(query) ?
+        {task.link ?
             (<a className={styles['task-details']} href={`/portfolio/${task.link}`} target="_blank">
                 <h5>{task.description}</h5>
             </a>) :
@@ -20,5 +18,3 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ task, query }) => {
     </>
     )
 }
-
-export default TaskDescription
