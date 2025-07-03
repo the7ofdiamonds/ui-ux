@@ -37,6 +37,6 @@ export * from '@/views/task/TaskCheckbox';
 export * from '@/views/task/TaskComponent';
 export * from '@/views/task/TaskDescription';
 
-// export * from '@/views/taxonomy/bar/TaxonomyBar';
-// export * from '@/views/taxonomy/TaxList';
-// export * from '@/views/taxonomy/TaxListIcon';
+export * from '@/views/taxonomy/bar/TaxonomyBar';
+export * from '@/views/taxonomy/TaxList';
+export * from '@/views/taxonomy/TaxListIcon';

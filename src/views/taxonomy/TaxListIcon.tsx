@@ -9,9 +9,10 @@ import styles from './TaxListIcon.module.scss';
 interface TaxListIconProps {
   taxonomiesTitle: string;
   taxonomiesSet: Set<Taxonomy>;
+  handleClick: (taxonomy: Taxonomy) => void;
 }
 
-export const TaxListIcon: React.FC<TaxListIconProps> = ({ taxonomiesTitle, taxonomiesSet }) => {
+export const TaxListIcon: React.FC<TaxListIconProps> = ({ taxonomiesTitle, taxonomiesSet, handleClick }) => {
   const [title, setTitle] = useState<string | null>(null);
   const [projectSkills, setProjectSkills] = useState<Set<Taxonomy>>(new Set());
 
@@ -29,9 +30,7 @@ export const TaxListIcon: React.FC<TaxListIconProps> = ({ taxonomiesTitle, taxon
         {title && <h5 className={styles.title}>{title}</h5>}
 
         <div className={styles['tax-row']}>
-          <TaxonomyBar taxonomySet={projectSkills} handleClick={function (taxonomy: Taxonomy): void {
-            throw new Error('Function not implemented.');
-          } } />
+          <TaxonomyBar taxonomySet={projectSkills} handleClick={handleClick} />
         </div>
       </div>
     )

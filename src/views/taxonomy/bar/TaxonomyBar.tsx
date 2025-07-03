@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { IconComponent } from '@the7ofdiamonds/ui-ux';
+import { IconComponent } from '@/views/icon/IconComponent';
 
 import { Taxonomy } from '@/model/Taxonomy';
 

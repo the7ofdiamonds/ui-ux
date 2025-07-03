@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
+import { ImageComponent } from '@/views/image/ImageComponent';
+
+import { Image } from '@/model/Image';
 
 import styles from './Header.module.scss';
 
-interface HeaderComponentProps {
-  user: User | null;
+interface Link {
+  href: string;
+  text: string;
 }
 
-export const HeaderComponent: React.FC<HeaderComponentProps> = ({ user }) => {
-  const [name, setName] = useState<string|null>(null);
-  const [dropdown, setDropdown] = useState('hide');
+interface HeaderComponentProps {
+  branding: string | Image;
+  leftMenu: Array<Link> | null;
+  centerMenu: Array<Link> | null;
+  rightMenu: Array<Link> | null;
+}
 
-  useEffect(() => {
-    if (user && user.name) {
-      setName(user.name)
-    }
-  }, [user]);
+export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, leftMenu, centerMenu, rightMenu }) => {
+  const [dropdown, setDropdown] = useState('hide');
 
   const toggleMenu = () => {
     if (dropdown == 'hide') {
@@ -30,22 +35,24 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ user }) => {
         <div className={styles.header}>
           <div className={styles.top}>
             <div className={styles.leftSide}>
-              <div className={styles.auth}></div>
 
               <div className={styles['left-menu']} id="left-menu">
-                <a href="/#/about" onClick={toggleMenu}>
-                  <h2 className={styles.title}>ABOUT</h2>
-                </a>
-
-                <a href="/#/portfolio" onClick={toggleMenu}>
-                  <h2 className={styles.title}>PORTFOLIO</h2>
-                </a>
+                {leftMenu && leftMenu.length > 0 &&
+                  leftMenu.map((link) => (
+                    <a href={link.href} onClick={toggleMenu}>
+                      <h2 className={styles.title}>{link.text}</h2>
+                    </a>
+                  ))}
               </div>
             </div>
 
             <div className={styles.center}>
-              <a href="/#/">
-                <h1 className={styles['header-title']}>{name}</h1>
+              <a href="/">
+                {typeof branding === 'string' ?
+                  (<h1 className={styles['header-title']}>{branding}</h1>)
+                  : (
+                    <ImageComponent image={branding} />
+                  )}
               </a>
             </div>
 
@@ -61,12 +68,12 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ user }) => {
               </div>
 
               <div className={styles['right-menu']} id="right-menu">
-                <a href="/#/resume" onClick={toggleMenu}>
-                  <h2 className={styles.title}>RESUME</h2>
-                </a>
-                <a href="/#/contact" onClick={toggleMenu}>
-                  <h2 className={styles.title}>CONTACT</h2>
-                </a>
+                {rightMenu && rightMenu.length > 0 &&
+                  rightMenu.map((link) => (
+                    <a href={link.href} onClick={toggleMenu}>
+                      <h2 className={styles.title}>{link.text}</h2>
+                    </a>
+                  ))}
               </div>
             </div>
           </div>
@@ -74,26 +81,14 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ user }) => {
           {dropdown == 'show' && (
             <nav className={styles.dropdown} id="dropdown">
               <ul className="links">
-                <li>
-                  <a href="/#/about" onClick={toggleMenu}>
-                    <h2 className={styles.title}>ABOUT</h2>
-                  </a>
-                </li>
-                <li>
-                  <a href="/#/portfolio" onClick={toggleMenu}>
-                    <h2 className={styles.title}>PORTFOLIO</h2>
-                  </a>
-                </li>
-                <li>
-                  <a href="/#/resume" onClick={toggleMenu}>
-                    <h2 className={styles.title}>RESUME</h2>
-                  </a>
-                </li>
-                <li>
-                  <a href="/#/contact" onClick={toggleMenu}>
-                    <h2 className={styles.title}>CONTACT</h2>
-                  </a>
-                </li>
+                {centerMenu && centerMenu.length > 0 &&
+                  centerMenu.map((link, index) => (
+                    <li key={index}>
+                      <a href={link.href} onClick={toggleMenu}>
+                        <h2 className={styles.title}>{link.text}</h2>
+                      </a>
+                    </li>
+                  ))}
               </ul>
             </nav>
           )}
