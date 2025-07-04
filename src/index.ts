@@ -1,3 +1,5 @@
+export * from '@/controllers/contentSlice';
+
 export * from '@/model/CheckList';
 export * from '@/model/Color';
 export * from '@/model/Image';
