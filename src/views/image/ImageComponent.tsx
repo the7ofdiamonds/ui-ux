@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { IconComponent } from '@/views/icon/IconComponent';
+
 import { Image } from '@/model/Image';
 
 import styles from './Image.module.scss';
@@ -14,6 +16,6 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({ image }) => {
   return url ? (
     <img className={styles.image} src={url} alt={title} title={title} />
   ) : (
-    className && <i className={`${className}, ${styles.i}`} title={title}></i>
+    className && <IconComponent imageClass={image} />
   );
 }
