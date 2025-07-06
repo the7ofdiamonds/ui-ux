@@ -1,11 +1,16 @@
 export * from '@/controllers/contentSlice';
+export * from '@/controllers/taxonomiesSlice';
 
 export * from '@/model/CheckList';
 export * from '@/model/Color';
+export * from '@/model/Coordinates';
 export * from '@/model/Image';
+export * from '@/model/SecureHeaders';
 export * from '@/model/Task';
 export * from '@/model/Taxonomy';
 
+export * from '@/utils/Headers';
+export * from '@/utils/Location';
 export * from '@/utils/String';
 
 export * from '@/views/buttons/Button';
