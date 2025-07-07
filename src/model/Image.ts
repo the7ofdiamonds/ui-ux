@@ -1,22 +1,21 @@
-
 export type ImageObject = {
-  id: string;
-  title: string;
-  url: string;
-  class_name: string;
+  id: string | null;
+  title: string | null;
+  url: string | null;
+  class_name: string | null;
 };
 
 export class Image {
-  id: string;
-  title: string;
-  url: string;
-  className: string;
+  id: string | null;
+  title: string | null;
+  url: string | null;
+  className: string | null;
 
   constructor(data?: Partial<ImageObject> | ImageObject) {
-    this.id = data?.id || '';
-    this.title = data?.title || '';
-    this.url = data?.url || '';
-    this.className = data?.class_name || '';
+    this.id = data?.id ? data.id : null;
+    this.title = data?.title ? data.title : null;
+    this.url = data?.url ? data.url : null;
+    this.className = data?.class_name ? data.class_name : null;
   }
 
   setID(id: string) {

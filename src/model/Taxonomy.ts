@@ -5,10 +5,10 @@ export type TaxonomyObject = {
   id: string | null;
   type: string | null;
   title: string | null;
-  description: string | null;
   path: string | null;
-  image: ImageObject | null;
-  usage: number;
+  description?: string | null;
+  image?: ImageObject | null;
+  usage?: number;
 };
 
 export class Taxonomy {
@@ -30,8 +30,8 @@ export class Taxonomy {
     this.usage = data?.usage ?? 0;
     this.image = data?.image
       ? new Image({
-          id: data?.image?.id,
-          title: data?.image?.title,
+          id: this.id,
+          title: this.title,
           url: data?.image?.url,
           class_name: data?.image?.class_name,
         })
