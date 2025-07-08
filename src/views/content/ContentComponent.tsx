@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import type { AsyncThunk, ThunkDispatch } from '@reduxjs/toolkit';
 
 import { marked } from 'marked';
 
@@ -7,10 +8,11 @@ import styles from './Content.module.scss';
 interface ContentComponentProps {
   title: string | null;
   query: string | object;
-  getFile: (query: string | object) => Promise<string>;
+  getFile: AsyncThunk<string, string | object, {}>;
+  dispatch: ThunkDispatch<any, any, any>;
 }
 
-export const ContentComponent: React.FC<ContentComponentProps> = ({ title, query, getFile }) => {
+export const ContentComponent: React.FC<ContentComponentProps> = ({ title, query, getFile, dispatch }) => {
   const [file, setFile] = useState<string | null>(null);
   const [html, setHTML] = useState<string | object | null>(null);
 
@@ -19,7 +21,8 @@ export const ContentComponent: React.FC<ContentComponentProps> = ({ title, query
 
     if (query) {
       try {
-        getFile(query)
+        dispatch(getFile(query))
+          .unwrap()
           .then((file) => {
             const regex = /<(\w+)[^>]*>(.*?)<\/\1>/;
             const match = file.match(regex);
