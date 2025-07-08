@@ -6,8 +6,8 @@ import styles from './Content.module.scss';
 
 interface ContentComponentProps {
   title: string | null;
-  query: object;
-  getFile: (query: object) => Promise<string>;
+  query: string | object;
+  getFile: (query: string | object) => Promise<string>;
 }
 
 export const ContentComponent: React.FC<ContentComponentProps> = ({ title, query, getFile }) => {
