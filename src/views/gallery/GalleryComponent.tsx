@@ -76,9 +76,9 @@ export const GalleryComponent: React.FC<GalleryProps> = ({ title, gallery }) => 
                 <span className={styles['gallery-photo']}>
                   <img
                     className={styles.photo}
-                    src={gallery[currentPhotoIndex].url}
-                    alt={gallery[currentPhotoIndex].title}
-                    title={gallery[currentPhotoIndex].title}
+                    src={gallery[currentPhotoIndex].url ?? ''}
+                    alt={gallery[currentPhotoIndex].title ?? ''}
+                    title={gallery[currentPhotoIndex].title ?? ''}
                   />
                 </span>
               )}

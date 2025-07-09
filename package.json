@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -30,7 +30,7 @@
     "tsc:dev": "tsc --watch",
     "sync": "browser-sync start --config browsersync.config.js",
     "vite": "vite -c vite.config.ts",
-    "build": "vite:build",
+    "build": "npm run vite:build",
     "preview": "vite preview --port 8080",
     "gulp": "gulp",
     "vite:build": "vite build",

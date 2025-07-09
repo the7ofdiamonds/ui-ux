@@ -5,14 +5,14 @@ import { marked } from 'marked';
 
 import styles from './Content.module.scss';
 
-interface ContentComponentProps {
+interface ContentComponentProps<T> {
   title: string | null;
-  query: string | object;
-  getFile: AsyncThunk<string, string | object, {}>;
+  query: T;
+  getFile: AsyncThunk<string, T, {}>;
   dispatch: ThunkDispatch<any, any, any>;
 }
 
-export const ContentComponent: React.FC<ContentComponentProps> = ({ title, query, getFile, dispatch }) => {
+export const ContentComponent = <T,>({ title, query, getFile, dispatch }: ContentComponentProps<T>) => {
   const [file, setFile] = useState<string | null>(null);
   const [html, setHTML] = useState<string | object | null>(null);
 
