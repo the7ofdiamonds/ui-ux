@@ -14,7 +14,7 @@ interface ButtonImageExternalProps {
     url: string;
 }
 
-export const ButtonIcon: React.FC<ButtonImageExternalProps> = ({ description,image,name,url }) => {
+export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ description,image,name,url }) => {
 
     return (
         <>

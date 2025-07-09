@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -30,7 +30,7 @@
     "tsc:dev": "tsc --watch",
     "sync": "browser-sync start --config browsersync.config.js",
     "vite": "vite -c vite.config.ts",
-    "build": "npm-run-all vite:build",
+    "build": "vite:build",
     "preview": "vite preview --port 8080",
     "gulp": "gulp",
     "vite:build": "vite build",
@@ -38,7 +38,8 @@
     "update-dev": "git push ui-ux development",
     "update-prod": "git push ui-ux",
     "refactor": "./refactor.sh && npm run update-prod",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "npm-run-all build && npm publish"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
