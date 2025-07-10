@@ -17,7 +17,7 @@ export const IconComponent: React.FC<IconComponentProps> = ({ imageClass }) => {
     <>
       {
         image?.className && (
-          <i className={`${image.className} ${styles.i}`} title={image.title}></i>
+          <i className={`${image.className} ${styles.i}`} title={image.title ?? ''}></i>
         )}
     </>
   );

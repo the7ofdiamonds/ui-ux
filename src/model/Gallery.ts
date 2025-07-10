@@ -1,4 +1,4 @@
-import { Image, ImageObject } from './Image';
+import { Image, ImageObject } from '@/model/Image';
 
 export type GalleryObject = {
   logos: Array<ImageObject> | null;

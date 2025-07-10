@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.13",
+  "version": "1.0.17",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -11,6 +11,7 @@
       "types": "./dist/types/index.d.ts"
     }
   },
+  "types": "./dist/types/index.d.ts",
   "files": [
     "dist"
   ],
@@ -42,8 +43,10 @@
     "publish": "npm-run-all build && npm publish"
   },
   "dependencies": {
+    "@octokit/graphql": "^8.2.2",
+    "@octokit/rest": "^21.1.1",
+    "@octokit/types": "^14.1.0",
     "@reduxjs/toolkit": "^1.9.5",
-    "@rollup/plugin-commonjs": "^28.0.3",
     "browser-sync": "^3.0.3",
     "buffer": "^6.0.3",
     "cors": "^2.8.5",
@@ -55,17 +58,13 @@
     "moment": "^2.29.4",
     "node": "^23.8.0",
     "path": "^0.12.7",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-redux": "^8.0.0",
-    "react-router-dom": "^6.14.2",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
     "source-map-js": "^1.0.2",
     "tslib": "^2.8.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.3",
     "@types/marked": "^5.0.2",
@@ -75,6 +74,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "child_process": "^1.0.2",
     "npm-run-all": "^4.1.5",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "sass": "^1.89.2",
     "typescript": "^5.7.3",
     "vite": "^5.0.10",
@@ -84,7 +84,9 @@
   },
   "peerDependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.0",
+    "react-router-dom": "^6.14.2"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"

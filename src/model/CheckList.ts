@@ -1,4 +1,4 @@
-import { Task, TaskDataObject, TaskObject } from './Task';
+import { Task, TaskDataObject, TaskObject } from '@/model/Task';
 
 import { v4 as uuidv4 } from 'uuid';
 
