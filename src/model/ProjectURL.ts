@@ -1,4 +1,4 @@
-import { Image, ImageObject } from '@the7ofdiamonds/ui-ux';
+import { Image, ImageObject } from '@/model/Image';
 
 export type ProjectURLObject = {
   id: string | null;

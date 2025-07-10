@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -31,16 +31,15 @@
     "tsc:dev": "tsc --watch",
     "sync": "browser-sync start --config browsersync.config.js",
     "vite": "vite -c vite.config.ts",
-    "build": "npm run vite:build",
+    "build": "vite build",
     "preview": "vite preview --port 8080",
     "gulp": "gulp",
-    "vite:build": "vite build",
-    "gulp:build": "gulp build",
     "update-dev": "git push ui-ux development",
     "update-prod": "git push ui-ux",
     "refactor": "./refactor.sh && npm run update-prod",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "npm-run-all build && npm publish"
+    "clean": "rimraf dist",
+    "publish": "npm-run-all clean build && npm publish"
   },
   "dependencies": {
     "@octokit/graphql": "^8.2.2",
@@ -52,7 +51,6 @@
     "cors": "^2.8.5",
     "crypto-browserify": "^3.12.0",
     "del": "^8.0.0",
-    "fs": "^0.0.1-security",
     "glob": "^11.0.1",
     "marked": "^15.0.5",
     "moment": "^2.29.4",

@@ -1,107 +1,54 @@
 import { SkillObject, Skill } from '@/model/Skill';
+import { Framework, Language, ProjectType, Service, Technology } from './Skill';
+import { ProjectSkills } from './ProjectSkills';
+import { ISKills, getSkillsFrom } from './ISkills';
 
 export type SkillsObject = {
   list: Array<SkillObject> | null;
 };
 
-import { Framework, Language, ProjectType, Service, Technology } from './Skill';
-import { ProjectSkills } from './ProjectSkills';
-
-export class Skills {
-  list: Array<Skill>;
+export class Skills implements ISKills<Skill, SkillObject> {
+  list: Array<Skill> = [];
   types: Set<ProjectType> = new Set();
   languages: Set<Language> = new Set();
   frameworks: Set<Framework> = new Set();
   technologies: Set<Technology> = new Set();
   services: Set<Service> = new Set();
-  count: number;
+  count: number = 0;
 
   constructor(data?: SkillsObject) {
-    this.list = data?.list
-      ? data.list.map((skill) => {
-          return new Skill(skill);
-        })
-      : [];
-
     if (data && data.list && data.list.length > 0) {
+      this.list = data.list.map((skill) => {
+        return new Skill(skill);
+      });
+      this.count = this.list.length;
+
       this.types = this.getProjectTypes(data.list);
       this.languages = this.getLanguages(data.list);
       this.frameworks = this.getFrameworks(data.list);
       this.technologies = this.getTechnologies(data.list);
       this.services = this.getServices(data.list);
     }
-
-    this.count = this.list.length;
   }
 
   getProjectTypes(data: Array<SkillObject>) {
-    const projectType = new ProjectType();
-
-    let types: Set<ProjectType> = new Set();
-
-    data.forEach((skillObject) => {
-      if (skillObject.path === projectType.path) {
-        types.add(new ProjectType(skillObject));
-      }
-    });
-
-    return types;
+    return getSkillsFrom<SkillObject, ProjectType>(data, ProjectType);
   }
 
   getLanguages(data: Array<SkillObject>) {
-    const language = new Language();
-
-    let languages: Set<Language> = new Set();
-
-    data.forEach((skillObject) => {
-      if (skillObject.path === language.path) {
-        languages.add(new Language(skillObject));
-      }
-    });
-
-    return languages;
+    return getSkillsFrom<SkillObject, Language>(data, Language);
   }
 
   getFrameworks(data: Array<SkillObject>) {
-    const framework = new Framework();
-
-    let frameworks: Set<Framework> = new Set();
-
-    data.forEach((skillObject) => {
-      if (skillObject.path === framework.path) {
-        frameworks.add(new Framework(skillObject));
-      }
-    });
-
-    return frameworks;
+    return getSkillsFrom<SkillObject, Framework>(data, Framework);
   }
 
   getTechnologies(data: Array<SkillObject>) {
-    const technology = new Technology();
-
-    let technologies: Set<Technology> = new Set();
-
-    data.forEach((skillObject) => {
-      if (skillObject.path === technology.path) {
-        technologies.add(new Technology(skillObject));
-      }
-    });
-
-    return technologies;
+    return getSkillsFrom<SkillObject, Technology>(data, Technology);
   }
 
   getServices(data: Array<SkillObject>) {
-    const service = new Service();
-
-    let services: Set<Service> = new Set();
-
-    data.forEach((skillObject) => {
-      if (skillObject.path === service.path) {
-        services.add(new Service(skillObject));
-      }
-    });
-
-    return services;
+    return getSkillsFrom<SkillObject, Service>(data, Service);
   }
 
   existsInSet(skills: Set<Skill>, skill: Skill) {
@@ -145,7 +92,9 @@ export class Skills {
       );
 
       if (technologies.length > 0) {
-        this.technologies = this.technologies.intersection(new Set(technologies));
+        this.technologies = this.technologies.intersection(
+          new Set(technologies)
+        );
       }
 
       const services = projectSkills.list.filter(

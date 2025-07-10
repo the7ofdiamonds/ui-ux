@@ -1,4 +1,4 @@
-import { Image } from '@the7ofdiamonds/ui-ux';
+import { Image } from '@/model/Image';
 
 import { ProjectURL, ProjectURLObject } from '@/model/ProjectURL';
 

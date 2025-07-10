@@ -1,4 +1,12 @@
 import { ProjectSkill, ProjectSkillObject } from '@/model/ProjectSkill';
+import {
+  Framework,
+  Language,
+  ProjectType,
+  Service,
+  Technology,
+} from '@/model/Skill';
+import { ISKills, getSkillsFrom } from '@/model/ISkills';
 
 export type LanguageGQL = {
   size: number;
@@ -16,15 +24,50 @@ export type ProjectSkillsDataObject = {
   list: Array<string> | null;
 };
 
-export class ProjectSkills {
-  list: Array<ProjectSkill>;
-  count: number;
+export class ProjectSkills
+  implements ISKills<ProjectSkill, ProjectSkillObject>
+{
+  list: Array<ProjectSkill> = [];
+  types: Set<ProjectType> = new Set();
+  languages: Set<Language> = new Set();
+  frameworks: Set<Framework> = new Set();
+  technologies: Set<Technology> = new Set();
+  services: Set<Service> = new Set();
+  count: number = 0;
 
-  constructor(data?: ProjectSkillsObject | Partial<ProjectSkillsObject>) {
-    this.list = data?.list
-      ? data.list.map((projectSkill) => new ProjectSkill(projectSkill))
-      : [];
-    this.count = this.list ? this.list.length : 0;
+  constructor(data?: ProjectSkillsObject) {
+    if (data && data.list && data.list.length > 0) {
+      this.list = data.list.map(
+        (projectSkill) => new ProjectSkill(projectSkill)
+      );
+      this.count = this.list.length;
+
+      this.types = this.getProjectTypes(data.list);
+      this.languages = this.getLanguages(data.list);
+      this.frameworks = this.getFrameworks(data.list);
+      this.technologies = this.getTechnologies(data.list);
+      this.services = this.getServices(data.list);
+    }
+  }
+
+  getProjectTypes(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<ProjectSkillObject, ProjectType>(data, ProjectType);
+  }
+
+  getLanguages(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<ProjectSkillObject, Language>(data, Language);
+  }
+
+  getFrameworks(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<ProjectSkillObject, Framework>(data, Framework);
+  }
+
+  getTechnologies(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<ProjectSkillObject, Technology>(data, Technology);
+  }
+
+  getServices(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<ProjectSkillObject, Service>(data, Service);
   }
 
   fromGitHubGraphQL(languages: Array<LanguageGQL>) {

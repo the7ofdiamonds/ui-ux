@@ -7,7 +7,7 @@ export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
 export class Skill extends Taxonomy {
   readonly type: string = 'skill';
 
-  constructor(data?: SkillObject | Partial<SkillObject>) {
+  constructor(data?: Partial<SkillObject>) {
     super({ ...data, type: 'skill' });
   }
 

@@ -1,4 +1,4 @@
-import { Gallery, GalleryObject } from '@the7ofdiamonds/ui-ux';
+import { Gallery, GalleryObject } from '@/model/Gallery';
 
 import { DocumentURL } from '@/model/DocumentURL';
 import { ContentURL } from '@/model/ContentURL';
