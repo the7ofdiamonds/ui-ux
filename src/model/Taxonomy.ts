@@ -12,13 +12,13 @@ export type TaxonomyObject = {
 };
 
 export class Taxonomy {
-  id: string | null;
-  type: string | null;
-  title: string | null;
-  description: string | null;
-  path: string | null;
-  image: Image | null;
-  usage: number;
+  public id: string | null;
+  public type: string | null;
+  public title: string | null;
+  public description: string | null;
+  public path: string | null;
+  public image: Image | null;
+  public usage: number;
 
   constructor(data?: TaxonomyObject | Partial<TaxonomyObject>) {
     this.id = data?.id ? data.id : null;

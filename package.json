@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.18",
+  "version": "1.0.20",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -33,7 +33,6 @@
     "vite": "vite -c vite.config.ts",
     "build": "vite build",
     "preview": "vite preview --port 8080",
-    "gulp": "gulp",
     "update-dev": "git push ui-ux development",
     "update-prod": "git push ui-ux",
     "refactor": "./refactor.sh && npm run update-prod",
@@ -72,6 +71,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "child_process": "^1.0.2",
     "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.10",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "sass": "^1.89.2",
     "typescript": "^5.7.3",
