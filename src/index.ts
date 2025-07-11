@@ -50,6 +50,7 @@ export * from './model/Repos';
 export * from './model/RepoSize';
 export * from './model/RepoURL';
 export * from './model/Roadmap';
+export * from './model/Role';
 export * from './model/SecureHeaders';
 export * from './model/Skill';
 export * from './model/Skills';
