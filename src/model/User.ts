@@ -1,5 +1,6 @@
 import { Account, AccountObject } from '@/model/Account';
 import { ContactMethods } from '@/model/ContactMethods';
+import { Role } from '@/model/Role';
 
 export type UserObject = Omit<AccountObject, 'type' | 'login'> & {
   username: string | null;
@@ -32,6 +33,10 @@ export class User extends Account {
     super({ ...data, type: 'User' });
 
     this.username = data?.username ? data.username : null;
+    this.roles =
+      data?.roles && data.roles.length > 0
+        ? data.roles.map((role) => new Role(role))
+        : [];
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
     this.title = data?.title ? data.title : null;
@@ -125,7 +130,7 @@ export class User extends Account {
       website: this.website,
       story: this.story,
       nickname: this.nickname,
-      nicename:this.nicename,
+      nicename: this.nicename,
       url: this.url,
       contact_methods: this.contactMethods
         ? this.contactMethods.toContactMethodsObject()

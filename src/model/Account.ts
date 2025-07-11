@@ -96,7 +96,7 @@ export class Account {
   public skills: Skills;
   public portfolio: Portfolio | null;
 
-  constructor(data?: AccountObject | Partial<AccountObject>) {
+  constructor(data?: Partial<AccountObject>) {
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;

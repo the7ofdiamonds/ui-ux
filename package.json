@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:the7ofdiamonds/ui-ux.git"
+    "url": "git+ssh://git@github.com/the7ofdiamonds/ui-ux.git"
   },
   "bugs": {
     "url": "https://github.com/the7ofdiamonds/ui-ux/issues"
