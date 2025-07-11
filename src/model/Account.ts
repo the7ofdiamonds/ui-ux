@@ -8,6 +8,7 @@ import { Organizations } from '@/model/Organizations';
 import { Portfolio, PortfolioObject } from '@/model/Portfolio';
 import { Repo, RepoObject, RepositoryGQL } from '@/model/Repo';
 import { Repos } from '@/model/Repos';
+import { Role, RoleObject } from '@/model/Role';
 import { SkillsObject, Skills } from '@/model/Skills';
 
 export type AccountGQL = {
@@ -36,6 +37,7 @@ export type AccountObject = {
   updated_at: string | null;
   type?: string | null;
   login: string | null;
+  roles: Array<RoleObject>;
   avatar_url: string | null;
   name: string | null;
   bio: string | null;
@@ -73,25 +75,26 @@ export interface iAccount {
 }
 
 export class Account {
-  id: string | null;
-  createdAt: string | null;
-  updatedAt: string | null;
-  type: string | null;
-  login: string | null;
-  avatarURL: string | null;
-  name: string | null;
-  bio: string | null;
-  email: string | null;
-  contactMethods: ContactMethods | null = null;
-  url: string | null;
-  location: string | null;
-  organizationsURL: string | null;
-  organizations: Organizations | null;
-  reposURL: string | null;
-  repos: Repos | null;
-  repoQueries: Array<GitHubRepoQuery>;
-  skills: Skills;
-  portfolio: Portfolio | null;
+  public id: string | null;
+  public createdAt: string | null;
+  public updatedAt: string | null;
+  public type: string | null;
+  public login: string | null;
+  public roles: Array<Role>;
+  public avatarURL: string | null;
+  public name: string | null;
+  public bio: string | null;
+  public email: string | null;
+  public contactMethods: ContactMethods | null = null;
+  public url: string | null;
+  public location: string | null;
+  public organizationsURL: string | null;
+  public organizations: Organizations | null;
+  public reposURL: string | null;
+  public repos: Repos | null;
+  public repoQueries: Array<GitHubRepoQuery>;
+  public skills: Skills;
+  public portfolio: Portfolio | null;
 
   constructor(data?: AccountObject | Partial<AccountObject>) {
     this.id = data?.id ? data.id : null;
@@ -99,6 +102,10 @@ export class Account {
     this.updatedAt = data?.updated_at ? data.updated_at : null;
     this.type = data?.type ? data.type : null;
     this.login = data?.login ? data.login : null;
+    this.roles =
+      data?.roles && data.roles.length > 0
+        ? data.roles.map((roleObject) => new Role(roleObject))
+        : [];
     this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
     this.name = data?.name ? data.name : null;
     this.bio = data?.bio ? data.bio : null;

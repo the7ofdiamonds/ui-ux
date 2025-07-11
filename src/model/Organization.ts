@@ -230,6 +230,7 @@ export class Organization extends Account {
       updated_at: this.updatedAt,
       avatar_url: this.avatarURL,
       login: this.login,
+      roles: this.roles,
       description: this.description,
       bio: null,
       name: this.name,

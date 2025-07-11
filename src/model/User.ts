@@ -1,26 +1,39 @@
 import { Account, AccountObject } from '@/model/Account';
 import { ContactMethods } from '@/model/ContactMethods';
 
-export type UserObject = {
+export type UserObject = Omit<AccountObject, 'type' | 'login'> & {
+  username: string | null;
+  first_name: string | null;
+  last_name: string | null;
   title: string | null;
   bio: string | null;
   website: string | null;
   story: string | null;
+  nickname: string | null;
+  nicename: string | null;
   phone: string | null;
   resume: string | null;
-} & Omit<AccountObject, 'type'>;
+};
 
 export class User extends Account {
+  username: string | null;
+  firstName: string | null;
+  lastName: string | null;
   title: string | null;
   bio: string | null;
   website: string | null;
   story: string | null;
+  nickname: string | null;
+  nicename: string | null;
   phone: string | null;
   resume: string | null;
 
   constructor(data?: UserObject | Partial<UserObject>) {
     super({ ...data, type: 'User' });
 
+    this.username = data?.username ? data.username : null;
+    this.firstName = data?.first_name ? data.first_name : null;
+    this.lastName = data?.last_name ? data.last_name : null;
     this.title = data?.title ? data.title : null;
     this.bio = data?.bio ? data.bio : null;
     this.email = data?.email ? data?.email : null;
@@ -32,6 +45,8 @@ export class User extends Account {
       : null;
     this.story =
       data?.story && typeof data.story === 'string' ? data.story : null;
+    this.nickname = data?.nickname ? data.nickname : null;
+    this.nicename = data?.nicename ? data.nicename : null;
   }
 
   setID(id: string) {
@@ -95,7 +110,10 @@ export class User extends Account {
       id: this.id,
       created_at: this.createdAt,
       updated_at: this.updatedAt,
-      login: this.login,
+      username: this.username,
+      roles: this.roles,
+      first_name: this.firstName,
+      last_name: this.lastName,
       avatar_url: this.avatarURL,
       name: this.name,
       title: this.title,
@@ -106,11 +124,13 @@ export class User extends Account {
       resume: this.resume,
       website: this.website,
       story: this.story,
+      nickname: this.nickname,
+      nicename:this.nicename,
       url: this.url,
       contact_methods: this.contactMethods
         ? this.contactMethods.toContactMethodsObject()
         : null,
-        organizations_url: this.organizationsURL,
+      organizations_url: this.organizationsURL,
       organizations:
         this.organizations && this.organizations.list.length > 0
           ? this.organizations.list.map((org) => org.toOrganizationObject())
