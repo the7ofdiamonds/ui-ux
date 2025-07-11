@@ -1,3 +1,4 @@
+import { Image } from '@/model/Image';
 import { Taxonomy, TaxonomyObject } from '@/model/Taxonomy';
 
 export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
@@ -5,10 +6,26 @@ export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
 }
 
 export class Skill extends Taxonomy {
-  readonly type: string = 'skill';
-
   constructor(data?: Partial<SkillObject>) {
     super({ ...data, type: 'skill' });
+
+    this.id = data?.id ? data.id : null;
+    this.type = data?.type ? data.type : null;
+    this.id = data?.id ? data.id : null;
+    this.type = data?.type ? data.type : null;
+    this.title = data?.title ? data.title : null;
+    this.description = data?.description ? data.description : '';
+    this.path =
+      data?.path && data?.title ? this.createSlug(data.path, data.title) : null;
+    this.usage = data?.usage ?? 0;
+    this.image = data?.image
+      ? new Image({
+          id: this.id,
+          title: this.title,
+          url: data?.image?.url,
+          class_name: data?.image?.class_name,
+        })
+      : null;
   }
 
   toSkillObject(): SkillObject {
