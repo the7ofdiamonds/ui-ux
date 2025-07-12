@@ -1,4 +1,4 @@
-import { Account, AccountObject } from '@/model/Account';
+import { Account, AccountObject, iAccount } from '@/model/Account';
 import { ContactMethods, ContactMethodsObject } from '@/model/ContactMethods';
 import {
   GitHubRepoQuery,
@@ -26,7 +26,7 @@ export type UserObject = Omit<AccountObject, 'type' | 'login'> & {
   resume: string | null;
 };
 
-export class User extends Account {
+export class User implements iAccount {
   public id: string | null;
   public createdAt: string | null;
   public updatedAt: string | null;
@@ -55,7 +55,7 @@ export class User extends Account {
   resume: string | null;
 
   constructor(data?: Partial<UserObject>) {
-    super({ ...data, type: 'User' });
+    // super({ ...data, type: 'User' });
 
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data.created_at : null;

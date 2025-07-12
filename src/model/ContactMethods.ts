@@ -23,7 +23,7 @@ export class ContactMethods {
   email: Contact;
   phone: Contact;
 
-  constructor(data?: ContactMethodsObject) {
+  constructor(data?: Partial<ContactMethodsObject>) {
     this.hackerRank = data?.hacker_rank
       ? new Contact(data?.hacker_rank)
       : this.setContact({

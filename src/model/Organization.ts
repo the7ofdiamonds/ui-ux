@@ -1,16 +1,16 @@
+import { Account, AccountObject, iAccount } from '@/model/Account';
 import { ContactMethods, ContactMethodsObject } from '@/model/ContactMethods';
-import { Repos } from '@/model/Repos';
-
+import { GitHubUserAccount } from '@/model/GitHub';
 import {
   GitHubRepoQuery,
   GitHubRepoQueryObject,
 } from '@/model/GitHubRepoQuery';
-import { RepoObject, RepositoryGQL } from '@/model/Repo';
-import { Account, AccountObject } from '@/model/Account';
+import { Organizations } from '@/model/Organizations';
 import { Portfolio, PortfolioObject } from '@/model/Portfolio';
+import { Role, RoleObject } from './Role';
+import { RepoObject, RepositoryGQL } from '@/model/Repo';
+import { Repos } from '@/model/Repos';
 import { Skills } from '@/model/Skills';
-
-// import { OrganizationAccountResponse } from '@/controllers/githubSlice';
 
 export type OrganizationGQL = {
   id: string;
@@ -38,7 +38,8 @@ export interface OrganizationObject extends AccountObject {
   blog: string | null;
   location: string | null;
   email: string | null;
-  url: string | null;
+  website: string | null;
+  phone: string | null;
   contact_methods: ContactMethodsObject | null;
   repos_url: string | null;
   repos: Array<RepoObject> | null;
@@ -46,51 +47,187 @@ export interface OrganizationObject extends AccountObject {
   portfolio: PortfolioObject | null;
 }
 
-export class Organization extends Account {
-  type: string = 'Organization';
+export class Organization implements iAccount {
+  public id: string | null;
+  public createdAt: string | null;
+  public updatedAt: string | null;
+  public login: string | null;
+  public name: string | null;
+  public roles: Array<Role>;
+  public avatarURL: string | null;
+  public bio: string | null;
+  public email: string | null;
+  public website: string | null;
+  public phone: string | null;
+  public contactMethods: ContactMethods = new ContactMethods();
+  public location: string | null;
+  public organizationsURL: string | null;
+  public organizations: Organizations | null;
+  public reposURL: string | null;
+  public repos: Repos | null;
+  public repoQueries: Array<GitHubRepoQuery>;
+  public skills: Skills;
+  public portfolio: Portfolio | null;
   company: string | null;
   description: string | null;
   blog: string | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
-    super(data);
+    // super({ ...data, type: 'Organization' });
 
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data?.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;
+    this.roles =
+      data?.roles && data.roles.length > 0
+        ? data.roles.map((roleObject) => new Role(roleObject))
+        : [];
     this.login = data?.login ? data.login : null;
     this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
+    this.bio = data?.bio ? data.bio : null;
     this.description = data?.description ? data.description : null;
     this.name = data?.name ? data.name : null;
     this.company = data?.company ? data.company : null;
     this.blog = data?.blog ? data.blog : null;
     this.location = data?.location ? data.location : null;
+    this.organizationsURL = data?.organizations_url
+      ? data.organizations_url
+      : null;
+    this.organizations = data?.organizations
+      ? new Organizations(data.organizations)
+      : null;
     this.email = data?.email ? data.email : null;
-    this.url = data?.url ? data?.url : null;
-
-    if (data?.contact_methods || this.email || this.blog) {
-      this.contactMethods = new ContactMethods();
-
-      if (data?.contact_methods) {
-        this.contactMethods = new ContactMethods(data.contact_methods);
-      }
-
-      if (this.email) {
-        this.contactMethods.setContactEmail(this.email);
-      }
-
-      if (this.blog) {
-        this.contactMethods.setContactWebsite(this.blog);
-      }
-    }
-
+    this.website = data?.website ? data?.website : null;
+    this.phone = data?.phone ? data.phone : null;
+    this.contactMethods = data
+      ? this.getContactMethods(data)
+      : this.contactMethods;
     this.reposURL = data?.repos_url ? data?.repos_url : null;
     this.repos = data?.repos ? new Repos(data.repos) : null;
     this.repoQueries = data?.repo_queries
-      ? this.setRepoQueries(data?.repo_queries)
+      ? this.getRepoQueries(data?.repo_queries)
       : [];
     this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
+  }
+
+  getRoles(roles: Array<RoleObject>): Array<Role> {
+    if (roles.length > 0) {
+      return roles.map((roleObject) => new Role(roleObject));
+    }
+
+    return [];
+  }
+
+  setRoles(roles: Array<RoleObject>) {
+    this.roles =
+      roles.length > 0 ? roles.map((roleObject) => new Role(roleObject)) : [];
+  }
+
+  getContactMethods(
+    data: Record<string, any> | GitHubUserAccount
+  ): ContactMethods {
+    if (data.html_url || data.login || data.blog) {
+      const contactMethods = new ContactMethods();
+      contactMethods.setContactGitHub(data.login);
+
+      if (data.blog) {
+        contactMethods.setContactWebsite(data.blog);
+      }
+
+      return contactMethods;
+    }
+
+    if ('contact_methods' in data) {
+      return new ContactMethods(data.contact_methods);
+    }
+
+    return new ContactMethods();
+  }
+
+  setContactMethonds(contacts: Record<string, any>) {
+    this.contactMethods = new ContactMethods(contacts);
+  }
+
+  setOrganizationsURL(url: string) {
+    this.organizationsURL = url;
+  }
+
+  getOrganizations(organizations: Array<OrganizationObject>) {
+    if (organizations.length > 0) {
+      this.organizations = new Organizations(organizations);
+    }
+
+    return new Organizations();
+  }
+
+  setOrganizations(organizations: Array<OrganizationObject>) {
+    this.organizations = new Organizations(organizations);
+  }
+
+  setReposURL(url: string) {
+    this.reposURL = url;
+  }
+
+  setRepos(repos: Repos) {
+    this.repos = repos;
+  }
+
+  getRepos(data: Array<RepoObject>) {
+    const repos = new Repos(data);
+    return repos.collection.map((repo) => repo.toRepoObject());
+  }
+
+  getRepoQueries(data: Array<Record<string, any>>): Array<GitHubRepoQuery> {
+    let repoQueries: Array<GitHubRepoQuery> = [];
+
+    if (Array.isArray(data) && data.length > 0) {
+      data.forEach((query) => {
+        repoQueries.push(new GitHubRepoQuery(query.owner?.login, query.id));
+      });
+    }
+
+    return repoQueries;
+  }
+
+  setRepoQueries(repos: Array<RepoObject>) {
+    let repoQueries: Array<GitHubRepoQuery> = [];
+
+    if (repos.length > 0) {
+      repos.forEach((repo) => {
+        const repoQuery =
+          repo?.owner?.login && repo?.id
+            ? new GitHubRepoQuery(repo?.owner?.login, repo?.id)
+            : null;
+
+        if (repoQuery) {
+          repoQueries.push(repoQuery);
+        }
+      });
+    }
+
+    this.repoQueries = repoQueries;
+  }
+
+  setPortfolio(portfolio: Portfolio) {
+    this.portfolio = portfolio;
+  }
+
+  setSkills(skills: Skills) {
+    this.skills = skills;
+  }
+
+  fromJson(json: Record<string, any>) {
+    this.id = '0';
+    this.login = json.contact_methods.login || null;
+    this.avatarURL = json.avatar_url || null;
+    this.name = json.name || null;
+    this.email = json.contact_methods.email.value || null;
+    this.phone = json.contact_methods.phone.value || null;
+    this.website = json.website || null;
+    this.contactMethods = json
+      ? this.getContactMethods(json)
+      : this.contactMethods;
   }
 
   fromGitHubGraphQL(response: OrganizationGQL) {
@@ -121,106 +258,25 @@ export class Organization extends Account {
     }
   }
 
-  setReposFromGitHub(data: Array<RepoObject>) {
-    const repos = new Repos();
-    repos.fromGitHub(data);
-    this.repos = repos;
+  fromGitHub(data: GitHubUserAccount) {
+    this.id = data?.login ? data?.login : this.id;
+    this.createdAt = data?.created_at ? data?.created_at : this.createdAt;
+    this.updatedAt = data?.updated_at ? data?.updated_at : this.updatedAt;
+    this.login = data?.login ? data?.login : this.login;
+    this.avatarURL = data?.avatar_url ? data?.avatar_url : this.avatarURL;
+    this.name = data?.name ? data?.name : this.name;
+    this.company = data?.company ? data?.company : this.company;
+    this.email = data?.email ? data?.email : this.email;
+    this.blog = data?.blog ? data?.blog : this.blog;
+    this.location = data?.location ? data?.location : this.location;
+    this.reposURL = data?.repos_url ? data?.repos_url : this.reposURL;
+    this.website = data?.blog ? data?.blog : null;
+    this.contactMethods = this.getContactMethods(data);
   }
-
-  getReposFromGitHub(data: Array<RepoObject>) {
-    const repos = new Repos();
-    repos.fromGitHub(data);
-    return repos.collection.map((repo) => {
-      return {
-        ...repo.toRepoObject(),
-        skills: repo.skills ? repo.skills.toProjectSkillsObject() : null,
-        contents: {
-          solution:
-            repo.contents && repo.contents.solution
-              ? repo.contents.solution.toRepoContentObject()
-              : null,
-          design:
-            repo.contents && repo.contents.design
-              ? repo.contents.design.toRepoContentObject()
-              : null,
-          development:
-            repo.contents && repo.contents.development
-              ? repo.contents.development.toRepoContentObject()
-              : null,
-          delivery:
-            repo.contents && repo.contents.delivery
-              ? repo.contents.delivery.toRepoContentObject()
-              : null,
-          problem:
-            repo.contents && repo.contents.problem
-              ? repo.contents.problem.toRepoContentObject()
-              : null,
-        },
-        contributors: {
-          users:
-            repo.contributors &&
-            Array.isArray(repo.contributors.list) &&
-            repo.contributors.list.length > 0
-              ? repo.contributors.list.map((user) => user.toContributorObject())
-              : null,
-        },
-      };
-    });
-  }
-
-  // fromGitHub(data: OrganizationAccountResponse) {
-  //   this.id = data?.login ? data?.login : this.id;
-  //   this.createdAt = data?.created_at ? data?.created_at : this.createdAt;
-  //   this.updatedAt = data?.updated_at ? data?.updated_at : this.updatedAt;
-  //   this.login = data?.login ? data?.login : this.login;
-  //   this.avatarURL = data?.avatar_url ? data?.avatar_url : this.avatarURL;
-  //   this.name = data?.name ? data?.name : this.name;
-  //   this.company = data?.company ? data?.company : this.company;
-  //   this.description = data?.description ? data?.description : this.description;
-  //   this.email = data?.email ? data?.email : this.email;
-  //   this.blog = data?.blog ? data?.blog : this.blog;
-  //   this.location = data?.location ? data?.location : this.location;
-  //   this.reposURL = data?.repos_url ? data?.repos_url : this.reposURL;
-  //   this.url = data?.url ? data?.url : this.url;
-
-  //   data?.html_url && this.contactMethods
-  //     ? this.contactMethods.setContactGitHub({ url: data?.html_url })
-  //     : (this.contactMethods = new ContactMethods());
-
-  //   data?.html_url
-  //     ? this.contactMethods.setContactGitHub({ url: data?.html_url })
-  //     : null;
-  // }
 
   fromDB(data: Record<string, any>) {
     this.company = data?.company ? data?.company : this.company;
     this.avatarURL = data?.avatar_url ? data?.avatar_url : this.avatarURL;
-  }
-
-  getRepoQueries(data: Array<Record<string, any>>) {
-    let repoQueries: Array<GitHubRepoQuery> = [];
-
-    if (Array.isArray(data) && data.length > 0) {
-      data.forEach((query) => {
-        const repoQuery = new GitHubRepoQuery(query.owner.login, query.id);
-        repoQueries.push(repoQuery);
-      });
-    }
-
-    return repoQueries;
-  }
-
-  setRepoQueries(data: Array<Record<string, any>>) {
-    let repoQueries: Array<GitHubRepoQuery> = [];
-
-    if (Array.isArray(data) && data.length > 0) {
-      data.forEach((query) => {
-        const repoQuery = new GitHubRepoQuery(query.owner, query.repo);
-        repoQueries.push(repoQuery);
-      });
-    }
-
-    return repoQueries;
   }
 
   toOrganizationObject(): OrganizationObject {
@@ -238,7 +294,8 @@ export class Organization extends Account {
       blog: this.blog,
       location: this.location,
       email: this.email,
-      url: this.url,
+      website: this.website,
+      phone: this.phone,
       contact_methods: this.contactMethods
         ? this.contactMethods.toContactMethodsObject()
         : null,

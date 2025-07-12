@@ -1,4 +1,4 @@
-import { Octokit } from '@octokit/rest';
+import { Octokit,RestEndpointMethodTypes } from '@octokit/rest';
 import { graphql } from '@octokit/graphql';
 import {
   GetResponseDataTypeFromEndpointMethod,
@@ -26,3 +26,5 @@ export type RepoLanguagesResponse = GetResponseTypeFromEndpointMethod<
 >;
 
 export type GitHubLanguages = RepoLanguagesResponse['data'];
+
+export type GitHubUserAccount = RestEndpointMethodTypes["users"]["getByUsername"]["response"]["data"];

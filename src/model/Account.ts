@@ -10,6 +10,7 @@ import { Repo, RepoObject, RepositoryGQL } from '@/model/Repo';
 import { Repos } from '@/model/Repos';
 import { Role, RoleObject } from '@/model/Role';
 import { SkillsObject, Skills } from '@/model/Skills';
+import { GitHubUserAccount } from './GitHub';
 
 export type AccountGQL = {
   id: string;
@@ -42,8 +43,8 @@ export type AccountObject = {
   name: string | null;
   bio: string | null;
   email: string | null;
+  website: string | null;
   contact_methods: ContactMethodsObject | null;
-  url: string | null;
   location: string | null;
   organizations_url: string | null;
   organizations: Array<OrganizationObject> | null;
@@ -55,38 +56,54 @@ export type AccountObject = {
 };
 
 export interface iAccount {
+  id: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  roles: Array<Role> | null;
+  avatarURL: string | null;
+  bio: string | null;
+  email: string | null;
+  website: string | null;
+  contactMethods: ContactMethods | null;
+  location: string | null;
   organizationsURL: string | null;
   organizations: Organizations | null;
   reposURL: string | null;
   repos: Repos | null;
   repoQueries: Array<GitHubRepoQuery>;
-  skills: Skills;
   portfolio: Portfolio | null;
-  fromGitHubGraphQL: (data: AccountGQL) => void;
-  fromGitHub: (data: any) => void;
-  fromDB: (data: Record<string, any>) => void;
-  fromJson: (data: Record<string, any>) => void;
+  skills: Skills | null;
+  getRoles: (roles: Array<RoleObject>) => Array<Role>;
+  setRoles: (roles: Array<RoleObject>) => void;
+  getContactMethods: (contacts: Record<string, any>) => ContactMethods;
+  setContactMethonds: (contacts: Record<string, any>) => void;
+  getOrganizations: (organizations: Array<OrganizationObject>) => Organizations;
+  setOrganizations: (organizations: Array<OrganizationObject>) => void;
   setReposURL: (url: string) => void;
   setRepos: (repos: Repos) => void;
   getRepoQueries: (data: Array<Record<string, any>>) => Array<GitHubRepoQuery>;
   setRepoQueries: (repos: Array<RepoObject>) => void;
   setPortfolio: (portfolio: Portfolio) => void;
   setSkills: (skills: Skills) => void;
+  fromGitHub: (data: any) => void;
+  fromGitHubGraphQL: (data: AccountGQL) => void;
+  fromDB: (data: Record<string, any>) => void;
+  fromJson: (data: Record<string, any>) => void;
 }
 
-export class Account {
+export class Account implements iAccount {
   public id: string | null;
   public createdAt: string | null;
   public updatedAt: string | null;
   public type: string | null;
   public login: string | null;
-  public roles: Array<Role>;
+  public roles: Array<Role> | null;
   public avatarURL: string | null;
   public name: string | null;
   public bio: string | null;
   public email: string | null;
+  public website: string | null;
   public contactMethods: ContactMethods | null = null;
-  public url: string | null;
   public location: string | null;
   public organizationsURL: string | null;
   public organizations: Organizations | null;
@@ -102,32 +119,14 @@ export class Account {
     this.updatedAt = data?.updated_at ? data.updated_at : null;
     this.type = data?.type ? data.type : null;
     this.login = data?.login ? data.login : null;
-    this.roles =
-      data?.roles && data.roles.length > 0
-        ? data.roles.map((roleObject) => new Role(roleObject))
-        : [];
+    this.roles = data?.roles ? this.getRoles(data.roles) : null;
     this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
     this.name = data?.name ? data.name : null;
     this.bio = data?.bio ? data.bio : null;
     this.location = data?.location ? data.location : null;
     this.email = data?.email ? data.email : null;
-    this.url = data?.url ? data.url : null;
-    this.contactMethods = data?.contact_methods
-      ? new ContactMethods(data?.contact_methods)
-      : null;
-
-    if (this.email || data?.contact_methods) {
-      this.contactMethods = new ContactMethods();
-
-      if (data?.contact_methods) {
-        this.contactMethods = new ContactMethods(data.contact_methods);
-      }
-
-      if (this.email) {
-        this.contactMethods.setContactEmail(this.email);
-      }
-    }
-
+    this.website = data?.website ? data.website : null;
+    this.contactMethods = data ? this.getContactMethods(data) : null;
     this.organizationsURL = data?.organizations_url
       ? data.organizations_url
       : null;
@@ -145,100 +144,54 @@ export class Account {
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
   }
 
-  fromGitHubGraphQL(user: AccountGQL) {
-    this.id = user.id;
-    this.avatarURL = user.avatarUrl;
-    this.name = user.name;
-    this.bio = user.bio;
-    this.email = user.email;
-    this.login = user.login;
-
-    if (
-      Array.isArray(user.organizations.nodes) &&
-      user.organizations.nodes.length > 0
-    ) {
-      const orgs = new Organizations();
-      orgs.fromGitHubGraphQL(user.organizations);
-      this.organizations = orgs;
+  getRoles(roles: Array<RoleObject>): Array<Role> {
+    if (roles.length > 0) {
+      return roles.map((roleObject) => new Role(roleObject));
     }
 
-    if (
-      Array.isArray(user.repositories.nodes) &&
-      user.repositories.nodes.length > 0
-    ) {
-      const repos = new Repos();
-      const orgRepos =
-        this.organizations && this.organizations.list
-          ? this.organizations.list.flatMap((org) =>
-              org.repos &&
-              org.repos?.collection &&
-              Array.isArray(org.repos?.collection)
-                ? org.repos.collection
-                : []
-            )
-          : [];
-      repos.fromGitHubGraphQL(user.repositories.nodes);
-      const totalRepos: Array<Repo> = [...orgRepos, ...repos.collection];
-      repos.setCollection(totalRepos);
-      this.repos = repos;
-    }
-
-    if (this.repos && this.repos.collection.length > 0) {
-      const portfolio = new Portfolio();
-      portfolio.fromRepos(this.repos);
-      this.portfolio = portfolio;
-    }
+    return [];
   }
 
-  fromGitHub(data: any) {
-    this.id = data?.login;
-    this.avatarURL = data?.avatar_url;
-    this.name = data?.name;
-    // this.bio = data?.bio;
-    this.email = data?.email;
-    // this.website = data?.blog;
-    this.organizationsURL = data?.organizations_url;
-    this.reposURL = data?.repos_url;
-    this.login = data?.login;
+  setRoles(roles: Array<RoleObject>) {
+    this.roles =
+      roles.length > 0 ? roles.map((roleObject) => new Role(roleObject)) : [];
+  }
 
-    if (data?.html_url || data?.email) {
-      this.contactMethods = new ContactMethods();
+  getContactMethods(
+    data: Record<string, any> | GitHubUserAccount
+  ): ContactMethods {
+    if (data.html_url || data.login || data.blog) {
+      const contactMethods = new ContactMethods();
+      contactMethods.setContactGitHub(data.login);
 
-      if (data?.html_url) {
-        this.contactMethods.setContactGitHub(data.html_url);
+      if (data.blog) {
+        contactMethods.setContactWebsite(data.blog);
       }
 
-      if (data?.email) {
-        this.contactMethods.setContactEmail(data.email);
-      }
+      return contactMethods;
     }
+
+    if ('contact_methods' in data) {
+      return new ContactMethods(data.contact_methods);
+    }
+
+    return new ContactMethods();
   }
 
-  fromDB(data: Record<string, any>) {
-    // this.title = data?.title || this.title;
-    // try {
-    //   const resume = data?.resume ? new URL(data?.resume) : null;
-    //   this.resume = resume ? resume.href : this.resume;
-    // } catch (error) {
-    //   console.error(`Invalid URL: ${data?.resume}`, error);
-    // }
-  }
-
-  fromJson(json: Record<string, any>) {
-    this.id = '0';
-    this.login = json.contact_methods.login || null;
-    this.avatarURL = json.avatar_url || null;
-    this.name = json.name || null;
-    this.email = json.contact_methods.email.value || null;
-    // this.phone = json.contact_methods.phone.value || null;
-    // this.website = json.website || null;
-    this.contactMethods = json.contact_methods
-      ? new ContactMethods(json.contact_methods)
-      : null;
+  setContactMethonds(contacts: Record<string, any>) {
+    this.contactMethods = new ContactMethods(contacts);
   }
 
   setOrganizationsURL(url: string) {
     this.organizationsURL = url;
+  }
+
+  getOrganizations(organizations: Array<OrganizationObject>) {
+    if (organizations.length > 0) {
+      this.organizations = new Organizations(organizations);
+    }
+
+    return new Organizations();
   }
 
   setOrganizations(organizations: Array<OrganizationObject>) {
@@ -295,5 +248,86 @@ export class Account {
 
   setSkills(skills: Skills) {
     this.skills = skills;
+  }
+
+  fromGitHub(data: GitHubUserAccount) {
+    this.id = data?.login;
+    this.avatarURL = data?.avatar_url;
+    this.name = data?.name;
+    this.bio = data?.bio;
+    this.email = data?.email;
+    this.website = data?.blog;
+    this.organizationsURL = data?.organizations_url;
+    this.reposURL = data?.repos_url;
+    this.login = data?.login;
+    this.contactMethods = this.getContactMethods(data);
+  }
+
+  fromGitHubGraphQL(user: AccountGQL) {
+    this.id = user.id;
+    this.avatarURL = user.avatarUrl;
+    this.name = user.name;
+    this.bio = user.bio;
+    this.email = user.email;
+    this.login = user.login;
+
+    if (
+      Array.isArray(user.organizations.nodes) &&
+      user.organizations.nodes.length > 0
+    ) {
+      const orgs = new Organizations();
+      orgs.fromGitHubGraphQL(user.organizations);
+      this.organizations = orgs;
+    }
+
+    if (
+      Array.isArray(user.repositories.nodes) &&
+      user.repositories.nodes.length > 0
+    ) {
+      const repos = new Repos();
+      const orgRepos =
+        this.organizations && this.organizations.list
+          ? this.organizations.list.flatMap((org) =>
+              org.repos &&
+              org.repos?.collection &&
+              Array.isArray(org.repos?.collection)
+                ? org.repos.collection
+                : []
+            )
+          : [];
+      repos.fromGitHubGraphQL(user.repositories.nodes);
+      const totalRepos: Array<Repo> = [...orgRepos, ...repos.collection];
+      repos.setCollection(totalRepos);
+      this.repos = repos;
+    }
+
+    if (this.repos && this.repos.collection.length > 0) {
+      const portfolio = new Portfolio();
+      portfolio.fromRepos(this.repos);
+      this.portfolio = portfolio;
+    }
+  }
+
+  fromDB(data: Record<string, any>) {
+    // this.title = data?.title || this.title;
+    // try {
+    //   const resume = data?.resume ? new URL(data?.resume) : null;
+    //   this.resume = resume ? resume.href : this.resume;
+    // } catch (error) {
+    //   console.error(`Invalid URL: ${data?.resume}`, error);
+    // }
+  }
+
+  fromJson(json: Record<string, any>) {
+    this.id = '0';
+    this.login = json.contact_methods.login || null;
+    this.avatarURL = json.avatar_url || null;
+    this.name = json.name || null;
+    this.email = json.contact_methods.email.value || null;
+    // this.phone = json.contact_methods.phone.value || null;
+    // this.website = json.website || null;
+    this.contactMethods = json.contact_methods
+      ? new ContactMethods(json.contact_methods)
+      : null;
   }
 }
