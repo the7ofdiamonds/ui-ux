@@ -1,5 +1,15 @@
 import { Account, AccountObject } from '@/model/Account';
-import { ContactMethods } from '@/model/ContactMethods';
+import { ContactMethods, ContactMethodsObject } from '@/model/ContactMethods';
+import {
+  GitHubRepoQuery,
+  GitHubRepoQueryObject,
+} from '@/model/GitHubRepoQuery';
+import { OrganizationGQL, OrganizationObject } from '@/model/Organization';
+import { Organizations } from '@/model/Organizations';
+import { Portfolio, PortfolioObject } from '@/model/Portfolio';
+import { Repo, RepoObject, RepositoryGQL } from '@/model/Repo';
+import { Repos } from '@/model/Repos';
+import { SkillsObject, Skills } from '@/model/Skills';
 import { Role } from '@/model/Role';
 
 export type UserObject = Omit<AccountObject, 'type' | 'login'> & {
@@ -29,29 +39,64 @@ export class User extends Account {
   phone: string | null;
   resume: string | null;
 
-  constructor(data?: UserObject | Partial<UserObject>) {
+  constructor(data?: Partial<UserObject>) {
     super({ ...data, type: 'User' });
 
+    this.id = data?.id ? data.id : null;
+    this.createdAt = data?.created_at ? data.created_at : null;
+    this.updatedAt = data?.updated_at ? data.updated_at : null;
     this.username = data?.username ? data.username : null;
-    this.roles =
-      data?.roles && data.roles.length > 0
-        ? data.roles.map((role) => new Role(role))
-        : [];
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
     this.title = data?.title ? data.title : null;
     this.bio = data?.bio ? data.bio : null;
-    this.email = data?.email ? data?.email : null;
-    this.phone = data?.phone ? data?.phone : null;
-    this.resume = data?.resume ? data?.resume : null;
-    this.website = data?.website ? data?.website : null;
-    this.contactMethods = data?.contact_methods
-      ? new ContactMethods(data.contact_methods)
-      : null;
+    this.email = data?.email ? data.email : null;
+    this.phone = data?.phone ? data.phone : null;
+    this.resume = data?.resume ? data.resume : null;
+    this.website = data?.website ? data.website : null;
     this.story =
       data?.story && typeof data.story === 'string' ? data.story : null;
     this.nickname = data?.nickname ? data.nickname : null;
     this.nicename = data?.nicename ? data.nicename : null;
+    this.roles =
+      data?.roles && data.roles.length > 0
+        ? data.roles.map((roleObject) => new Role(roleObject))
+        : [];
+    this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
+    this.location = data?.location ? data.location : null;
+    this.contactMethods = null;
+
+    if (this.email || this.website || data?.contact_methods) {
+      this.contactMethods = new ContactMethods();
+
+      if (this.email) {
+        this.contactMethods.setContactEmail(this.email);
+      }
+
+      if (this.website) {
+        this.contactMethods.setContactWebsite(this.website);
+      }
+
+      if (this.phone) {
+        this.contactMethods?.setContactPhone(this.phone);
+      }
+    }
+
+    this.organizationsURL = data?.organizations_url
+      ? data.organizations_url
+      : null;
+    this.organizations = data?.organizations
+      ? new Organizations(data.organizations)
+      : null;
+    this.reposURL = data?.repos_url ? data.repos_url : null;
+    this.repos = data?.repos ? new Repos(data.repos) : null;
+    this.repoQueries = data?.repo_queries
+      ? data.repo_queries.map(
+          (repoQuery) => new GitHubRepoQuery(repoQuery.owner, repoQuery.repo)
+        )
+      : [];
+    this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
+    this.skills = data?.skills ? new Skills(data.skills) : new Skills();
   }
 
   setID(id: string) {
