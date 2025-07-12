@@ -6,18 +6,23 @@ export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
 }
 
 export class Skill extends Taxonomy {
+  public id: string | null;
+  public type: string | null;
+  public title: string | null;
+  public description: string | null;
+  public path: string | null;
+  public image: Image | null;
+  public usage: number;
+
   constructor(data?: Partial<SkillObject>) {
     super({ ...data, type: 'skill' });
 
-    this.id = data?.id ? data.id : null;
-    this.type = data?.type ? data.type : null;
     this.id = data?.id ? data.id : null;
     this.type = data?.type ? data.type : null;
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
     this.path =
       data?.path && data?.title ? this.createSlug(data.path, data.title) : null;
-    this.usage = data?.usage ?? 0;
     this.image = data?.image
       ? new Image({
           id: this.id,
@@ -26,12 +31,13 @@ export class Skill extends Taxonomy {
           class_name: data?.image?.class_name,
         })
       : null;
+    this.usage = data?.usage ?? 0;
   }
 
   toSkillObject(): SkillObject {
     return {
       id: this.id,
-      type: 'skill',
+      type: this.type,
       title: this.title,
       description: this.description,
       path: this.path,
