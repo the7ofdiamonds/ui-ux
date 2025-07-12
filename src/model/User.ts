@@ -27,11 +27,26 @@ export type UserObject = Omit<AccountObject, 'type' | 'login'> & {
 };
 
 export class User extends Account {
+  public id: string | null;
+  public createdAt: string | null;
+  public updatedAt: string | null;
+  public roles: Array<Role>;
+  public avatarURL: string | null;
+  public bio: string | null;
+  public email: string | null;
+  public contactMethods: ContactMethods | null = null;
+  public location: string | null;
+  public organizationsURL: string | null;
+  public organizations: Organizations | null;
+  public reposURL: string | null;
+  public repos: Repos | null;
+  public repoQueries: Array<GitHubRepoQuery>;
+  public skills: Skills;
+  public portfolio: Portfolio | null;
   username: string | null;
   firstName: string | null;
   lastName: string | null;
   title: string | null;
-  bio: string | null;
   website: string | null;
   story: string | null;
   nickname: string | null;
