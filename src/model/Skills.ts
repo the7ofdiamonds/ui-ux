@@ -51,7 +51,7 @@ export class Skills implements ISKills<Skill, SkillObject> {
     return getSkillsFrom<SkillObject, Service>(data, Service);
   }
 
-  existsInSet(skills: Set<Skill>, skill: Skill) {
+  existsInSet(skills: Set<Skill>, skill: Skill): boolean {
     const map = new Map(Array.from(skills).map((skill) => [skill.id, skill]));
 
     return map.has(skill.id);

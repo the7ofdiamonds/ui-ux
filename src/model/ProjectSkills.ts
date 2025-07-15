@@ -4,6 +4,7 @@ import {
   Language,
   ProjectType,
   Service,
+  Skill,
   Technology,
 } from '@/model/Skill';
 import { ISKills, getSkillsFrom } from '@/model/ISkills';
@@ -68,6 +69,12 @@ export class ProjectSkills
 
   getServices(data: Array<ProjectSkillObject>) {
     return getSkillsFrom<ProjectSkillObject, Service>(data, Service);
+  }
+
+  existsInSet(skills: Set<Skill>, skill: Skill): boolean {
+    const map = new Map(Array.from(skills).map((skill) => [skill.id, skill]));
+
+    return map.has(skill.id);
   }
 
   fromGitHubGraphQL(languages: Array<LanguageGQL>) {
