@@ -14,16 +14,26 @@ export class Tasks {
         : new Set();
   }
 
+  setList(list: Set<Task>) {
+    this.list = list;
+  }
+
   existsInSet(task: Task): boolean {
     const map = new Map(Array.from(this.list).map((task) => [task.id, task]));
 
     return map.has(task.id);
   }
 
-//   filter(term: string): Skills {
+  addTasks(tasks: Tasks) {
+    if (this.list) {
+      this.list.union(tasks.list);
+    }
+  }
 
-//     return this.list.find((skill) => skill.id === term) ?? new Skill();
-//   }
+  //   filter(term: string): Skills {
+
+  //     return this.list.find((skill) => skill.id === term) ?? new Skill();
+  //   }
 
   toTasksObject(): TasksObject {
     return {

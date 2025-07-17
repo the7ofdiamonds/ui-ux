@@ -13,6 +13,7 @@ import { RepoURL } from '@/model/RepoURL';
 import { FeaturesRoadmap } from '@/model/FeaturesRoadmap';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
+import { Tasks } from './Tasks';
 
 export type ProjectDevelopmentObject = {
   gallery: GalleryObject | null;
@@ -79,12 +80,8 @@ export class ProjectDevelopment {
     this.skills = skills;
   }
 
-  setCheckList(tasks: Array<Task>) {
-    if (tasks && Array.isArray(tasks) && tasks.length > 0) {
-      const checkList = new CheckList();
-      checkList.setTasks(new Set(tasks));
-      this.checkList = checkList;
-    }
+  setCheckList(checkList: CheckList) {
+    this.checkList = checkList;
   }
 
   setRepoURL(url: string) {
@@ -113,8 +110,11 @@ export class ProjectDevelopment {
     }
 
     if (repo.issues?.development) {
-      const tasks = repo.issues?.toTask(repo.issues?.development);
-      this.setCheckList(tasks);
+      const tasks = new Tasks();
+      tasks.setList(new Set(repo.issues?.toTask(repo.issues?.development)));
+      const checkList = new CheckList();
+      checkList.setTasks(tasks);
+      this.setCheckList(checkList);
     }
   }
 

@@ -89,14 +89,6 @@ export class CheckList {
     this.setTotalWeight(tasks.list);
   }
 
-  addTasks(tasks: Tasks) {
-    if (this.tasks) {
-      this.tasks.list.union(tasks.list);
-
-      this.setTotalWeight(this.tasks.list);
-    }
-  }
-
   existsInSet(task: Task) {
     if (!this.tasks) {
       return;

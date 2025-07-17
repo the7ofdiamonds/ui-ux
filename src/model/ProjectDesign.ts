@@ -1,23 +1,24 @@
 import { Gallery, GalleryObject } from '@/model/Gallery';
 import { Color, ColorObject } from '@/model/Color';
+import { Colors, ColorsObject } from '@/model/Colors';
 import { CheckList, CheckListObject } from '@/model/CheckList';
 import { ContentURL, ContentURLObject } from '@/model/ContentURL';
 import { Task } from '@/model/Task';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
-import { Colors } from '@/model/Colors';
+import { Tasks } from './Tasks';
 
 export type ProjectDesignObject = {
   gallery: GalleryObject | null;
   check_list: CheckListObject | null;
-  colors_list: Array<ColorObject> | null;
+  colors: ColorsObject | null;
   content_url: string | null;
 };
 
 export type ProjectDesignDataObject = {
   gallery: GalleryObject | null;
   check_list: CheckListObject | null;
-  colors_list: Array<ColorObject> | null;
+  colors: ColorsObject | null;
   content_url: string | null;
 };
 
@@ -27,14 +28,15 @@ export class ProjectDesign {
   colors: Colors | null;
   contentURL: ContentURL | null;
 
-  constructor(data?: ProjectDesignObject | Partial<ProjectDesignObject>) {
+  constructor(data?: Partial<ProjectDesignObject>) {
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.checkList = data?.check_list ? new CheckList(data.check_list) : null;
     this.colors =
-      data?.colors_list &&
-      Array.isArray(data.colors_list) &&
-      data.colors_list.length > 0
-        ? new Colors(data.colors_list.map((color) => new Color(color)))
+      data?.colors &&
+      data.colors?.list &&
+      Array.isArray(data.colors.list) &&
+      data.colors.list.length > 0
+        ? new Colors(data.colors)
         : null;
     this.contentURL = data?.content_url
       ? new ContentURL(data.content_url)
@@ -45,16 +47,12 @@ export class ProjectDesign {
     this.gallery = gallery;
   }
 
-  setCheckList(tasks: Array<Task>) {
-    if (tasks && Array.isArray(tasks) && tasks.length > 0) {
-      const checkList = new CheckList();
-      checkList.setTasks(new Set(tasks));
-      this.checkList = checkList;
-    }
+  setCheckList(checkList: CheckList) {
+    this.checkList = checkList;
   }
 
-  setColors(colors: Array<Color>) {
-    this.colors = new Colors(colors);
+  setColors(colors: Colors) {
+    this.colors = colors;
   }
 
   setContentURL(url: string) {
@@ -67,35 +65,38 @@ export class ProjectDesign {
     }
 
     if (repo.issues?.design) {
-      const tasks = repo.issues?.toTask(repo.issues.design);
-      this.setCheckList(tasks);
+      const tasks = new Tasks();
+      tasks.setList(new Set(repo.issues?.toTask(repo.issues.design)));
+
+      const checkList = new CheckList();
+      checkList.setTasks(tasks);
+      this.setCheckList(checkList);
     }
   }
 
   fromDocumentData(data: ProjectDataObject) {
     if (data.process && data.process.design) {
+      const design = data.process.design;
+
       if (
-        data.process.design.gallery &&
-        ((data.process.design.gallery.animations &&
-          data.process.design.gallery.animations?.length > 0) ||
-          (data.process.design.gallery.icons &&
-            data.process.design.gallery.icons.length > 0) ||
-          (data.process.design.gallery.logos &&
-            data.process.design.gallery.logos.length > 0) ||
-          (data.process.design.gallery.previews &&
-            data.process.design.gallery.previews.length > 0) ||
-          (data.process.design.gallery.screenshots &&
-            data.process.design.gallery.screenshots.length > 0) ||
-          (data.process.design.gallery.uml_diagrams &&
-            data.process.design.gallery.uml_diagrams.length > 0))
+        design.gallery &&
+        ((design.gallery.animations && design.gallery.animations?.length > 0) ||
+          (design.gallery.icons && design.gallery.icons.length > 0) ||
+          (design.gallery.logos && design.gallery.logos.length > 0) ||
+          (design.gallery.previews && design.gallery.previews.length > 0) ||
+          (design.gallery.screenshots &&
+            design.gallery.screenshots.length > 0) ||
+          (design.gallery.uml_diagrams &&
+            design.gallery.uml_diagrams.length > 0))
       ) {
-        const gallery = new Gallery(data?.process.design.gallery);
+        const gallery = new Gallery(design.gallery);
         this.setGallery(gallery);
       }
 
-      if (data?.process?.design?.colors_list) {
-        const colors = Array.from(data?.process?.design?.colors_list).map(
-          (color) => new Color(color as Record<string, any>)
+      if (design.colors && design.colors.list) {
+        const colors = new Colors();
+        colors.setList(
+          new Set(design.colors.list.map((color) => new Color(color)))
         );
         this.setColors(colors);
       }
@@ -106,9 +107,7 @@ export class ProjectDesign {
     return {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
-      colors_list: this.colors
-        ? Array.from(this.colors.list).map((color) => color.toColorObject())
-        : null,
+      colors: this.colors ? this.colors.toColorsObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
     };
   }
@@ -117,9 +116,7 @@ export class ProjectDesign {
     return {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
-      colors_list: this.colors
-        ? Array.from(this.colors.list).map((color) => color.toColorObject())
-        : null,
+      colors: this.colors ? this.colors.toColorsObject() : null,
       content_url: this.contentURL?.url ? this.contentURL.url : null,
     };
   }

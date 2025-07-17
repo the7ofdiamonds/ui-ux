@@ -4,6 +4,7 @@ import { ContentURL } from '@/model/ContentURL';
 import { Task } from '@/model/Task';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
+import { Tasks } from './Tasks';
 
 export type ProjectDeliveryObject = {
   check_list: CheckListObject | null;
@@ -30,12 +31,8 @@ export class ProjectDelivery {
       : null;
   }
 
-  setCheckList(tasks: Array<Task>) {
-    if (tasks && Array.isArray(tasks) && tasks.length > 0) {
-      const checkList = new CheckList();
-      checkList.setTasks(new Set(tasks));
-      this.checkList = checkList;
-    }
+  setCheckList(checkList: CheckList) {
+    this.checkList = checkList;
   }
 
   setGallery(gallery: Gallery) {
@@ -52,8 +49,12 @@ export class ProjectDelivery {
     }
 
     if (repo.issues?.delivery) {
-      const tasks = repo.issues.toTask(repo.issues.delivery);
-      this.setCheckList(tasks);
+      const tasks = new Tasks();
+      repo.issues.toTask(repo.issues.delivery);
+
+      const checkList = new CheckList();
+      checkList.setTasks(tasks);
+      this.setCheckList(checkList);
     }
   }
 

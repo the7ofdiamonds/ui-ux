@@ -1,10 +1,21 @@
-import { Color } from '@/model/Color';
+import { Color, ColorObject } from '@/model/Color';
+
+export type ColorsObject = {
+  list: Array<ColorObject> | null;
+};
 
 export class Colors {
   list: Set<Color>;
 
-  constructor(list?: Array<Color>) {
-    this.list = list ? new Set(list) : new Set();
+  constructor(colors?: ColorsObject) {
+    this.list =
+      colors && colors.list && colors.list.length > 0
+        ? new Set(colors.list.map((color) => new Color(color)))
+        : new Set();
+  }
+
+  setList(list: Set<Color>) {
+    this.list = list;
   }
 
   addColor(color: Color) {
@@ -21,5 +32,14 @@ export class Colors {
     );
 
     return map.has(color.id);
+  }
+
+  toColorsObject(): ColorsObject {
+    return {
+      list:
+        this.list.size > 0
+          ? Array.from(this.list).map((color) => color.toColorObject())
+          : null,
+    };
   }
 }

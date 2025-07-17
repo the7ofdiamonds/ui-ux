@@ -6,6 +6,7 @@ import { Task } from '@/model/Task';
 import { CheckList } from '@/model/CheckList';
 
 import styles from './CheckList.module.scss';
+import { Tasks } from '@/model/Tasks';
 
 interface CheckListProps {
   checkList: CheckList;
@@ -14,7 +15,7 @@ interface CheckListProps {
 export const CheckListComponent: React.FC<CheckListProps> = ({ checkList }) => {
   const [id, setId] = useState<string | null>(null);
   const [title, setTitle] = useState<string | null>(null);
-  const [tasks, setTasks] = useState<Set<Task> | null>(null);
+  const [tasks, setTasks] = useState<Tasks | null>(null);
 
   useEffect(() => {
     if (checkList.id) {
@@ -36,12 +37,12 @@ export const CheckListComponent: React.FC<CheckListProps> = ({ checkList }) => {
 
   return (
     <>
-      {tasks && tasks.size > 0 && id ? (
+      {tasks && tasks.list.size > 0 && id ? (
         <div className={styles.checklist} >
 
           {title && (<h4>{title}</h4>)}
 
-          {Array.from(tasks).map((task) => (
+          {Array.from(tasks.list).map((task) => (
             <TaskComponent task={task} key={task.id} />
           ))}
         </div>

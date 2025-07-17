@@ -34,6 +34,7 @@ export * from './model/ProjectProblem';
 export * from './model/ProjectProcess';
 export * from './model/ProjectProgress';
 export * from './model/ProjectQuery';
+export * from './model/ProjectSkill';
 export * from './model/ProjectSkills';
 export * from './model/ProjectSolution';
 export * from './model/ProjectStatus';
