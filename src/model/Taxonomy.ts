@@ -46,6 +46,18 @@ export class Taxonomy {
     this.title = title;
   }
 
+  setDescription(description: string) {
+    this.description = description;
+  }
+
+  setPath(path: string) {
+    this.path = path;
+  }
+
+  setImage(image: Image) {
+    this.image = image;
+  }
+
   setUsage(usage: number) {
     this.usage = usage;
   }
