@@ -17,6 +17,18 @@ export class ProjectVersions {
     this.future = data?.future ? new Set(data?.future) : new Set();
   }
 
+  setHistory(history: Set<string>) {
+    this.history = history;
+  }
+
+  setCurrent(current: string) {
+    this.current = current;
+  }
+
+  setFuture(future: Set<string>) {
+    this.future = future;
+  }
+
   order() {
     const path = [...this.history, ...this.future];
 

@@ -15,6 +15,18 @@ export class Color {
     this.value = data?.value ?? '#000';
   }
 
+  setID(id: string) {
+    this.id = id;
+  }
+
+  setName(name: string) {
+    this.name = name;
+  }
+
+  setValue(value: string) {
+    this.value = value;
+  }
+
   toColorObject(): ColorObject {
     return {
       id: this.id,
