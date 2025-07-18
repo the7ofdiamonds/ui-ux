@@ -51,6 +51,26 @@ export class ProjectSkills
     }
   }
 
+  setProjectTypes(types: Set<ProjectType>) {
+    this.types = types;
+  }
+
+  setLanguages(languages: Set<Language>) {
+    this.languages = languages;
+  }
+
+  setFrameworks(frameworks: Set<Framework>) {
+    this.frameworks = frameworks;
+  }
+
+  setTechnologies(technologies: Set<Technology>) {
+    this.technologies = technologies;
+  }
+
+  setServices(services: Set<Service>) {
+    this.services = services;
+  }
+
   getProjectTypes(data: Array<ProjectSkillObject>) {
     return getSkillsFrom<ProjectSkillObject, ProjectType>(data, ProjectType);
   }
