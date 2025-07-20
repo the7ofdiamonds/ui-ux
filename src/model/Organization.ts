@@ -1,4 +1,4 @@
-import { Account, AccountObject, iAccount } from '@/model/Account';
+import { AccountObject, iAccount } from '@/model/Account';
 import { ContactMethods, ContactMethodsObject } from '@/model/ContactMethods';
 import { GitHubUserAccount } from '@/model/GitHub';
 import {
@@ -47,7 +47,7 @@ export interface OrganizationObject extends AccountObject {
   portfolio: PortfolioObject | null;
 }
 
-export class Organization extends Account implements iAccount {
+export class Organization implements iAccount {
   public id: string | null;
   public createdAt: string | null;
   public updatedAt: string | null;
@@ -74,8 +74,6 @@ export class Organization extends Account implements iAccount {
   blog: string | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
-    super({ ...data, type: 'organization' });
-
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data?.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;
