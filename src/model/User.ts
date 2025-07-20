@@ -1,15 +1,12 @@
-import { Account, AccountGQL, AccountObject, iAccount } from '@/model/Account';
-import { ContactMethods, ContactMethodsObject } from '@/model/ContactMethods';
-import {
-  GitHubRepoQuery,
-  GitHubRepoQueryObject,
-} from '@/model/GitHubRepoQuery';
-import { OrganizationGQL, OrganizationObject } from '@/model/Organization';
+import { AccountGQL, AccountObject, iAccount } from '@/model/Account';
+import { ContactMethods } from '@/model/ContactMethods';
+import { GitHubRepoQuery } from '@/model/GitHubRepoQuery';
+import { OrganizationObject } from '@/model/Organization';
 import { Organizations } from '@/model/Organizations';
-import { Portfolio, PortfolioObject } from '@/model/Portfolio';
-import { Repo, RepoObject, RepositoryGQL } from '@/model/Repo';
+import { Portfolio } from '@/model/Portfolio';
+import { RepoObject } from '@/model/Repo';
 import { Repos } from '@/model/Repos';
-import { SkillsObject, Skills } from '@/model/Skills';
+import { Skills } from '@/model/Skills';
 import { Role, RoleObject } from '@/model/Role';
 import { GitHubUserAccount } from './GitHub';
 
@@ -27,7 +24,7 @@ export type UserObject = Omit<AccountObject, 'type' | 'login' | 'name'> & {
   resume: string | null;
 };
 
-export class User extends Account implements iAccount {
+export class User implements iAccount {
   public id: string | null;
   public createdAt: string | null;
   public updatedAt: string | null;
@@ -59,8 +56,6 @@ export class User extends Account implements iAccount {
   public resume: string | null;
 
   constructor(data?: Partial<UserObject>) {
-    super({ ...data, type: 'user' });
-
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;
