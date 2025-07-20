@@ -59,7 +59,10 @@ export interface iAccount {
   id: string | null;
   createdAt: string | null;
   updatedAt: string | null;
+  type: string | null;
+  login: string | null;
   roles: Array<Role> | null;
+  name: string | null;
   avatarURL: string | null;
   bio: string | null;
   email: string | null;

@@ -47,10 +47,11 @@ export interface OrganizationObject extends AccountObject {
   portfolio: PortfolioObject | null;
 }
 
-export class Organization implements iAccount {
+export class Organization extends Account implements iAccount {
   public id: string | null;
   public createdAt: string | null;
   public updatedAt: string | null;
+  public type: string = 'organization';
   public login: string | null;
   public name: string | null;
   public roles: Array<Role>;
@@ -73,7 +74,7 @@ export class Organization implements iAccount {
   blog: string | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
-    // super({ ...data, type: 'Organization' });
+    super({ ...data, type: 'organization' });
 
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data?.created_at : null;

@@ -27,10 +27,13 @@ export type UserObject = Omit<AccountObject, 'type' | 'login' | 'name'> & {
   resume: string | null;
 };
 
-export class User implements iAccount {
+export class User extends Account implements iAccount {
   public id: string | null;
   public createdAt: string | null;
   public updatedAt: string | null;
+  public type: string = 'user';
+  public login: string | null;
+  public name: string | null;
   public roles: Array<Role>;
   public avatarURL: string | null;
   public bio: string | null;
@@ -44,26 +47,28 @@ export class User implements iAccount {
   public repoQueries: Array<GitHubRepoQuery>;
   public skills: Skills;
   public portfolio: Portfolio | null;
-  username: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  title: string | null;
-  website: string | null;
-  story: string | null;
-  nickname: string | null;
-  nicename: string | null;
-  phone: string | null;
-  resume: string | null;
+  public username: string | null;
+  public firstName: string | null;
+  public lastName: string | null;
+  public title: string | null;
+  public website: string | null;
+  public story: string | null;
+  public nickname: string | null;
+  public nicename: string | null;
+  public phone: string | null;
+  public resume: string | null;
 
   constructor(data?: Partial<UserObject>) {
-    // super({ ...data, type: 'User' });
+    super({ ...data, type: 'user' });
 
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;
+    this.login = data?.username ? data.username : null;
     this.username = data?.username ? data.username : null;
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
+    this.name = data?.first_name || data?.last_name ? this.getName() : null;
     this.title = data?.title ? data.title : null;
     this.bio = data?.bio ? data.bio : null;
     this.email = data?.email ? data.email : null;
@@ -104,6 +109,10 @@ export class User implements iAccount {
     this.id = id;
   }
 
+  setName(name: string) {
+    this.name = name;
+  }
+
   setTitle(title: string) {
     this.title = title;
   }
@@ -114,6 +123,24 @@ export class User implements iAccount {
 
   setStory(url: string) {
     this.story = url;
+  }
+
+  getName(): string | null {
+    let name = null;
+
+    if (this.firstName && this.lastName) {
+      name = `${this.firstName} ${this.lastName}`;
+    }
+
+    if (this.firstName) {
+      name = this.firstName;
+    }
+
+    if (this.lastName) {
+      name = this.lastName;
+    }
+
+    return name;
   }
 
   getRoles(roles: Array<RoleObject>): Array<Role> {
