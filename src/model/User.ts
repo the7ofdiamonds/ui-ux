@@ -267,6 +267,15 @@ export class User implements iAccount {
     this.avatarURL = org.avatarUrl;
 
     if (
+      org.organizations &&
+      Array.isArray(org.organizations) &&
+      org.organizations.length > 0
+    ) {
+      this.organizations = new Organizations();
+      this.organizations.fromGitHubGraphQL(org.organizations);
+    }
+
+    if (
       Array.isArray(org.repositories.nodes) &&
       org.repositories.nodes.length > 0
     ) {
