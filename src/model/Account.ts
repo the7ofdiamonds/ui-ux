@@ -279,7 +279,7 @@ export class Account implements iAccount {
       user.organizations.nodes.length > 0
     ) {
       const orgs = new Organizations();
-      orgs.fromGitHubGraphQL(user.organizations);
+      orgs.fromGitHubGraphQL(user.organizations.nodes);
       this.organizations = orgs;
     }
 

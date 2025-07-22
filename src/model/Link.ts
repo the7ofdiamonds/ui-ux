@@ -4,11 +4,11 @@ export type LinkObject = {
 };
 
 export class Link {
-  href: string | null;
+  href: string;
   text: string | null;
 
   constructor(data?: Partial<LinkObject>) {
-    this.href = data?.href ? data.href : null;
+    this.href = data?.href ?? '';
     this.text = data?.text ? data.text : null;
   }
 

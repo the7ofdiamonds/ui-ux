@@ -5,7 +5,7 @@
 @use './header_desktop.scss';
 @use './title.scss';
 
-header {
+:global(header) {
   grid-area: Navigation;
   position: fixed;
   top: 0;
@@ -69,7 +69,14 @@ header {
 
     .leftSide,
     .rightSide {
+      display: flex;
       align-items: center;
+      position: relative;
+    }
+
+    .leftSide {
+      grid-area: LeftSide;
+      justify-content: start;
     }
 
     .left-menu {
@@ -100,9 +107,7 @@ header {
 
     .rightSide {
       grid-area: RightSide;
-      display: flex;
       justify-content: end;
-      position: relative;
     }
   }
 
@@ -128,6 +133,15 @@ header {
         display: grid;
         grid-auto-rows: 4rem;
       }
+    }
+  }
+
+  .header:hover {
+    background-color: black;
+    color: white;
+
+    a {
+      color: white;
     }
   }
 

@@ -27,7 +27,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, left
 
   return (
     <>
-      <header className={styles.header}>
+      <header>
         <div className={styles.header}>
           <div className={styles.top}>
             <div className={styles.leftSide}>
@@ -36,7 +36,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, left
                 {leftMenu && leftMenu.length > 0 &&
                   leftMenu.map((link) => (
                     <a href={link.href} onClick={toggleMenu}>
-                      <h2 className={styles.title}>{link.text}</h2>
+                      {link.text && <h2 className={styles.title}>{link.text}</h2>}
                     </a>
                   ))}
               </div>
@@ -67,7 +67,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, left
                 {rightMenu && rightMenu.length > 0 &&
                   rightMenu.map((link) => (
                     <a href={link.href} onClick={toggleMenu}>
-                      <h2 className={styles.title}>{link.text}</h2>
+                      {link.text && <h2 className={styles.title}>{link.text}</h2>}
                     </a>
                   ))}
               </div>
@@ -81,7 +81,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, left
                   centerMenu.map((link, index) => (
                     <li key={index}>
                       <a href={link.href} onClick={toggleMenu}>
-                        <h2 className={styles.title}>{link.text}</h2>
+                        {link.text && <h2 className={styles.title}>{link.text}</h2>}
                       </a>
                     </li>
                   ))}
