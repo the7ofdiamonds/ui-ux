@@ -268,11 +268,11 @@ export class User implements iAccount {
 
     if (
       org.organizations &&
-      Array.isArray(org.organizations) &&
-      org.organizations.length > 0
+      Array.isArray(org.organizations.nodes) &&
+      org.organizations.nodes.length > 0
     ) {
       this.organizations = new Organizations();
-      this.organizations.fromGitHubGraphQL(org.organizations);
+      this.organizations.fromGitHubGraphQL(org.organizations.nodes);
     }
 
     if (

@@ -3,13 +3,9 @@ import React, { useState } from 'react';
 import { ImageComponent } from '@/views/image/ImageComponent';
 
 import { Image } from '@/model/Image';
+import { Link } from '@/model/Link';
 
 import styles from './Header.module.scss';
-
-interface Link {
-  href: string;
-  text: string;
-}
 
 interface HeaderComponentProps {
   branding: string | Image;

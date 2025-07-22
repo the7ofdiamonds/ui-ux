@@ -25,7 +25,7 @@ export class Organizations {
     this.count = organizations.length;
   }
 
-  fromGitHubGraphQL(organizations: OrganizationsGQL) {
+  fromGitHubGraphQL(organizations: Array<OrganizationGQL>) {
     if (Array.isArray(organizations) && organizations.length > 0) {
       this.list = organizations.map((organization) => {
         const org = new Organization();

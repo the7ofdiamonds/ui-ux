@@ -19,6 +19,7 @@ export * from './model/GitHubRepoQuery';
 export * from './model/Image';
 export * from './model/Issue';
 export * from './model/Issues';
+export * from './model/Link';
 export * from './model/Organization';
 export * from './model/Organizations';
 export * from './model/Owner';
