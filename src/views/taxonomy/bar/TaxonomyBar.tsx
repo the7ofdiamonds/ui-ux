@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { IconComponent } from '@/views/icon/IconComponent';
-
 import { Taxonomy } from '@/model/Taxonomy';
+
+import { ImageComponent } from '@/views/image/ImageComponent';
 
 import styles from './TaxonomyBar.module.scss';
 
@@ -18,32 +18,18 @@ export const TaxonomyBar: React.FC<TaxonomyBarProp> = ({ taxonomySet, handleClic
     setTaxonomies(taxonomySet);
   }, [taxonomySet]);
 
-  // const handleClick = (skill: Taxonomy) => {
-  //   handleSkills();
-  //   window.location.href = `/projects/${skill.path}/${skill.id}`;
-  // };
-
-  // const handleSkills = () => {
-  //   const skillsElement = document.getElementById('top');
-
-  //   if (skillsElement) {
-  //     skillsElement.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // };
-
   return (
     <>
       {taxonomies && taxonomies.size > 0 && (
         <div className={styles['project-skills-bar']}>
           {Array.from(taxonomies).map((taxonomy, index) => (
             <div className={styles.icon} key={index}>
-              {taxonomy.image &&
-                (taxonomy.image.className !== '' || taxonomy.image.url !== '')
+              {taxonomy.image && (taxonomy.image.className || taxonomy.image.url)
                 ? <button
                   key={index}
                   className={styles['taxonomys-button']}
                   onClick={() => handleClick(taxonomy)}>
-                  <IconComponent imageClass={taxonomy.image} />
+                  <ImageComponent image={taxonomy.image} />
                 </button> : <button
                   key={index}
                   className={styles.tag}

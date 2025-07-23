@@ -14,7 +14,7 @@ interface TaxListIconProps {
 
 export const TaxListIcon: React.FC<TaxListIconProps> = ({ taxonomiesTitle, taxonomiesSet, handleClick }) => {
   const [title, setTitle] = useState<string | null>(null);
-  const [projectSkills, setProjectSkills] = useState<Set<Taxonomy>>(new Set());
+  const [projectSkills, setProjectSkills] = useState<Set<Taxonomy>>(taxonomiesSet);
 
   useEffect(() => {
     setTitle(taxonomiesTitle)
@@ -22,7 +22,7 @@ export const TaxListIcon: React.FC<TaxListIconProps> = ({ taxonomiesTitle, taxon
 
   useEffect(() => {
     setProjectSkills(taxonomiesSet);
-  }, [taxonomiesSet, setProjectSkills]);
+  }, [taxonomiesSet]);
 
   return (
     projectSkills.size > 0 && (

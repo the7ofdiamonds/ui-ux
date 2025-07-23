@@ -5,19 +5,16 @@ import { Image } from '@/model/Image';
 import styles from './Icon.module.scss';
 
 interface IconComponentProps {
-  imageClass: Image;
+  icon: Image;
 }
 
-export const IconComponent: React.FC<IconComponentProps> = ({ imageClass }) => {
-  const [image, setImage] = useState<Image>(imageClass);
-
-  useEffect(() => { setImage(imageClass) }, [imageClass, setImage]);
+export const IconComponent: React.FC<IconComponentProps> = ({ icon }) => {
 
   return (
     <>
       {
-        image?.className && (
-          <i className={`${image.className} ${styles.i}`} title={image.title ?? ''}></i>
+        icon?.className && (
+          <i className={`${icon.className} ${styles.i}`} title={icon.title ?? ''}></i>
         )}
     </>
   );

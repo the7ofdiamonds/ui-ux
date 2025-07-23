@@ -16,6 +16,6 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({ image }) => {
   return url ? (
     <img className={styles.image} src={url} alt={title ?? ''} title={title ?? ''} />
   ) : (
-    className && <IconComponent imageClass={image} />
+    className && <IconComponent icon={image} />
   );
 }
