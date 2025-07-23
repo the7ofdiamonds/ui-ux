@@ -172,8 +172,8 @@ export class User implements iAccount {
     return new ContactMethods();
   }
 
-  setContactMethonds(contacts: Record<string, any>) {
-    this.contactMethods = new ContactMethods(contacts);
+  setContactMethonds(contacts: ContactMethods) {
+    this.contactMethods = contacts;
   }
 
   setOrganizationsURL(url: string) {

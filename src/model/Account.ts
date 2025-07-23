@@ -79,7 +79,7 @@ export interface iAccount {
   getRoles: (roles: Array<RoleObject>) => Array<Role>;
   setRoles: (roles: Array<RoleObject>) => void;
   getContactMethods: (contacts: Record<string, any>) => ContactMethods;
-  setContactMethonds: (contacts: Record<string, any>) => void;
+  setContactMethonds: (contacts: ContactMethods) => void;
   getOrganizations: (organizations: Array<OrganizationObject>) => Organizations;
   setOrganizations: (organizations: Array<OrganizationObject>) => void;
   setReposURL: (url: string) => void;

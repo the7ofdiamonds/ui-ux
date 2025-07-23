@@ -1,15 +1,15 @@
 import { Contact, ContactObject } from './Contact';
 
 export interface ContactMethodsObject {
-  hacker_rank: ContactObject | null;
-  linked_in: ContactObject | null;
-  x: ContactObject | null;
-  instagram: ContactObject | null;
-  github: ContactObject | null;
-  youtube: ContactObject | null;
-  website: ContactObject | null;
-  email: ContactObject | null;
-  phone: ContactObject | null;
+  hacker_rank: string | null;
+  linked_in: string | null;
+  x: string | null;
+  instagram: string | null;
+  github: string | null;
+  youtube: string | null;
+  website: string | null;
+  email: string | null;
+  phone: string | null;
 }
 
 export class ContactMethods {
@@ -24,78 +24,69 @@ export class ContactMethods {
   phone: Contact;
 
   constructor(data?: Partial<ContactMethodsObject>) {
-    this.hackerRank = data?.hacker_rank
-      ? new Contact(data?.hacker_rank)
-      : this.setContact({
-          id: 'hackerrank',
-          title: 'Hacker Rank',
-          type: 'url',
-          url: '',
-        });
-    this.linkedin = data?.linked_in
-      ? new Contact(data?.linked_in)
-      : this.setContact({
-          id: 'linkedin',
-          title: 'LinkedIn',
-          type: 'url',
-          url: '',
-        });
-    this.x = data?.x
-      ? new Contact(data?.x)
-      : this.setContact({
-          id: 'x',
-          title: 'X',
-          type: 'url',
-          url: '',
-        });
-    this.instagram = data?.instagram
-      ? new Contact(data?.instagram)
-      : this.setContact({
-          id: 'instagram',
-          title: 'Instagram',
-          type: 'url',
-          url: '',
-        });
-    this.github = data?.github
-      ? new Contact(data?.github)
-      : this.setContact({
-          id: 'github',
-          title: 'GitHub',
-          type: 'url',
-          url: '',
-        });
-    this.youtube = data?.youtube
-      ? new Contact(data?.youtube)
-      : this.setContact({
-          id: 'youtube',
-          title: 'YouTube',
-          type: 'url',
-          url: '',
-        });
-    this.website = data?.website
-      ? new Contact(data?.website)
-      : this.setContact({
-          id: 'website',
-          title: 'Website',
-          type: 'url',
-          url: '',
-        });
-    this.email = data?.email
-      ? new Contact(data?.email)
-      : this.setContact({
-          id: 'email',
-          title: 'Email',
-          type: 'email',
-          value: '',
-        });
-    this.phone = data?.phone
-      ? new Contact(data?.phone)
-      : this.setContact({
-          id: 'phone',
-          title: 'Phone',
-          type: 'tel',
-          value: '',
-        });
+    this.hackerRank = new Contact({
+      id: 'hacker_rank',
+      title: 'Hacker Rank',
+      type: 'url',
+      url: data?.hacker_rank ?? '',
+      class_name: 'fa-brands fa-hackerrank',
+    });
+    this.linkedin = new Contact({
+      id: 'linkedin',
+      title: 'LinkedIn',
+      type: 'url',
+      url: data?.linked_in ?? '',
+      class_name: 'fa fa-linkedin fa-fw',
+    });
+    this.x = new Contact({
+      id: 'x',
+      title: 'X',
+      type: 'url',
+      url: data?.x ?? '',
+      class_name: 'fa-brands fa-x-twitter',
+    });
+    this.instagram = new Contact({
+      id: 'instagram',
+      title: 'Instagram',
+      type: 'url',
+      url: data?.instagram ?? '',
+      class_name: 'fa fa-instagram fa-fw',
+    });
+    this.github = new Contact({
+      id: 'github',
+      title: 'GitHub',
+      type: 'url',
+      url: data?.github ?? '',
+      class_name: 'fa fa-github fa-fw',
+    });
+    this.youtube = new Contact({
+      id: 'youtube',
+      title: 'YouTube',
+      type: 'url',
+      url: data?.youtube ?? '',
+      class_name: 'fa-brands fa-youtube',
+    });
+    this.website = new Contact({
+      id: 'website',
+      title: 'Website',
+      type: 'url',
+      url: data?.website ?? '',
+      class_name: 'fa-solid fa-globe',
+    });
+    this.email = new Contact({
+      id: 'email',
+      title: 'Email',
+      type: 'email',
+      value: data?.email ?? '',
+      class_name: 'fa fa-envelope fa-fw',
+    });
+    this.phone = new Contact({
+      id: 'phone',
+      title: 'Phone',
+      type: 'tel',
+      value: data?.phone ?? '',
+      class_name: 'fa-solid fa-phone',
+    });
   }
 
   setContact(data: Partial<ContactObject>) {
@@ -200,32 +191,16 @@ export class ContactMethods {
   toContactMethodsObject(): ContactMethodsObject {
     return {
       hacker_rank:
-        this.hackerRank && this.hackerRank.url
-          ? this.hackerRank.toContactObject()
-          : null,
-      linked_in:
-        this.linkedin && this.linkedin.url
-          ? this.linkedin.toContactObject()
-          : null,
-      x: this.x && this.x.url ? this.x.toContactObject() : null,
+        this.hackerRank && this.hackerRank.url ? this.hackerRank.url : null,
+      linked_in: this.linkedin && this.linkedin.url ? this.linkedin.url : null,
+      x: this.x && this.x.url ? this.x.url : null,
       instagram:
-        this.instagram && this.instagram.url
-          ? this.instagram.toContactObject()
-          : null,
-      github:
-        this.github && this.github.url ? this.github.toContactObject() : null,
-      youtube:
-        this.youtube && this.youtube.url
-          ? this.youtube.toContactObject()
-          : null,
-      website:
-        this.website && this.website.url
-          ? this.website.toContactObject()
-          : null,
-      email:
-        this.email && this.email.value ? this.email.toContactObject() : null,
-      phone:
-        this.phone && this.phone.value ? this.phone.toContactObject() : null,
+        this.instagram && this.instagram.url ? this.instagram.url : null,
+      github: this.github && this.github.url ? this.github.url : null,
+      youtube: this.youtube && this.youtube.url ? this.youtube.url : null,
+      website: this.website && this.website.url ? this.website.url : null,
+      email: this.email && this.email.value ? this.email.value : null,
+      phone: this.phone && this.phone.value ? this.phone.value : null,
     };
   }
 }
