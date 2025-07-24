@@ -2,12 +2,19 @@ import { Image } from '@/model/Image';
 import { Taxonomy, TaxonomyObject } from '@/model/Taxonomy';
 
 export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
-  type?: string | null;
+  type: string;
 }
 
-export class Skill extends Taxonomy {
+export interface ISkill {
+  id: string | null;
+  type: string;
+  title: string | null;
+  usage: number;
+}
+
+export class Skill extends Taxonomy implements ISkill {
   public id: string | null;
-  public type: string | null;
+  public type: string = 'skill';
   public title: string | null;
   public description: string | null;
   public path: string | null;
@@ -18,11 +25,9 @@ export class Skill extends Taxonomy {
     super({ ...data, type: 'skill' });
 
     this.id = data?.id ? data.id : null;
-    this.type = data?.type ? data.type : null;
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
-    this.path =
-      data?.path && data?.title ? this.createSlug(data.path, data.title) : null;
+    this.path = data?.path ? data.path : null;
     this.image = data?.image
       ? new Image({
           id: this.id,
@@ -48,41 +53,41 @@ export class Skill extends Taxonomy {
 }
 
 export class ProjectType extends Skill {
-  readonly path: string = 'project-types';
+  readonly path: string = 'project-type';
 
   constructor(data?: SkillObject | Partial<SkillObject>) {
-    super({ ...data, path: 'project-types' });
+    super({ ...data, path: 'project-type' });
   }
 }
 
 export class Language extends Skill {
-  readonly path: string = 'languages';
+  readonly path: string = 'language';
 
   constructor(data?: SkillObject | Partial<SkillObject>) {
-    super({ ...data, path: 'languages' });
+    super({ ...data, path: 'language' });
   }
 }
 
 export class Framework extends Skill {
-  readonly path: string = 'frameworks';
+  readonly path: string = 'framework';
 
   constructor(data?: SkillObject | Partial<SkillObject>) {
-    super({ ...data, path: 'frameworks' });
+    super({ ...data, path: 'framework' });
   }
 }
 
 export class Technology extends Skill {
-  readonly path: string = 'technologies';
+  readonly path: string = 'technology';
 
   constructor(data?: SkillObject | Partial<SkillObject>) {
-    super({ ...data, path: 'technologies' });
+    super({ ...data, path: 'technology' });
   }
 }
 
 export class Service extends Skill {
-  readonly path: string = 'services';
+  readonly path: string = 'service';
 
   constructor(data?: SkillObject | Partial<SkillObject>) {
-    super({ ...data, path: 'services' });
+    super({ ...data, path: 'service' });
   }
 }

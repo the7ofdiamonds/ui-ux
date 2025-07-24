@@ -7,7 +7,8 @@ import {
   Skill,
   Technology,
 } from '@/model/Skill';
-import { ISKills, getSkillsFrom } from '@/model/ISkills';
+import { ISKills } from '@/model/Skills';
+import { getSkillsFrom } from '@/model/ISkills';
 
 export type LanguageGQL = {
   size: number;
@@ -25,9 +26,7 @@ export type ProjectSkillsDataObject = {
   list: Array<string> | null;
 };
 
-export class ProjectSkills
-  implements ISKills<ProjectSkill, ProjectSkillObject>
-{
+export class ProjectSkills implements ISKills<ProjectSkillObject> {
   list: Array<ProjectSkill> = [];
   types: Set<ProjectType> = new Set();
   languages: Set<Language> = new Set();
@@ -97,87 +96,69 @@ export class ProjectSkills
     return map.has(skill.id);
   }
 
+  getProjectSkill(language: string, usage: number): ProjectSkill {
+    let skill: ProjectSkill | null = null;
+
+    switch (language) {
+      case 'Dockerfile':
+        skill = new ProjectSkill();
+        skill.setID('docker');
+        skill.setType('technology');
+        skill.setTitle('Docker');
+        break;
+
+      case 'SCSS':
+        skill = new ProjectSkill();
+        skill.setID('sass');
+        skill.setType('language');
+        skill.setTitle('Sass');
+        break;
+
+      case 'hack':
+        skill = new ProjectSkill();
+        skill.setID('hack');
+        skill.setType('language');
+        skill.setTitle('Hack');
+        break;
+
+      default:
+        skill = new ProjectSkill();
+        skill.setID(language.toLowerCase());
+        skill.setType('language');
+        skill.setTitle(language.toUpperCase());
+    }
+
+    if (skill) {
+      skill.setUsage(usage);
+    }
+
+    return skill;
+  }
+
   fromGitHubGraphQL(languages: Array<LanguageGQL>) {
     if (Array.isArray(languages) && languages.length > 0) {
       languages.forEach((language) => {
         const name = language.node.name;
         const usage = language.size;
+        const skill = this.getProjectSkill(name, usage);
 
-        if (name === 'Dockerfile') {
-          const dockerFile = new ProjectSkill();
-          dockerFile.setID('docker');
-          dockerFile.setTitle('Docker');
-          dockerFile.setUsage(usage);
-
-          this.list.push(dockerFile);
-        }
-
-        if (name === 'SCSS') {
-          const scss = new ProjectSkill();
-          scss.setID('sass');
-          scss.setTitle('Sass');
-          scss.setUsage(usage);
-
-          this.list.push(scss);
-        }
-
-        if (name === 'hack') {
-          const hack = new ProjectSkill();
-          hack.setID('hack');
-          hack.setTitle('Hack');
-          hack.setUsage(usage);
-
-          this.list.push(hack);
-        }
-
-        if (name !== 'hack' && name !== 'SCSS' && name !== 'Dockerfile') {
-          const lang = new ProjectSkill();
-          lang.setID(name.toLowerCase());
-          lang.setTitle(name.toUpperCase());
-          lang.setUsage(usage);
-
-          this.list.push(lang);
+        if (skill) {
+          this.list.push(skill);
         }
       });
     }
   }
 
   languagesFromGithub(data: Array<Record<string, any>>) {
-    if (Array.isArray(data) && data.length > 0) {
-      data.forEach(({ language, usage }) => {
-        const projectSkill = new ProjectSkill();
-        projectSkill.setUsage(usage);
+    if (!Array.isArray(data) || data.length === 0) return;
 
-        if (language === 'Dockerfile') {
-          projectSkill.setID('docker');
-          projectSkill.setType('technology');
-          projectSkill.setTitle('Docker');
-        }
+    data.forEach(({ language, usage }) => {
+      const skill: ProjectSkill | null = this.getProjectSkill(language, usage);
 
-        if (language === 'SCSS') {
-          projectSkill.setID('sass');
-          projectSkill.setType('technology');
-          projectSkill.setTitle('Sass');
-        }
-
-        if (language === 'hack') {
-          projectSkill.setID('hack');
-          projectSkill.setType('language');
-          projectSkill.setTitle('Hack');
-        }
-
-        if (
-          language !== 'hack' &&
-          language !== 'SCSS' &&
-          language !== 'Dockerfile'
-        ) {
-          projectSkill.setID(language.toLowerCase());
-          projectSkill.setTitle(language.toUpperCase());
-        }
-
-        this.list.push(projectSkill);
-      });
-    }
+      if (skill) {
+        this.list.push(skill);
+      }
+    });
   }
 
   fromDocumentData(data?: ProjectSkillsDataObject) {
@@ -194,7 +175,9 @@ export class ProjectSkills
     return {
       list:
         this.list && this.list.length > 0
-          ? this.list.map((projectSkill) => projectSkill.toProjectSkillObject())
+          ? this.list
+              .filter((projectSkill) => projectSkill instanceof ProjectSkill)
+              .map((projectSkill) => projectSkill.toProjectSkillObject())
           : null,
     };
   }
@@ -210,3 +193,7 @@ export class ProjectSkills
     };
   }
 }
+
+export const isProjectSkillsObject = (val: any): val is ProjectSkillsObject => {
+  return val && typeof val === 'object' && Array.isArray(val.list);
+};

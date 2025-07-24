@@ -8,7 +8,7 @@ import styles from './Content.module.scss';
 interface ContentComponentProps<T> {
   title: string | null;
   query: T;
-  getFile: AsyncThunk<string, T, {}>;
+  getFile: AsyncThunk<string | null, T, {}>;
   dispatch: ThunkDispatch<any, any, any>;
 }
 
@@ -25,7 +25,7 @@ export const ContentComponent = <T,>({ title, query, getFile, dispatch }: Conten
           .unwrap()
           .then((file) => {
             const regex = /<(\w+)[^>]*>(.*?)<\/\1>/;
-            const match = file.match(regex);
+            const match = file ? file.match(regex) : null;
 
             if (match && match[2]) {
               setFile(file)

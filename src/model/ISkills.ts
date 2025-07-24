@@ -1,22 +1,8 @@
-import { ProjectType, Language, Framework, Technology, Service } from './Skill';
-
-export interface ISKills<S, T> {
-  list: Array<S>;
-  types: Set<ProjectType>;
-  languages: Set<Language>;
-  frameworks: Set<Framework>;
-  technologies: Set<Technology>;
-  services: Set<Service>;
-  count: number;
-  getProjectTypes: (data: Array<T>) => Set<ProjectType>;
-  getLanguages: (data: Array<T>) => Set<Language>;
-  getFrameworks: (data: Array<T>) => Set<Framework>;
-  getTechnologies: (data: Array<T>) => Set<Technology>;
-  getServices: (data: Array<T>) => Set<Service>;
-}
+import { ProjectSkillObject } from './ProjectSkill';
+import { Skill, SkillObject } from './Skill';
 
 export const getSkillsFrom = <
-  T extends { path?: string | null; type?: string | null },
+  T extends { type: string },
   U extends { path: string }
 >(
   data: Array<T>,
@@ -28,8 +14,37 @@ export const getSkillsFrom = <
   const set = new Set<U>();
 
   data.forEach((item) => {
-    if (item.path === matchPath || item.type === matchPath) {
+    if (item.type === matchPath) {
       set.add(new SkillClass(item));
+    }
+  });
+
+  return set;
+};
+
+export const getSkillsOfType = <
+  T extends Skill,
+  D extends Partial<ProjectSkillObject> | Partial<SkillObject>
+>(
+  skills: Skill[],
+  SkillClass: new (data: D) => T
+): Set<T> => {
+  const set = new Set<T>();
+
+  skills.forEach((skill) => {
+    const newClass = new SkillClass({} as D);
+    const matchPath = newClass.path;
+    
+    if (skill.path === matchPath) {
+      newClass.setID(skill.id ?? '');
+      newClass.setType(skill.type ?? '');
+      newClass.setTitle(skill.title ?? '');
+      newClass.setDescription(skill.description ?? '');
+      newClass.setPath(skill.path ?? '');
+      skill.image ? newClass.setImage(skill.image) : null;
+      newClass.setUsage(skill.usage ?? 0);
+
+      set.add(newClass);
     }
   });
 

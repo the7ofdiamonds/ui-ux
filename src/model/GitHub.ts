@@ -29,3 +29,7 @@ export type GitHubLanguages = RepoLanguagesResponse['data'];
 
 export type GitHubUserAccount =
   RestEndpointMethodTypes['users']['getByUsername']['response']['data'];
+
+export type GitHubRepoFileResponse = RestEndpointMethodTypes['repos']['getContent']['response'];  
+
+export type GitHubRepoFileData = GitHubRepoFileResponse['data'];  

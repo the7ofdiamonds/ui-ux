@@ -5,7 +5,11 @@ import {
   ProjectVersions,
   ProjectVersionsObject,
 } from '@/model/ProjectVersions';
-import { ProjectSkills, ProjectSkillsDataObject } from '@/model/ProjectSkills';
+import {
+  isProjectSkillsObject,
+  ProjectSkills,
+  ProjectSkillsDataObject,
+} from '@/model/ProjectSkills';
 import { ProjectSkillsObject } from '@/model/ProjectSkills';
 import { CheckList, CheckListObject } from '@/model/CheckList';
 import { ContentURL } from '@/model/ContentURL';
@@ -14,6 +18,7 @@ import { FeaturesRoadmap } from '@/model/FeaturesRoadmap';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
 import { Tasks } from './Tasks';
+import { isSkillsObject, Skills, SkillsObject } from './Skills';
 
 export type ProjectDevelopmentObject = {
   gallery: GalleryObject | null;
@@ -42,15 +47,16 @@ export class ProjectDevelopment {
   versionsList: ProjectVersions | null;
   roadmap: FeaturesRoadmap | null;
 
-  constructor(
-    data?: ProjectDevelopmentObject | Partial<ProjectDevelopmentObject>
-  ) {
+  constructor(data?: Partial<ProjectDevelopmentObject>) {
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.repoURL = data?.repo_url ? new RepoURL(data.repo_url) : null;
     this.contentURL = data?.content_url
       ? new ContentURL(data.content_url)
       : null;
-    this.skills = data?.skills ? new ProjectSkills(data.skills) : null;
+    this.skills =
+      data?.skills && isProjectSkillsObject(data.skills)
+        ? new ProjectSkills(data.skills)
+        : null;
     this.checkList = data?.check_list ? new CheckList(data.check_list) : null;
     this.versionsList = data?.versions_list
       ? new ProjectVersions(data.versions_list)
@@ -122,7 +128,10 @@ export class ProjectDevelopment {
     if (data?.process?.development) {
       if (data.process.development?.skills) {
         this.skills ? this.skills : (this.skills = new ProjectSkills());
-        this.skills.fromDocumentData(data?.process?.development?.skills);
+
+        if (this.skills instanceof ProjectSkills) {
+          this.skills.fromDocumentData(data?.process?.development?.skills);
+        }
       }
 
       if (
@@ -151,7 +160,10 @@ export class ProjectDevelopment {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       repo_url: this.repoURL ? this.repoURL.url : null,
       content_url: this.contentURL ? this.contentURL.url : null,
-      skills: this.skills ? this.skills.toProjectSkillsObject() : null,
+      skills:
+        this.skills && this.skills instanceof ProjectSkills
+          ? this.skills.toProjectSkillsObject()
+          : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       versions_list: this.versionsList
         ? this.versionsList.toProjectVersionsObject()
@@ -164,7 +176,10 @@ export class ProjectDevelopment {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       repo_url: this.repoURL ? this.repoURL.url : null,
       content_url: this.contentURL ? this.contentURL.url : null,
-      skills: this.skills ? this.skills.toProjectSkillsDataObject() : null,
+      skills:
+        this.skills && this.skills instanceof ProjectSkills
+          ? this.skills.toProjectSkillsDataObject()
+          : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       versions_list: this.versionsList
         ? this.versionsList.toProjectVersionsObject()

@@ -62,7 +62,7 @@ export class Project {
   details: ProjectDetails | null;
   query: ProjectQuery | null;
 
-  constructor(data?: ProjectObject | Partial<ProjectObject>) {
+  constructor(data?: Partial<ProjectObject>) {
     try {
       this.id = data?.id ? data.id : null;
       this.name = data?.name ? data.name : null;

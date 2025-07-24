@@ -1,13 +1,33 @@
 import { SkillObject, Skill } from '@/model/Skill';
 import { Framework, Language, ProjectType, Service, Technology } from './Skill';
+import { ProjectSkill } from './ProjectSkill';
 import { ProjectSkills } from './ProjectSkills';
-import { ISKills, getSkillsFrom } from './ISkills';
+import { getSkillsFrom, getSkillsOfType } from './ISkills';
+
+export interface ISKills<T> {
+  list: Array<ProjectSkill | Skill>;
+  types: Set<ProjectType>;
+  languages: Set<Language>;
+  frameworks: Set<Framework>;
+  technologies: Set<Technology>;
+  services: Set<Service>;
+  count: number;
+  getProjectTypes: (data: Array<T>) => Set<ProjectType>;
+  getLanguages: (data: Array<T>) => Set<Language>;
+  getFrameworks: (data: Array<T>) => Set<Framework>;
+  getTechnologies: (data: Array<T>) => Set<Technology>;
+  getServices: (data: Array<T>) => Set<Service>;
+}
 
 export type SkillsObject = {
   list: Array<SkillObject> | null;
 };
 
-export class Skills implements ISKills<Skill, SkillObject> {
+export type SkillsDataObject = {
+  list: Array<string> | null;
+};
+
+export class Skills implements ISKills<SkillObject> {
   list: Array<Skill> = [];
   types: Set<ProjectType> = new Set();
   languages: Set<Language> = new Set();
@@ -17,18 +37,27 @@ export class Skills implements ISKills<Skill, SkillObject> {
   count: number = 0;
 
   constructor(data?: SkillsObject) {
-    if (data && data.list && data.list.length > 0) {
-      this.list = data.list.map((skill) => {
-        return new Skill(skill);
-      });
-      this.count = this.list.length;
+    this.list =
+      data && data.list && data.list.length > 0
+        ? data.list.map((skill) => {
+            return new Skill(skill);
+          })
+        : [];
+    this.count = this.list.length;
 
+    if (data && data.list && data.list.length > 0) {
       this.types = this.getProjectTypes(data.list);
       this.languages = this.getLanguages(data.list);
       this.frameworks = this.getFrameworks(data.list);
       this.technologies = this.getTechnologies(data.list);
       this.services = this.getServices(data.list);
     }
+
+    this.types = this.getProjectTypesFromList();
+    this.languages = this.getLanguagesFromList();
+    this.frameworks = this.getFrameworksFromList();
+    this.technologies = this.getTechnologiesFromList();
+    this.services = this.getServicesFromList();
   }
 
   getProjectTypes(data: Array<SkillObject>) {
@@ -51,6 +80,26 @@ export class Skills implements ISKills<Skill, SkillObject> {
     return getSkillsFrom<SkillObject, Service>(data, Service);
   }
 
+  getProjectTypesFromList() {
+    return getSkillsOfType<ProjectType, SkillObject>(this.list, ProjectType);
+  }
+
+  getLanguagesFromList() {
+    return getSkillsOfType<Language, SkillObject>(this.list, Language);
+  }
+
+  getFrameworksFromList() {
+    return getSkillsOfType<Framework, SkillObject>(this.list, Framework);
+  }
+
+  getTechnologiesFromList() {
+    return getSkillsOfType<Technology, SkillObject>(this.list, Technology);
+  }
+
+  getServicesFromList() {
+    return getSkillsOfType<Service, SkillObject>(this.list, Service);
+  }
+
   existsInSet(skills: Set<Skill>, skill: Skill): boolean {
     const map = new Map(Array.from(skills).map((skill) => [skill.id, skill]));
 
@@ -63,20 +112,34 @@ export class Skills implements ISKills<Skill, SkillObject> {
 
   fromProjectSkills(projectSkills: ProjectSkills) {
     if (projectSkills.list && projectSkills.list.length > 0) {
+      const skills = new Skills();
+
       const projectTypes = projectSkills.list.filter(
-        (projectSkill) => projectSkill.type === 'project_type'
+        (projectSkill) => projectSkill.type === 'project-type'
       );
 
       if (projectTypes.length > 0) {
-        this.types = this.types.intersection(new Set(projectTypes));
+        projectTypes.forEach((type) => {
+          Array.from(this.types).forEach((skill) => {
+            if (skill.id === type.id) {
+              skills.types.add(skill);
+            }
+          });
+        });
       }
 
-      const languages = projectSkills.list.filter(
+      const langs = projectSkills.list.filter(
         (projectSkill) => projectSkill.type === 'language'
       );
 
-      if (languages.length > 0) {
-        this.languages = this.languages.intersection(new Set(languages));
+      if (langs.length > 0) {
+        langs.forEach((language) => {
+          Array.from(this.languages).forEach((lang) => {
+            if (lang.id === language.id) {
+              skills.languages.add(lang);
+            }
+          });
+        });
       }
 
       const frameworks = projectSkills.list.filter(
@@ -84,7 +147,13 @@ export class Skills implements ISKills<Skill, SkillObject> {
       );
 
       if (frameworks.length > 0) {
-        this.frameworks = this.frameworks.intersection(new Set(frameworks));
+        frameworks.forEach((framework) => {
+          Array.from(this.frameworks).forEach((skill) => {
+            if (skill.id === framework.id) {
+              skills.frameworks.add(skill);
+            }
+          });
+        });
       }
 
       const technologies = projectSkills.list.filter(
@@ -92,9 +161,13 @@ export class Skills implements ISKills<Skill, SkillObject> {
       );
 
       if (technologies.length > 0) {
-        this.technologies = this.technologies.intersection(
-          new Set(technologies)
-        );
+        technologies.forEach((technology) => {
+          Array.from(this.technologies).forEach((skill) => {
+            if (skill.id === technology.id) {
+              skills.technologies.add(skill);
+            }
+          });
+        });
       }
 
       const services = projectSkills.list.filter(
@@ -102,9 +175,19 @@ export class Skills implements ISKills<Skill, SkillObject> {
       );
 
       if (services.length > 0) {
-        this.services = this.services.intersection(new Set(services));
+        services.forEach((service) => {
+          Array.from(this.services).forEach((skill) => {
+            if (skill.id === service.id) {
+              skills.services.add(skill);
+            }
+          });
+        });
       }
+
+      return skills;
     }
+
+    return null;
   }
 
   toSkillsObject(): SkillsObject {
@@ -115,4 +198,19 @@ export class Skills implements ISKills<Skill, SkillObject> {
           : null,
     };
   }
+
+  toSkillsDataObject(): SkillsDataObject {
+    return {
+      list:
+        this.list && this.list.length > 0
+          ? this.list
+              .map((projectSkill) => projectSkill.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+    };
+  }
 }
+
+export const isSkillsObject = (val: any): val is SkillsObject => {
+  return val && typeof val === 'object' && Array.isArray(val.list);
+};

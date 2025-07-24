@@ -15,6 +15,7 @@ export * from './model/DocumentURL';
 export * from './model/Feature';
 export * from './model/FeaturesRoadmap';
 export * from './model/Gallery';
+export * from './model/GitHub';
 export * from './model/GitHubRepoQuery';
 export * from './model/Image';
 export * from './model/Issue';

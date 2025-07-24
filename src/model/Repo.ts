@@ -1,16 +1,14 @@
 import { Owner, OwnerObject } from './Owner';
 import { RepoContents, RepoContentsObject } from './RepoContents';
 import { RepoContent } from './RepoContent';
-import { Language, Technology } from './Skill';
 import { Contributors, ContributorsObject } from '@/model/Contributors';
 import {
   ProjectSkills,
   ProjectSkillsObject,
   LanguageGQL,
 } from './ProjectSkills';
-import { Image } from './Image';
 import { Issues, IssuesObject } from './Issues';
-import { IssueGQL, IssueObject } from './Issue';
+import { IssueGQL } from './Issue';
 import { OwnerGQL } from './Owner';
 
 import { GitHubRepo } from '@/model/GitHub';

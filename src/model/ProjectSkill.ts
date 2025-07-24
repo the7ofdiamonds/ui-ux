@@ -1,19 +1,19 @@
-import { SkillObject } from '@/model/Skill';
+import { ISkill, SkillObject } from '@/model/Skill';
 
 export interface ProjectSkillObject
   extends Omit<SkillObject, 'description' | 'path' | 'image'> {
-  type: string | null;
+  type: string;
 }
 
-export class ProjectSkill {
+export class ProjectSkill implements ISkill {
   id: string | null;
-  type: string | null;
+  type: string;
   title: string | null;
   usage: number;
 
   constructor(data?: Partial<ProjectSkillObject>) {
     this.id = data?.id ? data.id : null;
-    this.type = data?.type ? data.type : null;
+    this.type = data?.type ?? '';
     this.title = data?.title ? data.title : null;
     this.usage = data?.usage ? data.usage : 0;
   }

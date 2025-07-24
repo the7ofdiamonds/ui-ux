@@ -40,7 +40,7 @@ export class ProjectProcess {
   status: ProjectStatus | null;
   checkList: ProjectCheckList | null;
 
-  constructor(data?: ProjectProcessObject) {
+  constructor(data?: Partial<ProjectProcessObject>) {
     this.design = data?.design ? new ProjectDesign(data.design) : null;
     this.development = data?.development
       ? new ProjectDevelopment(data.development)

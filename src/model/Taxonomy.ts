@@ -42,6 +42,10 @@ export class Taxonomy {
     this.id = id;
   }
 
+  setType(type: string) {
+    this.type = type;
+  }
+
   setTitle(title: string) {
     this.title = title;
   }
@@ -62,8 +66,12 @@ export class Taxonomy {
     this.usage = usage;
   }
 
-  createSlug(path: string, title: string) {
-    return `${path}/${title}`;
+  createSlug(path: string, id: string) {
+    return `${path}/${id}`;
+  }
+
+  getSlug() {
+    return `${this.path}/${this.id}`;
   }
 
   isValid(): boolean {

@@ -27,7 +27,7 @@ export const TaxonomyBar: React.FC<TaxonomyBarProp> = ({ taxonomySet, handleClic
               {taxonomy.image && (taxonomy.image.className || taxonomy.image.url)
                 ? <button
                   key={index}
-                  className={styles['taxonomys-button']}
+                  className={styles['taxonomies-button']}
                   onClick={() => handleClick(taxonomy)}>
                   <ImageComponent image={taxonomy.image} />
                 </button> : <button
