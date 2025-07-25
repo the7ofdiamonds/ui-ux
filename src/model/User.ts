@@ -305,11 +305,13 @@ export class User implements iAccount {
   fromJson(json: Record<string, any>) {
     this.id = '0';
     this.avatarURL = json.avatar_url || null;
+    this.name = json.name;
     this.title = json.title || null;
     this.email = json.contact_methods.email.value || null;
     this.phone = json.contact_methods.phone.value || null;
     this.resume = json.resume || null;
     this.website = json.website || null;
+    this.login = json.login || null;
   }
 
   toUserObject(): UserObject {

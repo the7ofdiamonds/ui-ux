@@ -24,10 +24,7 @@ export const ContentComponent = <T,>({ title, query, getFile, dispatch }: Conten
         dispatch(getFile(query))
           .unwrap()
           .then((file) => {
-            const regex = /<(\w+)[^>]*>(.*?)<\/\1>/;
-            const match = file ? file.match(regex) : null;
-
-            if (match && match[2]) {
+            if (file) {
               setFile(file)
             } else {
               return null;
