@@ -59,7 +59,7 @@ export const ContentComponent = <T,>({ title, query, getFile, dispatch }: Conten
     <>
       {html && html != "" && (
         <div className={styles.content}>
-          {title && <h4 className={styles.title}>{title}</h4>}
+          {title && <h4 className='title'>{title}</h4>}
           <div className={styles['content-html']} dangerouslySetInnerHTML={{ __html: html }}></div>
         </div>
       )}

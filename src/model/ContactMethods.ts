@@ -188,6 +188,18 @@ export class ContactMethods {
     }
   }
 
+  fromJson(data?: Record<string, any>) {
+    this.setContactHackerRank(data?.hacker_rank);
+    this.setContactLinkedIn(data?.linked_in);
+    this.setContactX(data?.x);
+    this.setContactInstagram(data?.instagram);
+    this.setContactGitHub(data?.github);
+    this.setContactYoutube(data?.youtube);
+    this.setContactWebsite(data?.website);
+    this.setContactEmail(data?.email);
+    this.setContactPhone(data?.phone);
+  }
+  
   toContactMethodsObject(): ContactMethodsObject {
     return {
       hacker_rank:

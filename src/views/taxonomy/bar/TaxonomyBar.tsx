@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Taxonomy } from '@/model/Taxonomy';
 
-import { ImageComponent } from '@/views/image/ImageComponent';
+import { TaxButton } from '@/views/taxonomy/button/TaxButton';
 
 import styles from './TaxonomyBar.module.scss';
 
@@ -24,18 +24,7 @@ export const TaxonomyBar: React.FC<TaxonomyBarProp> = ({ taxonomySet, handleClic
         <div className={styles['project-skills-bar']}>
           {Array.from(taxonomies).map((taxonomy, index) => (
             <div className={styles.icon} key={index}>
-              {taxonomy.image && (taxonomy.image.className || taxonomy.image.url)
-                ? <button
-                  key={index}
-                  className={styles['taxonomies-button']}
-                  onClick={() => handleClick(taxonomy)}>
-                  <ImageComponent image={taxonomy.image} />
-                </button> : <button
-                  key={index}
-                  className={styles.tag}
-                  onClick={() => handleClick(taxonomy)}>
-                  <h6>{taxonomy.title}</h6>
-                </button>}
+              <TaxButton taxonomy={taxonomy} handleClick={handleClick} />
             </div>
           ))}
         </div>

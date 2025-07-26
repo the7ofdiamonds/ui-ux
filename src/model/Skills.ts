@@ -3,6 +3,7 @@ import { Framework, Language, ProjectType, Service, Technology } from './Skill';
 import { ProjectSkill } from './ProjectSkill';
 import { ProjectSkills } from './ProjectSkills';
 import { getSkillsFrom, getSkillsOfType } from './ISkills';
+import { Taxonomy } from './Taxonomy';
 
 export interface ISKills<T> {
   list: Array<ProjectSkill | Skill>;
@@ -213,4 +214,17 @@ export class Skills implements ISKills<SkillObject> {
 
 export const isSkillsObject = (val: any): val is SkillsObject => {
   return val && typeof val === 'object' && Array.isArray(val.list);
+};
+
+export const handleSkills = () => {
+  const skillsElement = document.getElementById('top');
+
+  if (skillsElement) {
+    skillsElement.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+export const handleSkillClick = (skill: Taxonomy) => {
+  handleSkills();
+  window.location.href = `/taxonomy/${skill.path}/${skill.id}`;
 };

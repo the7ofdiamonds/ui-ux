@@ -47,11 +47,10 @@ export class Portfolio {
 
   filterProjects(taxonomy: string, term: string): Set<Project> {
     let updatedProjects: Set<Project> = new Set();
-
     if (taxonomy && term) {
       Array.from(this.projects).forEach((project: Project) => {
         if (
-          taxonomy === 'project-types' &&
+          taxonomy === 'project-type' &&
           project?.process?.development?.skills?.types
         ) {
           project.process.development.skills.types.forEach((type) => {
@@ -62,7 +61,7 @@ export class Portfolio {
         }
 
         if (
-          taxonomy == 'languages' &&
+          taxonomy == 'language' &&
           project?.process?.development?.skills?.languages
         ) {
           project.process.development.skills.languages.forEach((language) => {
@@ -73,7 +72,7 @@ export class Portfolio {
         }
 
         if (
-          taxonomy === 'frameworks' &&
+          taxonomy === 'framework' &&
           project?.process?.development?.skills?.frameworks
         ) {
           project.process.development.skills.frameworks.forEach((framework) => {
@@ -84,7 +83,7 @@ export class Portfolio {
         }
 
         if (
-          taxonomy === 'technologies' &&
+          taxonomy === 'technology' &&
           project?.process?.development?.skills?.technologies
         ) {
           project.process.development.skills.technologies.forEach(
@@ -97,7 +96,7 @@ export class Portfolio {
         }
 
         if (
-          taxonomy === 'services' &&
+          taxonomy === 'service' &&
           project?.process?.development?.skills?.services
         ) {
           project.process.development.skills.services.forEach((service) => {

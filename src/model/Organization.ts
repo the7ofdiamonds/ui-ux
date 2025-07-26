@@ -218,15 +218,14 @@ export class Organization implements iAccount {
 
   fromJson(json: Record<string, any>) {
     this.id = '0';
-    this.login = json.contact_methods.login || null;
+    this.login = json.login || null;
     this.avatarURL = json.avatar_url || null;
     this.name = json.name || null;
     this.email = json.contact_methods.email.value || null;
     this.phone = json.contact_methods.phone.value || null;
     this.website = json.website || null;
-    this.contactMethods = json
-      ? this.getContactMethods(json)
-      : this.contactMethods;
+      
+    this.contactMethods.fromJson(json.contact_methods)
   }
 
   fromGitHubGraphQL(response: OrganizationGQL) {
