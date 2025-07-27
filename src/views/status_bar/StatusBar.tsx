@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './StatusBar.module.scss';
 
+export type StatusBarVisibility = 'show' | 'hide';
+export type MessageType = 'info' | 'caution' | 'error' | 'success';
+
 interface StatusBarProps {
-  show: 'show' | 'hide';
-  messageType: string;
-  message: string;
+  show: StatusBarVisibility;
+  messageType: MessageType;
+  message: string | null;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message }) => {
-  const [showModal, setShowModal] = useState<'show' | 'hide'>(show);
+  const [showModal, setShowModal] = useState<StatusBarVisibility>('hide');
 
   useEffect(() => {
     setShowModal(show)
