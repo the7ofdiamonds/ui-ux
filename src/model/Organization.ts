@@ -110,6 +110,10 @@ export class Organization implements iAccount {
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
   }
 
+  setLogin(login: string) {
+    this.login = login;
+  }
+
   getRoles(roles: Array<RoleObject>): Array<Role> {
     if (roles.length > 0) {
       return roles.map((roleObject) => new Role(roleObject));
@@ -216,16 +220,19 @@ export class Organization implements iAccount {
     this.skills = skills;
   }
 
-  fromJson(json: Record<string, any>) {
+  fromJSON(json: Record<string, any>) {
     this.id = '0';
-    this.login = json.login || null;
-    this.avatarURL = json.avatar_url || null;
-    this.name = json.name || null;
-    this.email = json.contact_methods.email.value || null;
-    this.phone = json.contact_methods.phone.value || null;
-    this.website = json.website || null;
-      
-    this.contactMethods.fromJson(json.contact_methods)
+    this.login = json.login ? json.login : null;
+    this.avatarURL = json.avatar_url ? json.avatar_url : null;
+    this.name = json.name ? json.name : null;
+    this.email =
+      json.contact_methods?.email && json.contact_methods.email !== ''
+        ? json.contact_methods.email
+        : null;
+    this.phone = json.contact_methods?.phone ? json.contact_methods.phone : null;
+    this.website = json.website ? json.website : null;
+
+    this.contactMethods.fromJson(json.contact_methods);
   }
 
   fromGitHubGraphQL(response: OrganizationGQL) {

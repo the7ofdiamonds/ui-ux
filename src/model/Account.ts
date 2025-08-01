@@ -91,7 +91,7 @@ export interface iAccount {
   fromGitHub: (data: any) => void;
   fromGitHubGraphQL: (data: AccountGQL) => void;
   fromDB: (data: Record<string, any>) => void;
-  fromJson: (data: Record<string, any>) => void;
+  fromJSON: (data: Record<string, any>) => void;
 }
 
 export class Account implements iAccount {
@@ -321,7 +321,7 @@ export class Account implements iAccount {
     // }
   }
 
-  fromJson(json: Record<string, any>) {
+  fromJSON(json: Record<string, any>) {
     this.id = '0';
     this.login = json.contact_methods.login || null;
     this.avatarURL = json.avatar_url || null;

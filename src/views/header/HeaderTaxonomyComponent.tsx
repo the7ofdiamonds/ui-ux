@@ -14,7 +14,7 @@ export const HeaderTaxonomyComponent: React.FC<HeaderTaxonomyComponentProps> = (
     return (
         <>
             <h1 className={styles['page-title']}>
-                {skill.image && <IconComponent imageClass={skill.image} />}
+                {skill.image && <IconComponent icon={skill.image} />}
                 {skill.title}
             </h1>
         </>

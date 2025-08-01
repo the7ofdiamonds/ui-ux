@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { StatusBar } from '@/views/status_bar/StatusBar';
+import { MessageType, StatusBar, StatusBarVisibility } from '@/views/status_bar/StatusBar';
 
 import { Main } from '@/views/main/Main';
 
@@ -10,8 +10,9 @@ interface DocumentComponentProps {
 
 export const DocumentComponent: React.FC<DocumentComponentProps> = ({ documentURL }) => {
     const [url, setURL] = useState<string | null>(null);
-    const [message, setMessage] = useState<string>('');
-    const [messageType, setMessageType] = useState<string>('');
+    const [showStatusBar, setShowStatusBar] = useState<StatusBarVisibility>('hide');
+    const [message, setMessage] = useState<string | null>(null);
+    const [messageType, setMessageType] = useState<MessageType>('info');
 
     useEffect(() => {
         if (
@@ -22,6 +23,7 @@ export const DocumentComponent: React.FC<DocumentComponentProps> = ({ documentUR
                 setURL(documentURL);
             } catch (error) {
                 const err = error as Error;
+                setShowStatusBar('show');
                 setMessage(err.message)
                 setMessageType('error');
             }
@@ -30,23 +32,20 @@ export const DocumentComponent: React.FC<DocumentComponentProps> = ({ documentUR
 
     return (
         <Main>
-            {url ? (
-                <iframe
-                    id="pdf_viewer"
-                    src={`${url}#view=fit`}
-                    title="PDF Viewer"
-                    allowFullScreen
-                    style={{
-                        border: 0,
-                        margin: 0,
-                        padding: 0,
-                        display: "block",
-                        width: '100%',
-                        height: '100%'
-                    }}
-                />
-            ) : (
-                <StatusBar show={'hide'} messageType={messageType} message={message} />
-            )}
+            {url && <iframe
+                id="pdf_viewer"
+                src={`${url}#view=fit`}
+                title="PDF Viewer"
+                allowFullScreen
+                style={{
+                    border: 0,
+                    margin: 0,
+                    padding: 0,
+                    display: "block",
+                    width: '100%',
+                    height: '100%'
+                }}
+            />}
+            {message && <StatusBar show={showStatusBar} messageType={messageType} message={message} />}
         </Main>);
 };

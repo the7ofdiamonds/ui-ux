@@ -302,7 +302,7 @@ export class User implements iAccount {
     }
   }
 
-  fromJson(json: Record<string, any>) {
+  fromJSON(json: Record<string, any>) {
     this.id = '0';
     this.avatarURL = json.avatar_url || null;
     this.name = json.name;
