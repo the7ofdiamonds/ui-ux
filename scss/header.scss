@@ -5,7 +5,7 @@
 @use './header_desktop.scss';
 @use './title.scss';
 
-:global(header) {
+header {
   grid-area: Navigation;
   position: fixed;
   top: 0;
@@ -136,11 +136,17 @@
     }
   }
 
+  .header {
+    background-color: var(--header-background-color);
+    a {
+      color: var(--header-font-color);
+    }
+  }
+
   .header:hover {
     background-color: black;
-    color: white;
 
-    a {
+    .header-title {
       color: white;
     }
   }

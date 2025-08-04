@@ -1,18 +1,6 @@
 @use './variables.scss';
 
-a {
-  text-decoration: none;
-}
-
 .icon {
-  a {
-    img {
-      box-shadow: var(--box-shadow);
-      border-radius: var(--border-radius);
-    }
-
-    i {
-      font-size: 6rem;
-    }
-  }
+  font-size: 1.5rem;
+  color: var(--icon-color);
 }
