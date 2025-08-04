@@ -2,29 +2,21 @@ import { AccountObject, iAccount } from '@/model/Account';
 import { ContactMethods, ContactMethodsObject } from '@/model/ContactMethods';
 import { GitHubUserAccount } from '@/model/GitHub';
 import {
+  UserGQL,
+  OrganizationGQL,
+  OrganizationResponseGQL,
+} from '@/model/GitHubGQL';
+import {
   GitHubRepoQuery,
   GitHubRepoQueryObject,
 } from '@/model/GitHubRepoQuery';
 import { Organizations } from '@/model/Organizations';
 import { Portfolio, PortfolioObject } from '@/model/Portfolio';
 import { Role, RoleObject } from './Role';
-import { RepoObject, RepositoryGQL } from '@/model/Repo';
+import { RepoObject } from '@/model/Repo';
 import { Repos } from '@/model/Repos';
 import { Skills } from '@/model/Skills';
-
-export type OrganizationGQL = {
-  id: string;
-  login: string;
-  name: string;
-  avatarUrl: string;
-  repositories: {
-    nodes: Array<RepositoryGQL>;
-  };
-};
-
-export type OrganizationResponseGQL = {
-  organization: OrganizationGQL;
-};
+import { User, UserObject } from './User';
 
 export interface OrganizationObject extends AccountObject {
   id: string | null;
@@ -45,6 +37,7 @@ export interface OrganizationObject extends AccountObject {
   repos: Array<RepoObject> | null;
   repo_queries: Array<GitHubRepoQueryObject> | null;
   portfolio: PortfolioObject | null;
+  team: Array<UserObject> | null;
 }
 
 export class Organization implements iAccount {
@@ -69,9 +62,10 @@ export class Organization implements iAccount {
   public repoQueries: Array<GitHubRepoQuery>;
   public skills: Skills;
   public portfolio: Portfolio | null;
-  company: string | null;
-  description: string | null;
-  blog: string | null;
+  public company: string | null;
+  public description: string | null;
+  public blog: string | null;
+  public team: Array<User> | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
     this.id = data?.id ? data.id : null;
@@ -108,6 +102,7 @@ export class Organization implements iAccount {
       : [];
     this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
+    this.team = data?.team ? data.team.map((user) => new User(user)) : null;
   }
 
   setLogin(login: string) {
@@ -229,7 +224,9 @@ export class Organization implements iAccount {
       json.contact_methods?.email && json.contact_methods.email !== ''
         ? json.contact_methods.email
         : null;
-    this.phone = json.contact_methods?.phone ? json.contact_methods.phone : null;
+    this.phone = json.contact_methods?.phone
+      ? json.contact_methods.phone
+      : null;
     this.website = json.website ? json.website : null;
 
     this.contactMethods.fromJson(json.contact_methods);
@@ -241,11 +238,11 @@ export class Organization implements iAccount {
     if (!org) {
       return;
     }
-
     this.id = org.id;
     this.login = org.login;
     this.name = org.name;
     this.avatarURL = org.avatarUrl;
+    this.bio = org.description ? org.description : null;
 
     if (
       Array.isArray(org.repositories.nodes) &&
@@ -261,6 +258,17 @@ export class Organization implements iAccount {
       portfolio.fromRepos(this.repos);
       this.portfolio = portfolio;
     }
+
+    this.team =
+      org.membersWithRole && org.membersWithRole.nodes.length > 0
+        ? org.membersWithRole.nodes.map((user) => {
+          const usr = new User();
+          usr.fromGitHubGraphQL(user);
+          return usr
+        })
+        : null;
+
+    return this;
   }
 
   fromGitHub(data: GitHubUserAccount) {
@@ -293,7 +301,7 @@ export class Organization implements iAccount {
       login: this.login,
       roles: this.roles,
       description: this.description,
-      bio: null,
+      bio: this.bio,
       name: this.name,
       company: this.company,
       blog: this.blog,
@@ -317,6 +325,7 @@ export class Organization implements iAccount {
       skills: this.skills ? this.skills.toSkillsObject() : null,
       organizations_url: null,
       organizations: null,
+      team: this.team ? this.team.map((user) => user.toUserObject()) : null,
     };
   }
 }

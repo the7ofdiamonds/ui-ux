@@ -1,12 +1,5 @@
-import {
-  Organization,
-  OrganizationGQL,
-  OrganizationObject,
-} from './Organization';
-
-export type OrganizationsGQL = {
-  nodes: Array<OrganizationGQL>;
-};
+import { Organization, OrganizationObject } from './Organization';
+import { OrganizationGQL } from './GitHubGQL';
 
 export class Organizations {
   list: Array<Organization>;

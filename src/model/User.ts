@@ -1,4 +1,4 @@
-import { AccountGQL, AccountObject, iAccount } from '@/model/Account';
+import { AccountObject, iAccount } from '@/model/Account';
 import { ContactMethods } from '@/model/ContactMethods';
 import { GitHubRepoQuery } from '@/model/GitHubRepoQuery';
 import { OrganizationObject } from '@/model/Organization';
@@ -9,6 +9,7 @@ import { Repos } from '@/model/Repos';
 import { Skills } from '@/model/Skills';
 import { Role, RoleObject } from '@/model/Role';
 import { GitHubUserAccount } from './GitHub';
+import { AccountGQL, UserGQL } from './GitHubGQL';
 
 export type UserObject = Omit<AccountObject, 'type' | 'login' | 'name'> & {
   username: string | null;
@@ -256,15 +257,19 @@ export class User implements iAccount {
     this.contactMethods = this.getContactMethods(data);
   }
 
-  fromGitHubGraphQL(response: AccountGQL) {
+  fromGitHubGraphQL(response: UserGQL) {
     const org = response ? response : null;
 
     if (!org) {
       return;
     }
 
-    this.id = org.id;
-    this.avatarURL = org.avatarUrl;
+    this.id = org.id ? org.id : null;
+    this.avatarURL = org.avatarUrl ? org.avatarUrl : null;
+    this.name = org.name ? org.name : null;
+    this.bio = org.bio ? org.bio : null;
+    this.email = org.email ? org.email : null;
+    this.login = org.login ? org.login : null;
 
     if (
       org.organizations &&
@@ -276,6 +281,7 @@ export class User implements iAccount {
     }
 
     if (
+      org.repositories &&
       Array.isArray(org.repositories.nodes) &&
       org.repositories.nodes.length > 0
     ) {
@@ -289,6 +295,8 @@ export class User implements iAccount {
       portfolio.fromRepos(this.repos);
       this.portfolio = portfolio;
     }
+
+    return this
   }
 
   fromDB(data: Record<string, any>) {

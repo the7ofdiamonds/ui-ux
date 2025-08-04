@@ -3,7 +3,7 @@ import {
   GitHubRepoQuery,
   GitHubRepoQueryObject,
 } from '@/model/GitHubRepoQuery';
-import { OrganizationGQL, OrganizationObject } from '@/model/Organization';
+import { OrganizationObject } from '@/model/Organization';
 import { Organizations } from '@/model/Organizations';
 import { Portfolio, PortfolioObject } from '@/model/Portfolio';
 import { Repo, RepoObject, RepositoryGQL } from '@/model/Repo';
@@ -11,26 +11,8 @@ import { Repos } from '@/model/Repos';
 import { Role, RoleObject } from '@/model/Role';
 import { SkillsObject, Skills } from '@/model/Skills';
 import { GitHubUserAccount } from './GitHub';
+import { AccountGQL, FromGitHubGraphQL } from './GitHubGQL';
 
-export type AccountGQL = {
-  id: string;
-  __typename: string;
-  login: string;
-  name: string;
-  email: string;
-  bio: string;
-  avatarUrl: string;
-  organizations: {
-    nodes: Array<OrganizationGQL>;
-  };
-  repositories: {
-    nodes: Array<RepositoryGQL>;
-  };
-};
-
-export type AccountGQLResponse = {
-  viewer: AccountGQL;
-};
 
 export type AccountObject = {
   id: string | null;
@@ -89,7 +71,7 @@ export interface iAccount {
   setPortfolio: (portfolio: Portfolio) => void;
   setSkills: (skills: Skills) => void;
   fromGitHub: (data: any) => void;
-  fromGitHubGraphQL: (data: AccountGQL) => void;
+  fromGitHubGraphQL: FromGitHubGraphQL;
   fromDB: (data: Record<string, any>) => void;
   fromJSON: (data: Record<string, any>) => void;
 }

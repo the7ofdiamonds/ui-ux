@@ -1,5 +1,4 @@
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
-import { graphql } from '@octokit/graphql';
 import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod,
@@ -30,6 +29,7 @@ export type GitHubLanguages = RepoLanguagesResponse['data'];
 export type GitHubUserAccount =
   RestEndpointMethodTypes['users']['getByUsername']['response']['data'];
 
-export type GitHubRepoFileResponse = RestEndpointMethodTypes['repos']['getContent']['response'];  
+export type GitHubRepoFileResponse =
+  RestEndpointMethodTypes['repos']['getContent']['response'];
 
-export type GitHubRepoFileData = GitHubRepoFileResponse['data'];  
+export type GitHubRepoFileData = GitHubRepoFileResponse['data'];
