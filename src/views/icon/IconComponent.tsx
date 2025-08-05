@@ -14,7 +14,7 @@ export const IconComponent: React.FC<IconComponentProps> = ({ icon }) => {
     <>
       {
         icon?.className && (
-          <i className={`${icon.className} ${styles.icon}`} title={icon.title ?? ''}></i>
+          <i className={`${icon.className} ${styles.icon}`} aria-label={icon.title ?? ''} aria-hidden="false"></i>
         )}
     </>
   );
