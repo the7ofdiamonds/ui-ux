@@ -1,0 +1,52 @@
+.site-map {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.site-map-info,
+.site-map-communication,
+.site-map-account,
+.site-map-offer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  flex: 1;
+
+  h5 {
+    font-weight: 700;
+  }
+}
+
+.site-map-info-links,
+.site-map-communication-links,
+.site-map-account-links,
+.site-map-offer-links {
+  ul {
+    li {
+      list-style: none;
+      padding: 0.25rem;
+      a {
+        text-decoration: none;
+        color: var(--font-color);
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .site-map {
+    align-items: start;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
