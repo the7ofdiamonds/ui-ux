@@ -19,6 +19,7 @@ export * from './model/Gallery';
 export * from './model/GitHub';
 export * from './model/GitHubGQL';
 export * from './model/GitHubRepoQuery';
+export * from './model/Hours';
 export * from './model/Image';
 export * from './model/Issue';
 export * from './model/Issues';

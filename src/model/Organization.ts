@@ -17,6 +17,7 @@ import { RepoObject } from '@/model/Repo';
 import { Repos } from '@/model/Repos';
 import { Skills } from '@/model/Skills';
 import { User, UserObject } from './User';
+import { Hours } from './Hours';
 
 export interface OrganizationObject extends AccountObject {
   id: string | null;
@@ -38,6 +39,7 @@ export interface OrganizationObject extends AccountObject {
   repo_queries: Array<GitHubRepoQueryObject> | null;
   portfolio: PortfolioObject | null;
   team: Array<UserObject> | null;
+  office_hours: Array<Hours> | null;
 }
 
 export class Organization implements iAccount {
@@ -66,6 +68,7 @@ export class Organization implements iAccount {
   public description: string | null;
   public blog: string | null;
   public team: Array<User> | null;
+  public officeHours: Array<Hours> | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
     this.id = data?.id ? data.id : null;
@@ -103,6 +106,7 @@ export class Organization implements iAccount {
     this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
     this.team = data?.team ? data.team.map((user) => new User(user)) : null;
+    this.officeHours = data?.office_hours ? data.office_hours : null;
   }
 
   setLogin(login: string) {
@@ -215,6 +219,10 @@ export class Organization implements iAccount {
     this.skills = skills;
   }
 
+  setOfficeHours(officeHours: Array<Hours>) {
+    this.officeHours = officeHours;
+  }
+
   fromJSON(json: Record<string, any>) {
     this.id = '0';
     this.login = json.login ? json.login : null;
@@ -262,10 +270,10 @@ export class Organization implements iAccount {
     this.team =
       org.membersWithRole && org.membersWithRole.nodes.length > 0
         ? org.membersWithRole.nodes.map((user) => {
-          const usr = new User();
-          usr.fromGitHubGraphQL(user);
-          return usr
-        })
+            const usr = new User();
+            usr.fromGitHubGraphQL(user);
+            return usr;
+          })
         : null;
 
     return this;
@@ -326,6 +334,7 @@ export class Organization implements iAccount {
       organizations_url: null,
       organizations: null,
       team: this.team ? this.team.map((user) => user.toUserObject()) : null,
+      office_hours: this.officeHours,
     };
   }
 }
