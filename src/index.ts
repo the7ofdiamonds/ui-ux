@@ -59,6 +59,8 @@ export * from './model/RepoURL';
 export * from './model/Roadmap';
 export * from './model/Role';
 export * from './model/SecureHeaders';
+export * from './model/Service';
+export * from './model/Services';
 export * from './model/SiteMap';
 export * from './model/Skill';
 export * from './model/Skills';
