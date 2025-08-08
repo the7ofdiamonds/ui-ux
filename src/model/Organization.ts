@@ -18,6 +18,8 @@ import { Repos } from '@/model/Repos';
 import { Skills } from '@/model/Skills';
 import { User, UserObject } from './User';
 import { Hours } from './Hours';
+import { Service, ServiceObject } from './Service';
+import { Product, ProductObject } from './Product';
 
 export interface OrganizationObject extends AccountObject {
   id: string | null;
@@ -40,6 +42,8 @@ export interface OrganizationObject extends AccountObject {
   portfolio: PortfolioObject | null;
   team: Array<UserObject> | null;
   office_hours: Array<Hours> | null;
+  products: Array<ProductObject> | null;
+  services: Array<ServiceObject> | null;
 }
 
 export class Organization implements iAccount {
@@ -69,6 +73,8 @@ export class Organization implements iAccount {
   public blog: string | null;
   public team: Array<User> | null;
   public officeHours: Array<Hours> | null;
+  public products: Array<Product> | null;
+  public services: Array<Service> | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
     this.id = data?.id ? data.id : null;
@@ -107,6 +113,12 @@ export class Organization implements iAccount {
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
     this.team = data?.team ? data.team.map((user) => new User(user)) : null;
     this.officeHours = data?.office_hours ? data.office_hours : null;
+    this.products = data?.products
+      ? data.products.map((product) => new Product(product))
+      : null;
+    this.services = data?.services
+      ? data.services.map((service) => new Service(service))
+      : null;
   }
 
   setLogin(login: string) {
@@ -223,6 +235,12 @@ export class Organization implements iAccount {
     this.officeHours = officeHours;
   }
 
+  setProducts() {}
+
+  setServices(services: Array<Service>) {
+    this.services = services;
+  }
+
   fromJSON(json: Record<string, any>) {
     this.id = '0';
     this.login = json.login ? json.login : null;
@@ -335,6 +353,12 @@ export class Organization implements iAccount {
       organizations: null,
       team: this.team ? this.team.map((user) => user.toUserObject()) : null,
       office_hours: this.officeHours,
+      products: this.products
+        ? this.products.map((product) => product.toProductObject())
+        : null,
+      services: this.services
+        ? this.services.map((service) => service.toServiceObject())
+        : null,
     };
   }
 }

@@ -2,7 +2,7 @@ import { snakeCaseToPath } from '@/utils/String';
 import { Image, ImageObject } from './Image';
 
 export type TaxonomyObject = {
-  id: string | null;
+  id: string | number | null;
   type: string | null;
   title: string | null;
   path: string | null;
@@ -12,7 +12,7 @@ export type TaxonomyObject = {
 };
 
 export class Taxonomy {
-  public id: string | null;
+  public id: string | number | null;
   public type: string | null;
   public title: string | null;
   public description: string | null;

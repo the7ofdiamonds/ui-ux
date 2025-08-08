@@ -6,7 +6,7 @@ export interface ProjectSkillObject
 }
 
 export class ProjectSkill implements ISkill {
-  id: string | null;
+  id: string | number | null;
   type: string;
   title: string | null;
   usage: number;

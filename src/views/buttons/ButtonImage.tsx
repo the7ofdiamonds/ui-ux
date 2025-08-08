@@ -14,18 +14,14 @@ interface ButtonImageExternalProps {
     url: string;
 }
 
-export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ description,image,name,url }) => {
+export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ action, description, image, name, url }) => {
 
     return (
-        <>
-            {url &&
-                <Button
-                    action={() => window.open(url, '_blank')}
-                    title={description ?? name}>
-                    <ImageComponent image={image} />
-                    <h3>{`${name}`}</h3>
-                </Button>
-            }
-        </>
+        <Button
+            action={action}
+            title={description ?? name}>
+            <ImageComponent image={image} />
+            <h3>{`${name}`}</h3>
+        </Button>
     )
 }

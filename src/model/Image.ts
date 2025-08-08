@@ -1,17 +1,17 @@
 export type ImageObject = {
-  id: string | null;
+  id: string | number | null;
   title: string | null;
   url: string | null;
   class_name: string | null;
 };
 
 export class Image {
-  id: string | null;
+  id: string | number | null;
   title: string | null;
   url: string | null;
   className: string | null;
 
-  constructor(data?: Partial<ImageObject> | ImageObject) {
+  constructor(data?: Partial<ImageObject>) {
     this.id = data?.id ? data.id : null;
     this.title = data?.title ? data.title : null;
     this.url = data?.url ? data.url : null;

@@ -2,19 +2,19 @@ import { Image } from '@/model/Image';
 import { Taxonomy, TaxonomyObject } from '@/model/Taxonomy';
 
 export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
-  type: string;
+  type: string | null;
 }
 
 export interface ISkill {
-  id: string | null;
-  type: string;
+  id: string | number | null;
+  type: string | null;
   title: string | null;
   usage: number;
 }
 
 export class Skill extends Taxonomy implements ISkill {
-  public id: string | null;
-  public type: string = 'skill';
+  public id: string | number | null;
+  public type: string | null = 'skill';
   public title: string | null;
   public description: string | null;
   public path: string | null;
@@ -55,7 +55,7 @@ export class Skill extends Taxonomy implements ISkill {
 export class ProjectType extends Skill {
   readonly path: string = 'project-type';
 
-  constructor(data?: SkillObject | Partial<SkillObject>) {
+  constructor(data?: Partial<SkillObject>) {
     super({ ...data, path: 'project-type' });
   }
 }
@@ -63,7 +63,7 @@ export class ProjectType extends Skill {
 export class Language extends Skill {
   readonly path: string = 'language';
 
-  constructor(data?: SkillObject | Partial<SkillObject>) {
+  constructor(data?: Partial<SkillObject>) {
     super({ ...data, path: 'language' });
   }
 }
@@ -71,7 +71,7 @@ export class Language extends Skill {
 export class Framework extends Skill {
   readonly path: string = 'framework';
 
-  constructor(data?: SkillObject | Partial<SkillObject>) {
+  constructor(data?: Partial<SkillObject>) {
     super({ ...data, path: 'framework' });
   }
 }
@@ -79,15 +79,7 @@ export class Framework extends Skill {
 export class Technology extends Skill {
   readonly path: string = 'technology';
 
-  constructor(data?: SkillObject | Partial<SkillObject>) {
+  constructor(data?: Partial<SkillObject>) {
     super({ ...data, path: 'technology' });
-  }
-}
-
-export class Service extends Skill {
-  readonly path: string = 'service';
-
-  constructor(data?: SkillObject | Partial<SkillObject>) {
-    super({ ...data, path: 'service' });
   }
 }

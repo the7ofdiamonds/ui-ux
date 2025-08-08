@@ -1,9 +1,9 @@
 import { ProjectSkill, ProjectSkillObject } from '@/model/ProjectSkill';
+import { Service } from './Service';
 import {
   Framework,
   Language,
   ProjectType,
-  Service,
   Skill,
   Technology,
 } from '@/model/Skill';

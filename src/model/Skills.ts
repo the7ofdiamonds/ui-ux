@@ -1,5 +1,6 @@
+import { Service } from './Service';
 import { SkillObject, Skill } from '@/model/Skill';
-import { Framework, Language, ProjectType, Service, Technology } from './Skill';
+import { Framework, Language, ProjectType, Technology } from './Skill';
 import { ProjectSkill } from './ProjectSkill';
 import { ProjectSkills } from './ProjectSkills';
 import { getSkillsFrom, getSkillsOfType } from './ISkills';
