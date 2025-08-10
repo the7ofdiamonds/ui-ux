@@ -1,6 +1,6 @@
 {
   "name": "@the7ofdiamonds/ui-ux",
-  "version": "1.0.57",
+  "version": "1.0.58",
   "description": "A modern UI/UX component library by @the7ofdiamonds.",
   "author": "@the7ofdiamonds",
   "license": "ISC",
@@ -9,11 +9,15 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/types/index.d.ts"
+    },
+    "./scss": {
+      "sass": "./scss/index.scss"
     }
   },
   "types": "./dist/types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "scss"
   ],
   "repository": {
     "type": "git",

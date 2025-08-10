@@ -3,7 +3,7 @@ import React from 'react'
 import styles from './Button.module.scss';
 
 interface ButtonProps {
-    title: string;
+    title: string | null;
     description?: string;
     action: () => void;
     children?: React.ReactNode;

@@ -13,7 +13,7 @@ export type ServiceObject = SkillObject & {
   price: string | number | null;
   features: Array<FeatureObject> | null;
   onboarding_link: string | null;
-  icon: ImageObject | null;
+  icons: Array<ImageObject> | null;
   button_icon: ImageObject | null;
   action_word: string | null;
   price_id: string | null;
@@ -32,7 +32,7 @@ export class Service extends Skill {
   price: string | number | null;
   features: Array<Feature> | null;
   onboardingLink: string | null;
-  icon: Image | null;
+  icons: Array<Image> | null;
   buttonIcon: Image | null;
   actionWord: string | null;
   priceID: string | null;
@@ -57,7 +57,10 @@ export class Service extends Skill {
     this.onboardingLink = service?.onboarding_link
       ? service.onboarding_link
       : null;
-    this.icon = service?.icon ? new Image(service.icon) : null;
+    this.icons =
+      service?.icons && service.icons.length > 0
+        ? service.icons.map((icon) => new Image(icon))
+        : null;
     this.buttonIcon = service?.button_icon
       ? new Image(service.button_icon)
       : null;
@@ -81,7 +84,7 @@ export class Service extends Skill {
         ? this.features.map((feature) => feature.toFeatureObject())
         : null,
       onboarding_link: this.onboardingLink,
-      icon: this.icon ? this.icon.toImageObject() : null,
+      icons: this.icons ? this.icons.map((icon) => icon.toImageObject()) : null,
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       action_word: this.actionWord,
       price_id: this.priceID,

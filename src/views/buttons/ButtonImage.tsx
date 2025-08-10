@@ -9,9 +9,9 @@ import { Image } from '@/model/Image';
 interface ButtonImageExternalProps {
     action: () => void;
     description?: string;
-    image: Image;
-    name: string;
-    url: string;
+    image: Image | null;
+    name: string | null;
+    url: string | null;
 }
 
 export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ action, description, image, name, url }) => {
@@ -20,8 +20,7 @@ export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ action, descri
         <Button
             action={action}
             title={description ?? name}>
-            <ImageComponent image={image} />
-            <h3>{`${name}`}</h3>
+            {image && <ImageComponent image={image} />}
         </Button>
     )
 }
