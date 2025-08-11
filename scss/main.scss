@@ -7,6 +7,10 @@
   gap: 1.5rem;
   padding: 0 1rem;
 
+  &.full-height{
+    min-height: 100vh;
+  }
+  
   &.error {
     margin-top: -5rem;
   }
