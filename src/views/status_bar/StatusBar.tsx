@@ -39,7 +39,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message
           </div>
 
           <div className={`${styles['status-bar']} ${styles.card} ${messageType}`} id="status_bar">
-            <span>{message}</span>
+            <h4>{message}</h4>
           </div>
         </div>
       </span>

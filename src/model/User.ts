@@ -296,7 +296,7 @@ export class User implements iAccount {
       this.portfolio = portfolio;
     }
 
-    return this
+    return this;
   }
 
   fromDB(data: Record<string, any>) {
@@ -311,15 +311,20 @@ export class User implements iAccount {
   }
 
   fromJSON(json: Record<string, any>) {
+    console.log(json)
     this.id = '0';
     this.avatarURL = json.avatar_url || null;
-    this.name = json.name;
-    this.title = json.title || null;
-    this.email = json.contact_methods.email.value || null;
-    this.phone = json.contact_methods.phone.value || null;
-    this.resume = json.resume || null;
-    this.website = json.website || null;
-    this.login = json.login || null;
+    this.name = json?.name
+      ? json.name
+      : json?.first_name && json?.last_name
+      ? `${json?.first_name} ${json?.last_name}`
+      : null;
+    this.title = json?.title || null;
+    this.email = json?.contact_methods?.email?.value || null;
+    this.phone = json?.contact_methods?.phone?.value || null;
+    this.resume = json?.resume || null;
+    this.website = json?.website || null;
+    this.login = json?.login || null;
   }
 
   toUserObject(): UserObject {

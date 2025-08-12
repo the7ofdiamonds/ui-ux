@@ -14,11 +14,11 @@
   &.success {
     background-color: var(--color-success);
   }
-  span {
-    color: var(--color-primary);
 
-    h4 {
-      padding: 0.5em;
-    }
+  h4 {
+    color: var(--color-primary);
+    padding: 0.5em;
+    letter-spacing: normal;
+    text-align: center;
   }
 }

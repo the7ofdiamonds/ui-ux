@@ -256,6 +256,14 @@ export class Organization implements iAccount {
     this.website = json.website ? json.website : null;
 
     this.contactMethods.fromJson(json.contact_methods);
+
+    this.team = json.team
+      ? json.team.map((user: UserObject) => {
+          const usr = new User();
+          usr.fromJSON(user);
+          return usr;
+        })
+      : null;
   }
 
   fromGitHubGraphQL(response: OrganizationGQL) {
