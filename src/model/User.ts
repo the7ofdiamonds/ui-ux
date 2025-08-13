@@ -311,7 +311,6 @@ export class User implements iAccount {
   }
 
   fromJSON(json: Record<string, any>) {
-    console.log(json)
     this.id = '0';
     this.avatarURL = json.avatar_url || null;
     this.name = json?.name
