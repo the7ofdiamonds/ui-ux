@@ -23,7 +23,7 @@ export class Contributors {
   fromGitHub(contributors: RepoContributors) {
     let list: Array<Contributor> = [];
 
-    if (Array.isArray(contributors) && contributors.length > 0) {
+    if (contributors.length > 0) {
       contributors.forEach((contributor) => {
         const contr = new Contributor();
         contr.fromGitHub(contributor);

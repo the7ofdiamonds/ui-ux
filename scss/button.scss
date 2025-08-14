@@ -12,6 +12,7 @@
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   opacity: var(--opacity);
+  padding: 0.5rem;
 
   h2,
   h3,
@@ -19,8 +20,6 @@
   h5,
   h6 {
     color: var(--button-color);
-    padding: 0.75em;
-    word-wrap: normal;
   }
 
   i {

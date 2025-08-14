@@ -8,10 +8,13 @@ import { RepoObject } from '@/model/Repo';
 import { Repos } from '@/model/Repos';
 import { Skills } from '@/model/Skills';
 import { Role, RoleObject } from '@/model/Role';
-import { GitHubUserAccount } from './GitHub';
-import { AccountGQL, UserGQL } from './GitHubGQL';
 
-export type UserObject = Omit<AccountObject, 'type' | 'login' | 'name'> & {
+import { GitHubUserAccount, RepoContributor } from './GitHub';
+import { UserGQL } from './GitHubGQL';
+
+export type GitHubUser = GitHubUserAccount & RepoContributor & {};
+
+export type UserObject = AccountObject & {
   username: string | null;
   first_name: string | null;
   last_name: string | null;
@@ -60,7 +63,7 @@ export class User implements iAccount {
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;
-    this.login = data?.username ? data.username : null;
+    this.login = data?.login ? data.login : null;
     this.username = data?.username ? data.username : null;
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
@@ -245,11 +248,12 @@ export class User implements iAccount {
     this.skills = skills;
   }
 
-  fromGitHub(data: GitHubUserAccount) {
+  fromGitHub(data: GitHubUser) {
     this.id = data?.login ? data?.login : this.id;
     this.createdAt = data?.created_at ? data?.created_at : this.createdAt;
     this.updatedAt = data?.updated_at ? data?.updated_at : this.updatedAt;
     this.avatarURL = data?.avatar_url ? data?.avatar_url : this.avatarURL;
+    this.login = data?.login ? data.login : null;
     this.email = data?.email ? data?.email : this.email;
     this.location = data?.location ? data?.location : this.location;
     this.reposURL = data?.repos_url ? data?.repos_url : this.reposURL;
@@ -344,6 +348,9 @@ export class User implements iAccount {
       resume: this.resume,
       website: this.website,
       story: this.story,
+      login: this.login,
+      type: this.type,
+      name: this.name,
       nickname: this.nickname,
       nicename: this.nicename,
       contact_methods: this.contactMethods

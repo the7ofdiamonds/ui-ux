@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import TaskComponent from '@/views/task/TaskComponent';
 
-import { Task } from '@/model/Task';
 import { CheckList } from '@/model/CheckList';
 
 import styles from './CheckList.module.scss';

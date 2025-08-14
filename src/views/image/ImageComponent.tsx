@@ -11,11 +11,13 @@ interface ImageComponentProps {
 }
 
 export const ImageComponent: React.FC<ImageComponentProps> = ({ image }) => {
-  const { title, className, url } = image;
+  const { type, title, className, url, data } = image;
+  console.log(image)
 
-  return url ? (
-    <img className={styles.img} src={url} alt={title ?? ''} title={title ?? ''} />
-  ) : (
-    className && <IconComponent icon={image} />
-  );
+  return type === 'svg+xml' && data ?
+    (<span className={`${styles[`${className}`]}`} dangerouslySetInnerHTML={{ __html: data }} />) : url ? (
+      <img className={styles.img} src={url} alt={title ?? ''} title={title ?? ''} />
+    ) : (
+      className && <IconComponent icon={image} />
+    );
 }
