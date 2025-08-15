@@ -298,7 +298,6 @@ export class Organization implements iAccount {
         ? org.membersWithRole.nodes.map((user) => {
             const usr = new User();
             usr.fromGitHubGraphQL(user);
-            console.log(user)
             return usr;
           })
         : null;

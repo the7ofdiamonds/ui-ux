@@ -27,7 +27,6 @@ export class Image {
   }
 
   getTypeFromString(str: string): string {
-    console.log(str);
     if (str.startsWith('data:image/svg+xml')) {
       return 'svg+xml';
     }
