@@ -1,8 +1,6 @@
 import { formatTime } from '@/utils/String';
 
-import {
-  ProjectProgress,
-} from '@/model/ProjectProgress';
+import { ProjectProgress } from '@/model/ProjectProgress';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
 
@@ -15,19 +13,19 @@ export type ProjectStatusObject = {
 export class ProjectStatus {
   createdAt: string | null;
   updatedAt: string | null;
-  progress: ProjectProgress | number;
+  progress: ProjectProgress | null;
 
   constructor(data?: ProjectStatusObject) {
+    console.log(data);
     this.createdAt = data?.created_at
       ? this.getCreatedAt(data?.created_at)
       : null;
     this.updatedAt = data?.updated_at
       ? this.getUpdatedAt(data?.updated_at)
       : null;
-    this.progress = 0;
+    this.progress = new ProjectProgress();
 
     if (data?.progress) {
-      this.progress = new ProjectProgress();
       this.progress.completion = data.progress;
     }
   }
@@ -48,7 +46,7 @@ export class ProjectStatus {
     return formatTime(dateTime);
   }
 
-  setProgress(progress: ProjectProgress | number) {
+  setProgress(progress: ProjectProgress) {
     this.progress = progress;
   }
 

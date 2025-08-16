@@ -20,16 +20,28 @@ export function pathToSpace(input: string) {
 
 export function formatTime(input: string) {
   const date = new Date(input);
-
   const pad = (num: number) => String(num).padStart(2, '0');
 
-  const mm = pad(date.getMonth() + 1);
-  const dd = pad(date.getDate());
-  const yyyy = date.getFullYear();
+  const month = typeof date.getMonth() === 'number' ? date.getMonth() : null;
+  const day = typeof date.getDate() === 'number' ? date.getDate() : null;
+  const year =
+    typeof date.getFullYear() === 'number' ? date.getFullYear() : null;
+  const hour = typeof date.getHours() === 'number' ? date.getHours() : null;
+  const minute =
+    typeof date.getMinutes() === 'number' ? date.getMinutes() : null;
+  const seconds =
+    typeof date.getMinutes() === 'number' ? date.getMinutes() : null;
 
-  const hh = pad(date.getHours());
-  const min = pad(date.getMinutes());
-  const ss = pad(date.getSeconds());
+  if (month && day && year && hour && minute && seconds) {
+    const mm = pad(month + 1);
+    const dd = pad(day);
 
-  return `${mm}/${dd}/${yyyy} @ ${hh}:${min}:${ss}`;
+    const hh = pad(hour);
+    const min = pad(minute);
+    const ss = pad(seconds);
+
+    return `${mm}/${dd}/${year} @ ${hh}:${min}:${ss}`;
+  }
+
+  return null;
 }
