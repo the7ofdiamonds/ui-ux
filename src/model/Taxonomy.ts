@@ -38,7 +38,7 @@ export class Taxonomy {
       : null;
   }
 
-  setID(id: string) {
+  setID(id: string | number) {
     this.id = id;
   }
 

@@ -16,7 +16,6 @@ export class ProjectStatus {
   progress: ProjectProgress | null;
 
   constructor(data?: ProjectStatusObject) {
-    console.log(data);
     this.createdAt = data?.created_at
       ? this.getCreatedAt(data?.created_at)
       : null;
@@ -31,7 +30,7 @@ export class ProjectStatus {
   }
 
   setCreatedAt(dateTime: string | null) {
-    this.createdAt = dateTime ? formatTime(dateTime) : null;
+    this.createdAt = dateTime;
   }
 
   getCreatedAt(dateTime: string) {
@@ -39,7 +38,7 @@ export class ProjectStatus {
   }
 
   setUpdatedAt(dateTime: string | null) {
-    this.updatedAt = dateTime ? formatTime(dateTime) : null;
+    this.updatedAt = dateTime;
   }
 
   getUpdatedAt(dateTime: string) {
