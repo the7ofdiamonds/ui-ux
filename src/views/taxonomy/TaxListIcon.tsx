@@ -27,7 +27,7 @@ export const TaxListIcon: React.FC<TaxListIconProps> = ({ taxonomiesTitle, taxon
   return (
     projectSkills.size > 0 && (
       <div className={styles['tax-list']}>
-        {title && <h5 className={styles.title}>{title}</h5>}
+        {title && <h4 className={styles.title}>{title}</h4>}
 
         <div className={styles['tax-row']}>
           <TaxonomyBar taxonomySet={projectSkills} handleClick={handleClick} />

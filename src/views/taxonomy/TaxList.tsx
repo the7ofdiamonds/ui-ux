@@ -35,7 +35,7 @@ export const TaxList: React.FC<TaxListProps> = ({ taxonomiesSet, taxonomiesTitle
   return (
     taxonomies && taxonomies.length > 0 && (
       <div className="tax-list">
-        <h5 className="title">{title}</h5>
+        <h4 className="title">{title}</h4>
 
         <div className="tax-row">
           {taxonomies.map((taxonomy, index) =>
