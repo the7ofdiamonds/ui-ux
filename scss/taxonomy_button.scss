@@ -1,13 +1,14 @@
-.taxonomies-button {
-  border: none;
-  background-color: unset;
-  border-radius: unset;
-  box-shadow: none;
-  width: 4rem;
-  height: 4rem;
-  cursor: pointer;
-}
+.button {
+    background-color: unset;
+    border-radius: unset;
+    box-shadow: none;
+    opacity: var(--opacity);
+    padding: 0;
+    border: none;
 
-.tag{
-  
+  h3 {
+    background-color: var(--button-background-color);
+    color: var(--button-color);
+    padding: 0.75rem;
+  }
 }

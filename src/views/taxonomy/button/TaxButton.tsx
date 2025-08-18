@@ -5,8 +5,6 @@ import { Taxonomy } from '@/model/Taxonomy';
 import { ImageComponent } from '@/views/image/ImageComponent';
 
 import styles from './TaxonomyButton.module.scss';
-import { Button } from '@/views/buttons/Button';
-import { ButtonImage } from '@/views/buttons/ButtonImage';
 
 interface TaxButtonProps {
     taxonomy: Taxonomy;
@@ -16,10 +14,10 @@ interface TaxButtonProps {
 export const TaxButton: React.FC<TaxButtonProps> = ({ taxonomy, handleClick }) => {
     return (
         <>
-            {taxonomy.image && (taxonomy.image.className || taxonomy.image.url)
-                ? <ButtonImage action={() => handleClick(taxonomy)} image={taxonomy.image} name={null} url={null} />
-                : <Button title={taxonomy.title} action={() => handleClick(taxonomy)} />
-            }
+            <button className={styles.button} onClick={() => handleClick(taxonomy)} title={taxonomy.description ?? ''}>
+                {taxonomy.image && <ImageComponent image={taxonomy.image} />}
+                {taxonomy.title && <h3 className='title'>{taxonomy.title}</h3>}
+            </button>
         </>
     )
 }

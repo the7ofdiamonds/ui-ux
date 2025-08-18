@@ -46,10 +46,6 @@ header {
     }
   }
 
-  h3 {
-    text-transform: uppercase;
-  }
-
   .header {
     display: flex;
     flex-direction: column;
@@ -71,6 +67,12 @@ header {
       display: flex;
       align-items: center;
       position: relative;
+
+      a {
+        h2 {
+          padding: 0 1rem;
+        }
+      }
     }
 
     .leftSide {
@@ -136,17 +138,28 @@ header {
   }
 
   .header {
-    background-color: var(--header-background-color);
+    background-color: var(--header-background-color, white);
     a {
-      color: var(--header-font-color);
+      color: var(--header-font-color, black);
     }
   }
 
   .header:hover {
-    background-color: black;
+    background-color: var(--header-background-color-alt, black);
 
-    .header-title {
-      color: white;
+    nav.dropdown,
+    .rightSide .hamburger {
+      background-color: var(--header-background-color-alt, black);
+      color: var(--header-font-color-alt, white);
+    }
+
+    a {
+      background-color: var(--header-background-color-alt, black);
+
+      .title,
+      .header-title {
+        color: var(--header-font-color-alt, white);
+      }
     }
   }
 
