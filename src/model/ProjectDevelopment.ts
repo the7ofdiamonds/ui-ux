@@ -18,7 +18,6 @@ import { FeaturesRoadmap } from '@/model/FeaturesRoadmap';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
 import { Tasks } from './Tasks';
-import { isSkillsObject, Skills, SkillsObject } from './Skills';
 
 export type ProjectDevelopmentObject = {
   gallery: GalleryObject | null;
@@ -126,11 +125,13 @@ export class ProjectDevelopment {
 
   fromDocumentData(data: ProjectDataObject) {
     if (data?.process?.development) {
+
       if (data.process.development?.skills) {
+
         this.skills ? this.skills : (this.skills = new ProjectSkills());
 
         if (this.skills instanceof ProjectSkills) {
-          this.skills.fromDocumentData(data?.process?.development?.skills);
+          this.skills.fromDocumentData(data);
         }
       }
 
@@ -177,7 +178,7 @@ export class ProjectDevelopment {
       repo_url: this.repoURL ? this.repoURL.url : null,
       content_url: this.contentURL ? this.contentURL.url : null,
       skills:
-        this.skills && this.skills instanceof ProjectSkills
+        this.skills
           ? this.skills.toProjectSkillsDataObject()
           : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,

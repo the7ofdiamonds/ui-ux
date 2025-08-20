@@ -3,7 +3,7 @@ import { Image, ImageObject } from './Image';
 
 export type TaxonomyObject = {
   id: string | number | null;
-  type: string | null;
+  type: string;
   title: string | null;
   path: string | null;
   description?: string | null;
@@ -97,7 +97,7 @@ export class Taxonomy {
   toTaxonomyObject(): TaxonomyObject {
     return {
       id: this.id,
-      type: this.type,
+      type: this.type ? this.type : '',
       title: this.title,
       description: this.description,
       path: this.path,

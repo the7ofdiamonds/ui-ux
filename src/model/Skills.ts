@@ -63,23 +63,23 @@ export class Skills implements ISKills<SkillObject> {
   }
 
   getProjectTypes(data: Array<SkillObject>) {
-    return getSkillsFrom<SkillObject, ProjectType>(data, ProjectType);
+    return getSkillsFrom<ProjectType>(data, ProjectType);
   }
 
   getLanguages(data: Array<SkillObject>) {
-    return getSkillsFrom<SkillObject, Language>(data, Language);
+    return getSkillsFrom<Language>(data, Language);
   }
 
   getFrameworks(data: Array<SkillObject>) {
-    return getSkillsFrom<SkillObject, Framework>(data, Framework);
+    return getSkillsFrom<Framework>(data, Framework);
   }
 
   getTechnologies(data: Array<SkillObject>) {
-    return getSkillsFrom<SkillObject, Technology>(data, Technology);
+    return getSkillsFrom<Technology>(data, Technology);
   }
 
   getServices(data: Array<SkillObject>) {
-    return getSkillsFrom<SkillObject, Service>(data, Service);
+    return getSkillsFrom<Service>(data, Service);
   }
 
   getProjectTypesFromList() {
@@ -117,7 +117,7 @@ export class Skills implements ISKills<SkillObject> {
       const skills = new Skills();
 
       const projectTypes = projectSkills.list.filter(
-        (projectSkill) => projectSkill.type === 'project-type'
+        (projectSkill) => projectSkill.type === 'project_type'
       );
 
       if (projectTypes.length > 0) {
@@ -173,7 +173,7 @@ export class Skills implements ISKills<SkillObject> {
       }
 
       const services = projectSkills.list.filter(
-        (projectSkill) => projectSkill.type === 'services'
+        (projectSkill) => projectSkill.type === 'service'
       );
 
       if (services.length > 0) {
@@ -227,5 +227,6 @@ export const handleSkills = () => {
 
 export const handleSkillClick = (skill: Taxonomy) => {
   handleSkills();
-  window.location.href = `/taxonomy/${skill.path}/${skill.id}`;
+  console.log(skill)
+  window.location.href = `/taxonomy${skill.path}`;
 };

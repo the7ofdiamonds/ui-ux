@@ -26,7 +26,7 @@ export class Service extends Skill {
   createdAt: string | null;
   updatedAt: string | null;
   title: string | null;
-  type: string | null;
+  readonly type: string = 'service';
   content: string | null;
   description: string | null;
   price: string | number | null;
@@ -41,12 +41,11 @@ export class Service extends Skill {
   path: string = 'service';
 
   constructor(service?: Partial<ServiceObject>) {
-    super({ ...service, path: 'service' });
+    super({ ...service, type: 'service', path:`/service/${service?.id}` });
 
     this.id = service?.id ? service.id : null;
     this.createdAt = service?.created_at ? service.created_at : null;
     this.updatedAt = service?.updated_at ? service.updated_at : null;
-    this.type = service?.type ? service.type : null;
     this.title = service?.title ? service.title : null;
     this.content = service?.content ? service.content : null;
     this.description = service?.description ? service.description : null;
@@ -68,6 +67,7 @@ export class Service extends Skill {
     this.priceID = service?.price_id ? service.price_id : null;
     this.currency = service?.currency ? service.currency : null;
     this.url = service?.url ? service.url : null;
+    this.path = this.id ? `/skill/service/${this.id}` : 'service';
   }
 
   toServiceObject(): ServiceObject {

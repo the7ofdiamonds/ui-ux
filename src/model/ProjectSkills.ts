@@ -9,6 +9,7 @@ import {
 } from '@/model/Skill';
 import { ISKills } from '@/model/Skills';
 import { getSkillsFrom } from '@/model/ISkills';
+import { ProjectDataObject } from './Project';
 
 export type LanguageGQL = {
   size: number;
@@ -23,7 +24,11 @@ export type ProjectSkillsObject = {
 };
 
 export type ProjectSkillsDataObject = {
-  list: Array<string> | null;
+  types: Array<string> | null;
+  languages: Array<string> | null;
+  frameworks: Array<string> | null;
+  technologies: Array<string> | null;
+  services: Array<string> | null;
 };
 
 export class ProjectSkills implements ISKills<ProjectSkillObject> {
@@ -71,23 +76,23 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
   }
 
   getProjectTypes(data: Array<ProjectSkillObject>) {
-    return getSkillsFrom<ProjectSkillObject, ProjectType>(data, ProjectType);
+    return getSkillsFrom<ProjectType>(data, ProjectType);
   }
 
   getLanguages(data: Array<ProjectSkillObject>) {
-    return getSkillsFrom<ProjectSkillObject, Language>(data, Language);
+    return getSkillsFrom<Language>(data, Language);
   }
 
   getFrameworks(data: Array<ProjectSkillObject>) {
-    return getSkillsFrom<ProjectSkillObject, Framework>(data, Framework);
+    return getSkillsFrom<Framework>(data, Framework);
   }
 
   getTechnologies(data: Array<ProjectSkillObject>) {
-    return getSkillsFrom<ProjectSkillObject, Technology>(data, Technology);
+    return getSkillsFrom<Technology>(data, Technology);
   }
 
   getServices(data: Array<ProjectSkillObject>) {
-    return getSkillsFrom<ProjectSkillObject, Service>(data, Service);
+    return getSkillsFrom<Service>(data, Service);
   }
 
   existsInSet(skills: Set<Skill>, skill: Skill): boolean {
@@ -161,13 +166,67 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
     });
   }
 
-  fromDocumentData(data?: ProjectSkillsDataObject) {
-    if (data?.list && data.list.length > 0) {
-      data.list.forEach((projectSkillObject) => {
-        const projectSkill = new ProjectSkill();
-        projectSkill.setID(projectSkillObject);
-        this.list.push(projectSkill);
-      });
+  fromDocumentData(data?: ProjectDataObject) {
+    if (data?.process?.development?.skills) {
+      if (data.process?.development?.skills?.types) {
+        data.process.development.skills.types.forEach((skillID) => {
+          const projectType = new ProjectType();
+          projectType.setID(skillID);
+          this.types.add(projectType);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(projectType.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.languages) {
+        data.process.development.skills.languages.forEach((skillID) => {
+          const language = new Language();
+          language.setID(skillID);
+          this.languages.add(language);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(language.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.frameworks) {
+        data.process.development.skills.frameworks.forEach((skillID) => {
+          const framework = new Framework();
+          framework.setID(skillID);
+          this.frameworks.add(framework);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(framework.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.technologies) {
+        data.process.development.skills.technologies.forEach((skillID) => {
+          const technology = new Technology();
+          technology.setID(skillID);
+          this.technologies.add(technology);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(technology.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.services) {
+        data.process.development.skills.services.forEach((skillID) => {
+          const service = new Service();
+          service.setID(skillID);
+          this.services.add(service);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(service.type);
+          this.list.push(projectSkill);
+        });
+      }
     }
   }
 
@@ -184,10 +243,34 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
 
   toProjectSkillsDataObject(): ProjectSkillsDataObject {
     return {
-      list:
-        this.list && this.list.length > 0
-          ? this.list
-              .map((projectSkill) => projectSkill.id)
+      types:
+        this.types && this.types.size > 0
+          ? Array.from(this.types)
+              .map((type) => type.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      languages:
+        this.languages && this.languages.size > 0
+          ? Array.from(this.languages)
+              .map((language) => language.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      frameworks:
+        this.frameworks && this.frameworks.size > 0
+          ? Array.from(this.frameworks)
+              .map((framework) => framework.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      technologies:
+        this.technologies && this.technologies.size > 0
+          ? Array.from(this.technologies)
+              .map((technology) => technology.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      services:
+        this.services && this.services.size > 0
+          ? Array.from(this.services)
+              .map((service) => service.id)
               .filter((id): id is string => typeof id === 'string')
           : null,
     };

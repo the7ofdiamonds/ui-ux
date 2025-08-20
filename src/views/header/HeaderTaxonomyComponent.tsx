@@ -5,6 +5,7 @@ import { Taxonomy } from '@/model/Taxonomy'
 import { IconComponent } from '@/views/icon/IconComponent'
 
 import styles from './Header.module.scss';
+import { ImageComponent } from '../image/ImageComponent';
 
 interface HeaderTaxonomyComponentProps {
     skill: Taxonomy
@@ -14,7 +15,7 @@ export const HeaderTaxonomyComponent: React.FC<HeaderTaxonomyComponentProps> = (
     return (
         <>
             <h1 className={styles['page-title']}>
-                {skill.image && <IconComponent icon={skill.image} />}
+                {skill.image && <ImageComponent image={skill.image} />}
                 {skill.title}
             </h1>
         </>

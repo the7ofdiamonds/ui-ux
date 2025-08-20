@@ -74,8 +74,8 @@ export class ProjectProcess {
       : null;
 
     this.status =
-      data?.status && progress
-        ? new ProjectStatus(data?.status, progress)
+      data?.status
+        ? new ProjectStatus(data?.status)
         : null;
   }
 

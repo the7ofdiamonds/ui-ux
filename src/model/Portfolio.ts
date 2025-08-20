@@ -48,7 +48,10 @@ export class Portfolio {
   filterProjects(taxonomy: string, term: string): Set<Project> {
     let updatedProjects: Set<Project> = new Set();
     if (taxonomy && term) {
+
       Array.from(this.projects).forEach((project: Project) => {
+              console.log(project?.process?.development?.skills)
+
         if (
           taxonomy === 'project-type' &&
           project?.process?.development?.skills?.types

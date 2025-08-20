@@ -13,6 +13,7 @@ const rollupConfig: RollupOptions = {
     ...Object.keys(pkg.devDependencies || {}),
     ...Object.keys(pkg.optionalDependencies || {}),
     ...Object.keys(pkg.peerDependencies || {}),
+    /\.DS_Store$/,
   ],
   output: {
     globals: {

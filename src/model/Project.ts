@@ -68,8 +68,10 @@ export class Project {
       this.name = data?.name ? data.name : null;
       this.title = data?.title
         ? data.title
-        : this.name
-        ? this.getTitle(this.name)
+        : data?.name
+        ? this.getTitle(data.name)
+        : data?.id
+        ? this.getTitle(data.id)
         : null;
       this.subtitle = data?.subtitle ?? null;
       this.promotionalText = data?.promotional_text ?? null;
@@ -151,7 +153,11 @@ export class Project {
   fromRepo(repo: Repo) {
     this.id = repo.id;
     this.name = repo.name;
-    this.title = this.title ? this.title : this.getTitle(this.name);
+    this.title = repo.name
+      ? this.getTitle(repo.name)
+      : repo.id
+      ? this.getTitle(repo.id)
+      : null;
     this.description = repo.description;
 
     if (repo.owner) {
@@ -196,7 +202,9 @@ export class Project {
   }
 
   fromDocumentData(data: ProjectDataObject) {
-    this.title = data?.title ? data.title : this.getTitle(this.name);
+    if (data?.title) {
+      this.title = data.title;
+    }
 
     if (data?.solution) {
       this.solution ? this.solution : (this.solution = new ProjectSolution());

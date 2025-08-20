@@ -1,9 +1,7 @@
 import { Image } from '@/model/Image';
 import { Taxonomy, TaxonomyObject } from '@/model/Taxonomy';
 
-export interface SkillObject extends Omit<TaxonomyObject, 'type'> {
-  type: string | null;
-}
+export type SkillObject = TaxonomyObject & {};
 
 export interface ISkill {
   id: string | number | null;
@@ -14,7 +12,7 @@ export interface ISkill {
 
 export class Skill extends Taxonomy implements ISkill {
   public id: string | number | null;
-  public type: string | null = 'skill';
+  public type: string;
   public title: string | null;
   public description: string | null;
   public path: string | null;
@@ -22,12 +20,15 @@ export class Skill extends Taxonomy implements ISkill {
   public usage: number;
 
   constructor(data?: Partial<SkillObject>) {
-    super({ ...data, type: 'skill' });
-
+    super({ ...data, type: data?.type ? data.type : 'skill' });
     this.id = data?.id ? data.id : null;
+    this.type = data?.type ? data.type : 'skill';
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
-    this.path = data?.path ? data.path : null;
+    this.path =
+      this.id && this.type
+        ? `/skill/${this.type}/${this.id}`
+        : `/skill/${this.type}`;
     this.image = data?.image
       ? new Image({
           id: this.id,
@@ -39,6 +40,11 @@ export class Skill extends Taxonomy implements ISkill {
     this.usage = data?.usage ?? 0;
   }
 
+  setID(id: string | number): void {
+    this.id = id;
+    this.path = this.type ? `/skill/${this.type}/${id}` : `/skill/${this.type}`;
+  }
+  
   toSkillObject(): SkillObject {
     return {
       id: this.id,
@@ -53,33 +59,61 @@ export class Skill extends Taxonomy implements ISkill {
 }
 
 export class ProjectType extends Skill {
-  readonly path: string = 'project-type';
+  readonly type: string = 'project_type';
+  path: string = this.id
+    ? `/skill/project-type/${this.id}`
+    : '/skill/project-type';
 
   constructor(data?: Partial<SkillObject>) {
-    super({ ...data, path: 'project-type' });
+    super({
+      ...data,
+      type: 'project_type',
+      path: `/skill/project-type/${data?.id}`,
+    });
+    this.path = this.id
+      ? `/skill/project-type/${this.id}`
+      : '/skill/project-type';
   }
 }
 
 export class Language extends Skill {
-  readonly path: string = 'language';
+  readonly type: string = 'language';
+  path: string;
 
   constructor(data?: Partial<SkillObject>) {
-    super({ ...data, path: 'language' });
+    super({
+      ...data,
+      type: 'language',
+      path: `/skill/language/${data?.id}`,
+    });
+    this.path = this.id ? `/skill/language/${this.id}` : '/skill/language';
   }
 }
 
 export class Framework extends Skill {
-  readonly path: string = 'framework';
+  readonly type: string = 'framework';
+  path: string;
 
   constructor(data?: Partial<SkillObject>) {
-    super({ ...data, path: 'framework' });
+    super({
+      ...data,
+      type: 'framework',
+      path: `/skill/framework/${data?.id}`,
+    });
+    this.path = this.id ? `/skill/framework/${this.id}` : '/skill/framework';
   }
 }
 
 export class Technology extends Skill {
-  readonly path: string = 'technology';
+  readonly type: string = 'technology';
+  path: string;
 
   constructor(data?: Partial<SkillObject>) {
-    super({ ...data, path: 'technology' });
+    super({
+      ...data,
+      type: 'technology',
+      path: `/skill/technology/${data?.id}`,
+    });
+    this.path = this.id ? `/skill/technology/${this.id}` : '/skill/technology';
   }
 }

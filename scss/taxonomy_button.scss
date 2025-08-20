@@ -1,10 +1,11 @@
 .button {
-    background-color: unset;
-    border-radius: unset;
-    box-shadow: none;
-    opacity: var(--opacity);
-    padding: 0;
-    border: none;
+  background-color: unset;
+  border-radius: unset;
+  box-shadow: none;
+  opacity: var(--opacity);
+  padding: 0;
+  border: none;
+  cursor: pointer;
 
   h3 {
     background-color: var(--button-background-color);

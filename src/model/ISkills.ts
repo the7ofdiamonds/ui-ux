@@ -2,16 +2,15 @@ import { ProjectSkillObject } from './ProjectSkill';
 import { Skill, SkillObject } from './Skill';
 
 export const getSkillsFrom = <
-  T extends { type: string },
-  U extends { path: string }
+  T extends { type: string }
 >(
-  data: Array<T>,
-  SkillClass: new (data: T) => U
-): Set<U> => {
-  const instance = new SkillClass({} as T);
-  const matchPath = instance.path;
+  data: Array<SkillObject>|Array<ProjectSkillObject>,
+  SkillClass: new (data: SkillObject) => T
+): Set<T> => {
+  const instance = new SkillClass({} as SkillObject);
+  const matchPath = instance.type;
 
-  const set = new Set<U>();
+  const set = new Set<T>();
 
   data.forEach((item) => {
     if (item.type === matchPath) {
@@ -33,9 +32,9 @@ export const getSkillsOfType = <
 
   skills.forEach((skill) => {
     const newClass = new SkillClass({} as D);
-    const matchPath = newClass.path;
+    const matchPath = newClass.type;
     
-    if (skill.path === matchPath) {
+    if (skill.type === matchPath) {
       newClass.setID(skill.id ?? '');
       newClass.setType(skill.type ?? '');
       newClass.setTitle(skill.title ?? '');

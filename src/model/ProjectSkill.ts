@@ -1,7 +1,7 @@
 import { ISkill, SkillObject } from '@/model/Skill';
 
 export interface ProjectSkillObject
-  extends Omit<SkillObject, 'description' | 'path' | 'image'> {
+  extends Omit<SkillObject, 'description' | 'image'> {
   type: string;
 }
 
@@ -10,12 +10,17 @@ export class ProjectSkill implements ISkill {
   type: string;
   title: string | null;
   usage: number;
+  path: string;
 
   constructor(data?: Partial<ProjectSkillObject>) {
     this.id = data?.id ? data.id : null;
     this.type = data?.type ?? '';
     this.title = data?.title ? data.title : null;
     this.usage = data?.usage ? data.usage : 0;
+    this.path =
+      this.id && this.type
+        ? `/skill/${this.type}/${this.id}`
+        : `/skill/${this.type}`;
   }
 
   setID(id: string) {
@@ -40,6 +45,7 @@ export class ProjectSkill implements ISkill {
       type: this.type,
       title: this.title,
       usage: this.usage,
+      path: this.path
     };
   }
 }
