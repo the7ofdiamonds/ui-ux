@@ -50,7 +50,6 @@ export class Portfolio {
     if (taxonomy && term) {
 
       Array.from(this.projects).forEach((project: Project) => {
-              console.log(project?.process?.development?.skills)
 
         if (
           taxonomy === 'project-type' &&
