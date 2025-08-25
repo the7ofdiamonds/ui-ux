@@ -10,13 +10,10 @@ export class Portfolio {
   projects: Set<Project>;
   size: number;
 
-  constructor(portfolio?: PortfolioObject) {
+  constructor(data?: PortfolioObject) {
     this.projects =
-      portfolio &&
-      portfolio.projects &&
-      Array.isArray(portfolio.projects) &&
-      portfolio.projects.length > 0
-        ? new Set(portfolio.projects.map((project) => new Project(project)))
+      data?.projects && data.projects.length > 0
+        ? new Set(data.projects.map((project) => new Project(project)))
         : new Set();
     this.size = this.getCount();
   }
@@ -47,10 +44,11 @@ export class Portfolio {
 
   filterProjects(taxonomy: string, term: string): Set<Project> {
     let updatedProjects: Set<Project> = new Set();
+console.log(taxonomy)
+console.log(term)
+
     if (taxonomy && term) {
-
       Array.from(this.projects).forEach((project: Project) => {
-
         if (
           taxonomy === 'project-type' &&
           project?.process?.development?.skills?.types

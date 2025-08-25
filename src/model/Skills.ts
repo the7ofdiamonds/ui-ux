@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Service } from './Service';
 import { SkillObject, Skill } from '@/model/Skill';
 import { Framework, Language, ProjectType, Technology } from './Skill';
@@ -225,8 +226,11 @@ export const handleSkills = () => {
   }
 };
 
-export const handleSkillClick = (skill: Taxonomy) => {
-  handleSkills();
-  console.log(skill)
-  window.location.href = `/taxonomy${skill.path}`;
+export const useHandleSkillClick = () => {
+  const navigate = useNavigate();
+
+  return (skill: Taxonomy) => {
+    handleSkills();
+    navigate(`/taxonomy${skill.path}`);
+  };
 };

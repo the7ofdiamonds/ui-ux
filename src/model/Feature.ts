@@ -1,8 +1,8 @@
 import { Version } from '@/model/Version';
 
 export type FeatureObject = {
-  id: string | number;
-  description: string;
+  id: string | number| null;
+  description: string| null;
   version: string | null;
 };
 

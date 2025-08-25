@@ -1,7 +1,7 @@
 import { Features, FeaturesObject } from './Features';
 import { Gallery, GalleryObject } from './Gallery';
 
-export type ProductObject = {
+export type OfferingObject = {
   id: string | number | null;
   title: string | null;
   name: string | null;
@@ -19,7 +19,7 @@ export type ProductObject = {
   action_word: string | null;
 };
 
-export class Product {
+export class Offering {
   public id: string | number | null;
   public title: string | null;
   public name: string | null;
@@ -36,27 +36,27 @@ export class Product {
   public url: string | null;
   public actionWord: string | null;
 
-  constructor(product: ProductObject) {
-    this.id = product.id ? product.id : null;
-    this.title = product.title ? product.title : null;
-    this.name = product.name ? product.name : null;
-    this.subtitle = product.subtitle ? product.subtitle : null;
-    this.promotionalText = product.promotional_text
-      ? product.promotional_text
+  constructor(offering: Partial<OfferingObject>) {
+    this.id = offering.id ? offering.id : null;
+    this.title = offering.title ? offering.title : null;
+    this.name = offering.name ? offering.name : null;
+    this.subtitle = offering.subtitle ? offering.subtitle : null;
+    this.promotionalText = offering.promotional_text
+      ? offering.promotional_text
       : null;
-    this.description = product.description ? product.description : null;
-    this.features = product.features ? new Features(product.features) : null;
-    this.content = product.content ? product.content : null;
-    this.currency = product.currency ? product.currency : 'USD';
-    this.price = product.price ? product.price : null;
-    this.icon = product.icon ? product.icon : null;
-    this.gallery = product.gallery ? new Gallery(product.gallery) : null;
-    this.buttonIcon = product.button_icon;
-    this.url = product.url ? product.url : '';
-    this.actionWord = product.action_word ? product.action_word : null;
+    this.description = offering.description ? offering.description : null;
+    this.features = offering.features ? new Features(offering.features) : null;
+    this.content = offering.content ? offering.content : null;
+    this.currency = offering.currency ? offering.currency : 'USD';
+    this.price = offering.price ? offering.price : null;
+    this.icon = offering.icon ? offering.icon : null;
+    this.gallery = offering.gallery ? new Gallery(offering.gallery) : null;
+    this.buttonIcon = offering.button_icon ? offering.button_icon : null;
+    this.url = offering.url ? offering.url : null;
+    this.actionWord = offering.action_word ? offering.action_word : null;
   }
 
-  toProductObject(): ProductObject {
+  toOfferingObject(): OfferingObject {
     return {
       id: this.id,
       title: this.title,

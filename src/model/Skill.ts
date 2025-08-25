@@ -26,9 +26,9 @@ export class Skill extends Taxonomy implements ISkill {
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
     this.path =
-      this.id && this.type
-        ? `/skill/${this.type}/${this.id}`
-        : `/skill/${this.type}`;
+      data?.id && data?.path
+        ? `/skill/${data.path}/${data.id}`
+        : `/skill/${data?.path}`;
     this.image = data?.image
       ? new Image({
           id: this.id,
