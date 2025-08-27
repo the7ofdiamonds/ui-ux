@@ -9,11 +9,15 @@ export class Features {
   id: string | number | null;
   list: Set<Feature>;
 
-  constructor(data: FeaturesObject) {
-    this.id = data.id ? data.id : null;
-    this.list = data.list
+  constructor(data?: FeaturesObject) {
+    this.id = data?.id ? data.id : null;
+    this.list = data?.list
       ? new Set(data.list.map((feature) => new Feature(feature)))
       : new Set();
+  }
+
+  setList(list: Set<Feature>) {
+    this.list = list;
   }
 
   toFeaturesObject(): FeaturesObject {

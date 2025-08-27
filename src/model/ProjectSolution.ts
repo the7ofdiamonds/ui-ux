@@ -8,30 +8,49 @@ import {
 import { ContentURL } from '@/model/ContentURL';
 import { Repo } from '@/model/Repo';
 import { ProjectDataObject } from '@/model/Project';
+import { Features } from './Features';
+import { Pricing, PricingObject } from './Pricing';
+import { Offered } from './Offering';
+import { Image, ImageObject } from './Image';
 
 export type ProjectSolutionObject = {
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
+  pricing: PricingObject | null;
+  icon: string | null;
+  button_icon: ImageObject | null;
   content_url: string | null;
   project_urls: ProjectURLsObject | null;
+  available: Offered | null;
 };
 
 export type ProjectSolutionDataObject = {
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
+  pricing: PricingObject | null;
+  icon: string | null;
+  button_icon: ImageObject | null;
   content_url: string | null;
   project_urls: ProjectURLsDataObject | null;
+  available: Offered | null;
 };
 
 export class ProjectSolution {
   gallery: Gallery | null;
-  features: Set<Feature> | null;
+  features: Features | null;
+  pricing: Pricing | null;
+  icon: string | null;
+  buttonIcon: Image | null;
   contentURL: ContentURL | null;
   projectURLs: ProjectURLs | null;
+  available: Offered = false;
 
-  constructor(data: Record<string, any> | ProjectSolutionObject = {}) {
+  constructor(data?: Partial<ProjectSolutionObject>) {
     this.gallery = data?.gallery ? new Gallery(data.gallery) : new Gallery();
     this.features = data?.features ? this.getFeatures(data.features) : null;
+    this.pricing = data?.pricing ? new Pricing(data.pricing) : null;
+    this.icon = data?.icon ? data.icon : null;
+    this.buttonIcon = data?.button_icon ? new Image(data.button_icon) : null;
     this.contentURL = data?.content_url
       ? new ContentURL(data.content_url)
       : null;
@@ -42,6 +61,7 @@ export class ProjectSolution {
         data.project_urls.android)
         ? new ProjectURLs(data.project_urls)
         : null;
+    this.available = data?.available ? data.available : false;
   }
 
   setGallery(gallery: Gallery) {
@@ -52,18 +72,24 @@ export class ProjectSolution {
     this.contentURL = new ContentURL(url);
   }
 
-  setFeatures(features: Set<Feature>) {
+  setFeatures(list: Set<Feature>) {
+    const features = new Features();
+    features.setList(list);
     this.features = features;
   }
 
-  getFeatures(data?: Array<FeatureObject>): Set<Feature> {
-    let features = new Set<Feature>();
+  getFeatures(data?: Array<FeatureObject>): Features {
+    const features = new Features();
+
+    let list = new Set<Feature>();
 
     if (data && data?.length > 0) {
       data.forEach((feature) => {
-        features.add(new Feature(feature));
+        list.add(new Feature(feature));
       });
     }
+
+    features.setList(list);
 
     return features;
   }
@@ -110,32 +136,50 @@ export class ProjectSolution {
         const gallery = new Gallery(data?.solution?.gallery);
         this.setGallery(gallery);
       }
+
+      this.available = data.solution?.available
+        ? data.solution?.available
+        : false;
     }
   }
 
   toProjectSolutionObject(): ProjectSolutionObject {
     return {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
-      features: this.features
-        ? Array.from(this.features).map((feature) => feature.toFeatureObject())
-        : null,
+      features:
+        this.features && this.features.list.size > 0
+          ? Array.from(this.features.list).map((feature) =>
+              feature.toFeatureObject()
+            )
+          : null,
+      pricing: this.pricing ? this.pricing.toPricingObject() : null,
+      icon: this.icon,
+      button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
       project_urls: this.projectURLs
         ? this.projectURLs.toProjectURLsObject()
         : null,
+      available: this.available,
     };
   }
 
   toProjectSolutionDataObject(): ProjectSolutionDataObject {
     return {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
-      features: this.features
-        ? Array.from(this.features).map((feature) => feature.toFeatureObject())
-        : null,
+      features:
+        this.features && this.features.list.size > 0
+          ? Array.from(this.features.list).map((feature) =>
+              feature.toFeatureObject()
+            )
+          : null,
+      pricing: this.pricing ? this.pricing.toPricingObject() : null,
+      icon: this.icon,
+      button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       content_url: this.contentURL?.url ? this.contentURL.url : null,
       project_urls: this.projectURLs
         ? this.projectURLs.toProjectURLsDataObject()
         : null,
+      available: this.available,
     };
   }
 }

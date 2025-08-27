@@ -1,10 +1,17 @@
 import { ProjectSkill, ProjectSkillObject } from '@/model/ProjectSkill';
 import { Service } from './Service';
 import {
+  Builder,
+  CICD,
+  Cloud,
+  Database,
   Framework,
   Language,
+  Platform,
   ProjectType,
+  Server,
   Skill,
+  Software,
   Technology,
 } from '@/model/Skill';
 import { ISKills } from '@/model/Skills';
@@ -25,19 +32,31 @@ export type ProjectSkillsObject = {
 
 export type ProjectSkillsDataObject = {
   types: Array<string> | null;
+  software_applications: Array<string> | null;
+  databases: Array<string> | null;
   languages: Array<string> | null;
   frameworks: Array<string> | null;
   technologies: Array<string> | null;
-  services: Array<string> | null;
+  build_tools: Array<string> | null;
+  servers: Array<string> | null;
+  cicd_tools: Array<string> | null;
+  platforms: Array<string> | null;
+  cloud_providers: Array<string> | null;
 };
 
 export class ProjectSkills implements ISKills<ProjectSkillObject> {
   list: Array<ProjectSkill> = [];
   types: Set<ProjectType> = new Set();
+  softwareApplications: Set<Software> = new Set();
+  databases: Set<Database> = new Set();
   languages: Set<Language> = new Set();
   frameworks: Set<Framework> = new Set();
   technologies: Set<Technology> = new Set();
-  services: Set<Service> = new Set();
+  buildTools: Set<Builder> = new Set();
+  servers: Set<Server> = new Set();
+  cicdTools: Set<CICD> = new Set();
+  platforms: Set<Platform> = new Set();
+  cloudProviders: Set<Cloud> = new Set();
   count: number = 0;
 
   constructor(data?: ProjectSkillsObject) {
@@ -48,15 +67,29 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
       this.count = this.list.length;
 
       this.types = this.getProjectTypes(data.list);
+      this.softwareApplications = this.getSoftwareApplications(data.list);
+      this.databases = this.getDatabases(data.list);
       this.languages = this.getLanguages(data.list);
       this.frameworks = this.getFrameworks(data.list);
       this.technologies = this.getTechnologies(data.list);
-      this.services = this.getServices(data.list);
+      this.buildTools = this.getBuildTools(data.list);
+      this.servers = this.getServers(data.list);
+      this.cicdTools = this.getCICDTools(data.list);
+      this.platforms = this.getPlatforms(data.list);
+      this.cloudProviders = this.getCloudProviders(data.list);
     }
   }
 
   setProjectTypes(types: Set<ProjectType>) {
     this.types = types;
+  }
+
+  setSoftwareApplications(softwareApplications: Set<Software>) {
+    this.softwareApplications = softwareApplications;
+  }
+
+  setDatabases(databases: Set<Database>) {
+    this.databases = databases;
   }
 
   setLanguages(languages: Set<Language>) {
@@ -71,12 +104,36 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
     this.technologies = technologies;
   }
 
-  setServices(services: Set<Service>) {
-    this.services = services;
+  setBuildTools(buildTools: Set<Builder>) {
+    this.buildTools = buildTools;
+  }
+
+  setServer(servers: Set<Server>) {
+    this.servers = servers;
+  }
+
+  setCICDTools(cicdTools: Set<CICD>) {
+    this.cicdTools = cicdTools;
+  }
+
+  setPlatforms(platforms: Set<Platform>) {
+    this.platforms = platforms;
+  }
+
+  setCloud(cloudProviders: Set<Cloud>) {
+    this.cloudProviders = cloudProviders;
   }
 
   getProjectTypes(data: Array<ProjectSkillObject>) {
     return getSkillsFrom<ProjectType>(data, ProjectType);
+  }
+
+  getSoftwareApplications(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<Software>(data, Software);
+  }
+
+  getDatabases(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<Database>(data, Database);
   }
 
   getLanguages(data: Array<ProjectSkillObject>) {
@@ -91,8 +148,24 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
     return getSkillsFrom<Technology>(data, Technology);
   }
 
-  getServices(data: Array<ProjectSkillObject>) {
-    return getSkillsFrom<Service>(data, Service);
+  getBuildTools(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<Builder>(data, Builder);
+  }
+
+  getServers(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<Server>(data, Server);
+  }
+
+  getCICDTools(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<CICD>(data, CICD);
+  }
+
+  getPlatforms(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<Platform>(data, Platform);
+  }
+
+  getCloudProviders(data: Array<ProjectSkillObject>) {
+    return getSkillsFrom<Cloud>(data, Cloud);
   }
 
   existsInSet(skills: Set<Skill>, skill: Skill): boolean {
@@ -108,7 +181,7 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
       case 'Dockerfile':
         skill = new ProjectSkill();
         skill.setID('docker');
-        skill.setType('technology');
+        skill.setType('platform');
         skill.setTitle('Docker');
         break;
 
@@ -180,6 +253,32 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
         });
       }
 
+      if (data.process?.development?.skills?.software_applications) {
+        data.process.development.skills.software_applications.forEach(
+          (skillID) => {
+            const software = new Software();
+            software.setID(skillID);
+            this.softwareApplications.add(software);
+            const projectSkill = new ProjectSkill();
+            projectSkill.setID(skillID);
+            projectSkill.setType(software.type);
+            this.list.push(projectSkill);
+          }
+        );
+      }
+
+      if (data.process?.development?.skills?.databases) {
+        data.process.development.skills.databases.forEach((skillID) => {
+          const database = new Database();
+          database.setID(skillID);
+          this.databases.add(database);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(database.type);
+          this.list.push(projectSkill);
+        });
+      }
+
       if (data.process?.development?.skills?.languages) {
         data.process.development.skills.languages.forEach((skillID) => {
           const language = new Language();
@@ -216,14 +315,62 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
         });
       }
 
-      if (data.process?.development?.skills?.services) {
-        data.process.development.skills.services.forEach((skillID) => {
-          const service = new Service();
-          service.setID(skillID);
-          this.services.add(service);
+      if (data.process?.development?.skills?.build_tools) {
+        data.process.development.skills.build_tools.forEach((skillID) => {
+          const builder = new Builder();
+          builder.setID(skillID);
+          this.buildTools.add(builder);
           const projectSkill = new ProjectSkill();
           projectSkill.setID(skillID);
-          projectSkill.setType(service.type);
+          projectSkill.setType(builder.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.servers) {
+        data.process.development.skills.servers.forEach((skillID) => {
+          const server = new Server();
+          server.setID(skillID);
+          this.servers.add(server);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(server.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.cicd_tools) {
+        data.process.development.skills.cicd_tools.forEach((skillID) => {
+          const cicd = new CICD();
+          cicd.setID(skillID);
+          this.cicdTools.add(cicd);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(cicd.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.platforms) {
+        data.process.development.skills.platforms.forEach((skillID) => {
+          const platform = new Platform();
+          platform.setID(skillID);
+          this.platforms.add(platform);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(platform.type);
+          this.list.push(projectSkill);
+        });
+      }
+
+      if (data.process?.development?.skills?.cloud_providers) {
+        data.process.development.skills.cloud_providers.forEach((skillID) => {
+          const cloud = new Cloud();
+          cloud.setID(skillID);
+          this.cloudProviders.add(cloud);
+          const projectSkill = new ProjectSkill();
+          projectSkill.setID(skillID);
+          projectSkill.setType(cloud.type);
           this.list.push(projectSkill);
         });
       }
@@ -249,6 +396,18 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
               .map((type) => type.id)
               .filter((id): id is string => typeof id === 'string')
           : null,
+      software_applications:
+        this.softwareApplications && this.softwareApplications.size > 0
+          ? Array.from(this.softwareApplications)
+              .map((software) => software.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      databases:
+        this.databases && this.databases.size > 0
+          ? Array.from(this.databases)
+              .map((database) => database.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
       languages:
         this.languages && this.languages.size > 0
           ? Array.from(this.languages)
@@ -267,10 +426,34 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
               .map((technology) => technology.id)
               .filter((id): id is string => typeof id === 'string')
           : null,
-      services:
-        this.services && this.services.size > 0
-          ? Array.from(this.services)
-              .map((service) => service.id)
+      build_tools:
+        this.buildTools && this.buildTools.size > 0
+          ? Array.from(this.buildTools)
+              .map((builder) => builder.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      servers:
+        this.servers && this.servers.size > 0
+          ? Array.from(this.servers)
+              .map((server) => server.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      cicd_tools:
+        this.cicdTools && this.cicdTools.size > 0
+          ? Array.from(this.cicdTools)
+              .map((cicd) => cicd.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      platforms:
+        this.platforms && this.platforms.size > 0
+          ? Array.from(this.platforms)
+              .map((platform) => platform.id)
+              .filter((id): id is string => typeof id === 'string')
+          : null,
+      cloud_providers:
+        this.cloudProviders && this.cloudProviders.size > 0
+          ? Array.from(this.cloudProviders)
+              .map((provider) => provider.id)
               .filter((id): id is string => typeof id === 'string')
           : null,
     };

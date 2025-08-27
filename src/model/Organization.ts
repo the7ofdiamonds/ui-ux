@@ -19,7 +19,8 @@ import { Skills } from '@/model/Skills';
 import { User, UserObject } from './User';
 import { Hours } from './Hours';
 import { Service, ServiceObject } from './Service';
-import { Product, ProductObject } from './Product';
+import { Products, ProductsObject } from './Products';
+import { Services, ServicesObject } from './Services';
 
 export interface OrganizationObject extends AccountObject {
   id: string | null;
@@ -42,8 +43,8 @@ export interface OrganizationObject extends AccountObject {
   portfolio: PortfolioObject | null;
   team: Array<UserObject> | null;
   office_hours: Array<Hours> | null;
-  products: Array<ProductObject> | null;
-  services: Array<ServiceObject> | null;
+  products: ProductsObject | null;
+  services: ServicesObject | null;
 }
 
 export class Organization implements iAccount {
@@ -73,8 +74,8 @@ export class Organization implements iAccount {
   public blog: string | null;
   public team: Array<User> | null;
   public officeHours: Array<Hours> | null;
-  public products: Array<Product> | null;
-  public services: Array<Service> | null;
+  public products: Products | null;
+  public services: Services | null;
 
   constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
     this.id = data?.id ? data.id : null;
@@ -114,10 +115,10 @@ export class Organization implements iAccount {
     this.team = data?.team ? data.team.map((user) => new User(user)) : null;
     this.officeHours = data?.office_hours ? data.office_hours : null;
     this.products = data?.products
-      ? data.products.map((product) => new Product(product))
+      ? new Products(data.products)
       : null;
     this.services = data?.services
-      ? data.services.map((service) => new Service(service))
+      ? new Services(data.services)
       : null;
   }
 
@@ -235,9 +236,11 @@ export class Organization implements iAccount {
     this.officeHours = officeHours;
   }
 
-  setProducts() {}
+  setProducts(products: Products) {
+    this.products = products;
+  }
 
-  setServices(services: Array<Service>) {
+  setServices(services: Services) {
     this.services = services;
   }
 
@@ -362,10 +365,10 @@ export class Organization implements iAccount {
       team: this.team ? this.team.map((user) => user.toUserObject()) : null,
       office_hours: this.officeHours,
       products: this.products
-        ? this.products.map((product) => product.toProductObject())
+        ? this.products.toProductsObject()
         : null,
       services: this.services
-        ? this.services.map((service) => service.toServiceObject())
+        ? this.services.toServicesObject()
         : null,
     };
   }

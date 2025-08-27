@@ -31,6 +31,7 @@ export * from './model/Organizations';
 export * from './model/Owner';
 export * from './model/Page';
 export * from './model/Portfolio';
+export * from './model/Pricing';
 export * from './model/Product';
 export * from './model/Products';
 export * from './model/Project';

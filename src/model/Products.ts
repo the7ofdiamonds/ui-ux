@@ -1,10 +1,11 @@
+import { Portfolio } from './Portfolio';
 import { Product, ProductObject } from './Product';
 
 export type ProductsObject = {
-  id: string;
-  title: string;
-  description: string;
-  list: ProductObject[];
+  id: string | number | null;
+  title: string | null;
+  description: string | null;
+  list: ProductObject[] | null;
 };
 
 export class Products {
@@ -24,5 +25,29 @@ export class Products {
 
   setList(products: Product[]) {
     this.list = products;
+  }
+
+  fromPortfolio(portfolio: Portfolio) {
+    if (portfolio.projects.size > 0) {
+      Array.from(portfolio.projects).forEach((project) => {
+        if (project?.solution && project.solution?.available === 'product') {
+          const product = new Product();
+          product.fromProject(project);
+          this.list.push(product);
+        }
+      });
+    }
+  }
+
+  toProductsObject(): ProductsObject {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      list:
+        this.list.length > 0
+          ? this.list.map((product) => product.toProductObject())
+          : null,
+    };
   }
 }

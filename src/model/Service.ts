@@ -1,96 +1,90 @@
-import { Feature, FeatureObject } from './Feature';
-import { Image, ImageObject } from './Image';
-import { Skill, SkillObject } from './Skill';
+import { Features } from './Features';
+import { Gallery } from './Gallery';
+import { Image } from './Image';
+import { Offered, Offering, OfferingObject } from './Offering';
+import { Pricing } from './Pricing';
+import { Project } from './Project';
 
-export type ServiceObject = SkillObject & {
-  id: string | number | null;
-  created_at: string | null;
-  updated_at: string | null;
-  type: string | null;
-  title: string | null;
-  content: string | null;
-  description: string | null;
-  price: string | number | null;
-  features: Array<FeatureObject> | null;
+export type ServiceObject = OfferingObject & {
   onboarding_link: string | null;
-  icons: Array<ImageObject> | null;
-  button_icon: ImageObject | null;
-  action_word: string | null;
-  price_id: string | null;
-  currency: string | null;
-  url: string | null;
 };
 
-export class Service extends Skill {
-  id: string | number | null;
-  createdAt: string | null;
-  updatedAt: string | null;
-  title: string | null;
-  readonly type: string = 'service';
-  content: string | null;
-  description: string | null;
-  price: string | number | null;
-  features: Array<Feature> | null;
-  onboardingLink: string | null;
-  icons: Array<Image> | null;
-  buttonIcon: Image | null;
-  actionWord: string | null;
-  priceID: string | null;
-  currency: string | null;
-  url: string | null;
-  path: string = 'service';
+export class Service extends Offering {
+  readonly type: Offered = 'service';
+  public actionWord: string = 'request';
+  public onboardingLink: string | null;
 
   constructor(service?: Partial<ServiceObject>) {
-    super({ ...service, type: 'service', path:`/service/${service?.id}` });
+    super({ ...service, type: 'service' });
 
     this.id = service?.id ? service.id : null;
-    this.createdAt = service?.created_at ? service.created_at : null;
-    this.updatedAt = service?.updated_at ? service.updated_at : null;
     this.title = service?.title ? service.title : null;
-    this.content = service?.content ? service.content : null;
+    this.name = service?.name ? service.name : null;
+    this.subtitle = service?.subtitle ? service.subtitle : null;
+    this.promotionalText = service?.promotional_text
+      ? service.promotional_text
+      : null;
     this.description = service?.description ? service.description : null;
-    this.price = service?.price ? service.price : null;
-    this.features = service?.features
-      ? service.features.map((feature) => new Feature(feature))
-      : null;
-    this.onboardingLink = service?.onboarding_link
-      ? service.onboarding_link
-      : null;
-    this.icons =
-      service?.icons && service.icons.length > 0
-        ? service.icons.map((icon) => new Image(icon))
-        : null;
+    this.features = service?.features ? new Features(service.features) : null;
+    this.content = service?.content ? service.content : null;
+    this.pricing = service?.pricing ? new Pricing(service.pricing) : null;
+    this.icon = service?.icon ? service.icon : null;
+    this.gallery = service?.gallery ? new Gallery(service.gallery) : null;
     this.buttonIcon = service?.button_icon
       ? new Image(service.button_icon)
       : null;
-    this.actionWord = service?.action_word ? service.action_word : null;
-    this.priceID = service?.price_id ? service.price_id : null;
-    this.currency = service?.currency ? service.currency : null;
     this.url = service?.url ? service.url : null;
-    this.path = this.id ? `/skill/service/${this.id}` : 'service';
+    this.actionWord = service?.action_word ? service.action_word : 'request';
+    this.onboardingLink = service?.onboarding_link
+      ? service.onboarding_link
+      : null;
+  }
+
+  fromProject(project: Project) {
+    this.id = project?.id ? project.id : null;
+    this.title = project?.title ? project.title : null;
+    this.name = project?.name ? project.name : null;
+    this.subtitle = project?.subtitle ? project.subtitle : null;
+    this.promotionalText = project?.promotionalText
+      ? project.promotionalText
+      : null;
+    this.description = project?.description ? project.description : null;
+
+    if (project?.solution) {
+      const solution = project?.solution;
+      this.features = solution?.features ? solution.features : null;
+      this.content = solution?.contentURL ? solution.contentURL.url : null;
+      this.pricing = solution?.pricing ? solution.pricing : null;
+      this.icon = solution?.icon ? solution.icon : null;
+      this.gallery = solution?.gallery ? solution.gallery : null;
+      this.buttonIcon = solution?.buttonIcon ? solution.buttonIcon : null;
+      this.url =
+        solution?.projectURLs &&
+        solution.projectURLs?.homepage &&
+        solution.projectURLs.homepage?.url
+          ? solution.projectURLs.homepage.url
+          : null;
+    }
   }
 
   toServiceObject(): ServiceObject {
     return {
       id: this.id,
-      created_at: this.createdAt,
-      updated_at: this.updatedAt,
-      title: this.title,
       type: this.type,
-      content: this.content,
+      title: this.title,
+      name: this.name,
+      subtitle: this.subtitle,
+      promotional_text: this.promotionalText,
       description: this.description,
-      price: this.price,
-      features: this.features
-        ? this.features.map((feature) => feature.toFeatureObject())
-        : null,
-      onboarding_link: this.onboardingLink,
-      icons: this.icons ? this.icons.map((icon) => icon.toImageObject()) : null,
+      features: this.features ? this.features.toFeaturesObject() : null,
+      content: this.content,
+      pricing: this.pricing ? this.pricing?.toPricingObject() : null,
+      icon: this.icon,
+      gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
-      action_word: this.actionWord,
-      price_id: this.priceID,
-      currency: this.currency,
       url: this.url,
-      path: this.path,
+      action_word: this.actionWord,
+      onboarding_link: this.onboardingLink
     };
   }
 }

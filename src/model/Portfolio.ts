@@ -44,8 +44,6 @@ export class Portfolio {
 
   filterProjects(taxonomy: string, term: string): Set<Project> {
     let updatedProjects: Set<Project> = new Set();
-console.log(taxonomy)
-console.log(term)
 
     if (taxonomy && term) {
       Array.from(this.projects).forEach((project: Project) => {

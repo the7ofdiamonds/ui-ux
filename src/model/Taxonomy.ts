@@ -25,7 +25,6 @@ export class Taxonomy {
     this.type = data?.type ? data.type : null;
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
-    console.log(data)
     this.path =
       data?.path && data?.title ? this.createSlug(data.path, data.title) : null;
     this.usage = data?.usage ?? 0;

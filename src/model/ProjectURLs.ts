@@ -19,7 +19,7 @@ export class ProjectURLs {
   ios: ProjectURL | null;
   android: ProjectURL | null;
 
-  constructor(data?: ProjectURLsObject | Partial<ProjectURLsObject>) {
+  constructor(data?: Partial<ProjectURLsObject>) {
     this.homepage = null;
     this.ios = null;
     this.android = null;
