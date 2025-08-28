@@ -17,7 +17,7 @@ export type OfferingObject = {
   features: FeaturesObject | null;
   content: string | null;
   pricing: Partial<PricingObject> | null;
-  icon: string | null;
+  icon: ImageObject | null;
   gallery: Partial<GalleryObject> | null;
   button_icon: ImageObject | null;
   url: string | null;
@@ -35,7 +35,7 @@ export class Offering {
   public features: Features | null;
   public content: string | null;
   public pricing: Pricing | null;
-  public icon: string | null;
+  public icon: Image | null;
   public gallery: Gallery | null;
   public buttonIcon: Image | null;
   public url: string | null;
@@ -54,13 +54,31 @@ export class Offering {
     this.features = offering?.features ? new Features(offering.features) : null;
     this.content = offering?.content ? offering.content : null;
     this.pricing = offering?.pricing ? new Pricing(offering.pricing) : null;
-    this.icon = offering?.icon ? offering.icon : null;
+    this.icon = offering?.icon ? new Image(offering.icon) : null;
     this.gallery = offering?.gallery ? new Gallery(offering.gallery) : null;
     this.buttonIcon = offering?.button_icon
       ? new Image(offering.button_icon)
       : null;
-    this.url = offering?.url ? offering.url : null;
-    this.actionWord = offering?.action_word ? offering.action_word : null;
+    this.actionWord = this.getActionWord(offering?.action_word);
+    this.url = this.getUrl(offering?.url);
+  }
+
+  getActionWord(actionWord: string | undefined | null) {
+    return actionWord
+      ? actionWord
+      : this.type === 'product'
+      ? 'buy'
+      : this.type === 'service'
+      ? 'request'
+      : null;
+  }
+
+  getUrl(url: string | undefined | null) {
+    return url
+      ? url
+      : (this.type === 'product' || this.type === 'service') && this.id
+      ? `/${this.type}/${this.id}`
+      : null;
   }
 
   fromProject(project: Project) {
@@ -75,18 +93,14 @@ export class Offering {
 
     if (project?.solution) {
       const solution = project?.solution;
-      this.features = solution?.features ? solution.features : null;
+      this.features = solution.features ? solution.features : null;
       this.content = solution?.contentURL ? solution.contentURL.url : null;
       this.pricing = solution?.pricing ? solution.pricing : null;
       this.icon = solution?.icon ? solution.icon : null;
       this.gallery = solution?.gallery ? solution.gallery : null;
       this.buttonIcon = solution?.buttonIcon ? solution.buttonIcon : null;
-      this.url =
-        solution?.projectURLs &&
-        solution.projectURLs?.homepage &&
-        solution.projectURLs.homepage?.url
-          ? solution.projectURLs.homepage.url
-          : null;
+      this.actionWord = this.getActionWord(solution?.actionWord);
+      this.url = this.getUrl(solution.projectURLs?.homepage?.url);
     }
   }
 
@@ -102,7 +116,7 @@ export class Offering {
       features: this.features ? this.features.toFeaturesObject() : null,
       content: this.content,
       pricing: this.pricing ? this.pricing?.toPricingObject() : null,
-      icon: this.icon,
+      icon: this.icon ? this.icon.toImageObject() : null,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       url: this.url,

@@ -94,11 +94,77 @@ export class Portfolio {
         }
 
         if (
-          taxonomy === 'service' &&
-          project?.process?.development?.skills?.services
+          taxonomy === 'software' &&
+          project?.process?.development?.skills?.softwareApplications
         ) {
-          project.process.development.skills.services.forEach((service) => {
-            if (service.id === term) {
+          project.process.development.skills.softwareApplications.forEach((software) => {
+            if (software.id === term) {
+              updatedProjects.add(project);
+            }
+          });
+        }
+
+        if (
+          taxonomy === 'database' &&
+          project?.process?.development?.skills?.databases
+        ) {
+          project.process.development.skills.databases.forEach((database) => {
+            if (database.id === term) {
+              updatedProjects.add(project);
+            }
+          });
+        }
+
+        if (
+          taxonomy === 'builder' &&
+          project?.process?.development?.skills?.buildTools
+        ) {
+          project.process.development.skills.buildTools.forEach((builder) => {
+            if (builder.id === term) {
+              updatedProjects.add(project);
+            }
+          });
+        }
+
+        if (
+          taxonomy === 'server' &&
+          project?.process?.development?.skills?.servers
+        ) {
+          project.process.development.skills.servers.forEach((server) => {
+            if (server.id === term) {
+              updatedProjects.add(project);
+            }
+          });
+        }
+
+        if (
+          taxonomy === 'cicd' &&
+          project?.process?.development?.skills?.cicdTools
+        ) {
+          project.process.development.skills.cicdTools.forEach((cicdTool) => {
+            if (cicdTool.id === term) {
+              updatedProjects.add(project);
+            }
+          });
+        }
+
+        if (
+          taxonomy === 'platform' &&
+          project?.process?.development?.skills?.platforms
+        ) {
+          project.process.development.skills.platforms.forEach((platform) => {
+            if (platform.id === term) {
+              updatedProjects.add(project);
+            }
+          });
+        }
+
+        if (
+          taxonomy === 'cloud' &&
+          project?.process?.development?.skills?.cloudProviders
+        ) {
+          project.process.development.skills.cloudProviders.forEach((cloud) => {
+            if (cloud.id === term) {
               updatedProjects.add(project);
             }
           });

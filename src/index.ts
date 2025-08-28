@@ -25,6 +25,7 @@ export * from './model/Image';
 export * from './model/Issue';
 export * from './model/Issues';
 export * from './model/Link';
+export * from './model/Menu';
 export * from './model/Offering';
 export * from './model/Organization';
 export * from './model/Organizations';
@@ -89,6 +90,9 @@ export * from './views/colors/Colors';
 export * from './views/content/ContentComponent';
 export * from './views/description/DescriptionComponent';
 export * from './views/document/DocumentComponent';
+
+export * from './views/features/FeaturesComponent';
+
 export * from './views/footer/FooterComponent';
 export * from './views/gallery/GalleryComponent';
 

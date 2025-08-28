@@ -241,6 +241,7 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
 
   fromDocumentData(data?: ProjectDataObject) {
     if (data?.process?.development?.skills) {
+      console.log(data?.process?.development?.skills)
       if (data.process?.development?.skills?.types) {
         data.process.development.skills.types.forEach((skillID) => {
           const projectType = new ProjectType();

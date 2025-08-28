@@ -39,6 +39,13 @@ export class Products {
     }
   }
 
+  filterService(id: string | number | null): Product | null {
+    if (!id) return null;
+    return (
+      this.list.find((product) => String(product.id) === String(id)) ?? null
+    );
+  }
+
   toProductsObject(): ProductsObject {
     return {
       id: this.id,

@@ -233,6 +233,7 @@ export class Skills implements ISKills<SkillObject> {
           });
         });
       }
+            console.log(projectSkills)
 
       const databases = projectSkills.list.filter(
         (projectSkill) => projectSkill.type === 'database'

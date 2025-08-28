@@ -45,6 +45,11 @@ export class Services {
     }
   }
 
+  filterService(id: string | number | null): Service | null {
+    if (!id) return null;
+    return this.list.find((service) => String(service.id) === String(id)) ?? null;
+  }
+
   toServicesObject(): ServicesObject {
     return {
       id: this.id,

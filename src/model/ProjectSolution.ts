@@ -17,8 +17,9 @@ export type ProjectSolutionObject = {
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
   pricing: PricingObject | null;
-  icon: string | null;
+  icon: ImageObject | null;
   button_icon: ImageObject | null;
+  action_word: string | null;
   content_url: string | null;
   project_urls: ProjectURLsObject | null;
   available: Offered | null;
@@ -28,8 +29,9 @@ export type ProjectSolutionDataObject = {
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
   pricing: PricingObject | null;
-  icon: string | null;
+  icon: ImageObject | null;
   button_icon: ImageObject | null;
+  action_word: string | null;
   content_url: string | null;
   project_urls: ProjectURLsDataObject | null;
   available: Offered | null;
@@ -39,8 +41,9 @@ export class ProjectSolution {
   gallery: Gallery | null;
   features: Features | null;
   pricing: Pricing | null;
-  icon: string | null;
+  icon: Image | null;
   buttonIcon: Image | null;
+  actionWord: string | null;
   contentURL: ContentURL | null;
   projectURLs: ProjectURLs | null;
   available: Offered = false;
@@ -49,8 +52,10 @@ export class ProjectSolution {
     this.gallery = data?.gallery ? new Gallery(data.gallery) : new Gallery();
     this.features = data?.features ? this.getFeatures(data.features) : null;
     this.pricing = data?.pricing ? new Pricing(data.pricing) : null;
-    this.icon = data?.icon ? data.icon : null;
+    this.icon = data?.icon ? new Image(data.icon) : null;
     this.buttonIcon = data?.button_icon ? new Image(data.button_icon) : null;
+    this.actionWord = data?.action_word ? data.action_word : null;
+
     this.contentURL = data?.content_url
       ? new ContentURL(data.content_url)
       : null;
@@ -66,10 +71,6 @@ export class ProjectSolution {
 
   setGallery(gallery: Gallery) {
     this.gallery = gallery;
-  }
-
-  setContentURL(url: string) {
-    this.contentURL = new ContentURL(url);
   }
 
   setFeatures(list: Set<Feature>) {
@@ -94,8 +95,32 @@ export class ProjectSolution {
     return features;
   }
 
+  setPricing(pricing: Pricing) {
+    this.pricing = pricing;
+  }
+
+  setIcon(icon: Image) {
+    this.icon = icon;
+  }
+
+  setButtonIcon(buttonIcon: Image) {
+    this.buttonIcon = buttonIcon;
+  }
+
+  setActionWord(actionWord: string) {
+    this.actionWord = actionWord;
+  }
+
+  setContentURL(url: string) {
+    this.contentURL = new ContentURL(url);
+  }
+
   setProjectURLs(projectURLs: ProjectURLs) {
     this.projectURLs = projectURLs;
+  }
+
+  setAvailable(available: Offered) {
+    this.available = available;
   }
 
   fromRepo(repo: Repo) {
@@ -140,6 +165,14 @@ export class ProjectSolution {
       this.available = data.solution?.available
         ? data.solution?.available
         : false;
+
+      this.pricing = data.solution?.pricing
+        ? new Pricing(data.solution.pricing)
+        : null;
+
+      this.actionWord = data?.solution?.action_word
+        ? data.solution.action_word
+        : null;
     }
   }
 
@@ -153,8 +186,9 @@ export class ProjectSolution {
             )
           : null,
       pricing: this.pricing ? this.pricing.toPricingObject() : null,
-      icon: this.icon,
+      icon: this.icon ? this.icon.toImageObject() : null,
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
+      action_word: this.actionWord,
       content_url: this.contentURL ? this.contentURL.url : null,
       project_urls: this.projectURLs
         ? this.projectURLs.toProjectURLsObject()
@@ -173,8 +207,9 @@ export class ProjectSolution {
             )
           : null,
       pricing: this.pricing ? this.pricing.toPricingObject() : null,
-      icon: this.icon,
+      icon: this.icon ? this.icon.toImageObject() : null,
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
+      action_word: this.actionWord,
       content_url: this.contentURL?.url ? this.contentURL.url : null,
       project_urls: this.projectURLs
         ? this.projectURLs.toProjectURLsDataObject()
