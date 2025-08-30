@@ -166,7 +166,7 @@ export class ProjectSolution {
         ? data.solution?.available
         : false;
 
-      this.pricing = data.solution?.pricing
+        this.pricing = data.solution?.pricing
         ? new Pricing(data.solution.pricing)
         : null;
 

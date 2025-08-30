@@ -2,10 +2,9 @@ import React from 'react'
 
 import { Taxonomy } from '@/model/Taxonomy'
 
-import { IconComponent } from '@/views/icon/IconComponent'
+import { ImageComponent } from '../image/ImageComponent';
 
 import styles from './Header.module.scss';
-import { ImageComponent } from '../image/ImageComponent';
 
 interface HeaderTaxonomyComponentProps {
     skill: Taxonomy
@@ -13,11 +12,9 @@ interface HeaderTaxonomyComponentProps {
 
 export const HeaderTaxonomyComponent: React.FC<HeaderTaxonomyComponentProps> = ({ skill }) => {
     return (
-        <>
-            <h1 className={styles['page-title']}>
-                {skill.image && <ImageComponent image={skill.image} />}
-                {skill.title}
-            </h1>
-        </>
+        <h1 className='title'>
+            {skill.image && <ImageComponent image={skill.image} />}
+            {skill.title}
+        </h1>
     )
 }

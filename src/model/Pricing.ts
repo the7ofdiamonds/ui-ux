@@ -105,6 +105,8 @@ export class Pricing {
     minFractionDigits: number = 2,
     maxFractionDigits: number = 2
   ): string | null {
+    if (!price || price === 0) return 'Free';
+
     return this.format(
       price,
       locales,
