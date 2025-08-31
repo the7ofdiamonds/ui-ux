@@ -1,9 +1,5 @@
-import { Features } from './Features';
-import { Gallery } from './Gallery';
-import { Image } from './Image';
 import { Offered, Offering, OfferingObject } from './Offering';
-import { Pricing } from './Pricing';
-import { Project } from './Project';
+
 
 export type ServiceObject = OfferingObject & {
   onboarding_link: string | null;
@@ -26,6 +22,7 @@ export class Service extends Offering {
     return {
       id: this.id,
       type: this.type,
+      category: this.category,
       title: this.title,
       name: this.name,
       subtitle: this.subtitle,

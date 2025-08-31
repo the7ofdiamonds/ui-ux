@@ -1,5 +1,4 @@
 import { ProjectSkill, ProjectSkillObject } from '@/model/ProjectSkill';
-import { Service } from './Service';
 import {
   Builder,
   CICD,

@@ -1,3 +1,4 @@
+import { getActionWord } from './Actions';
 import { Features, FeaturesObject } from './Features';
 import { Gallery, GalleryObject } from './Gallery';
 import { Image, ImageObject } from './Image';
@@ -9,6 +10,7 @@ export type Offered = 'service' | 'product' | false;
 export type OfferingObject = {
   id: string | number | null;
   type: Offered | null;
+  category: string | null;
   title: string | null;
   name: string | null;
   subtitle: string | null;
@@ -27,6 +29,7 @@ export type OfferingObject = {
 export class Offering {
   public id: string | number | null;
   public type: Offered = false;
+  public category: string | null;
   public title: string | null;
   public name: string | null;
   public subtitle: string | null;
@@ -44,6 +47,7 @@ export class Offering {
   constructor(offering?: Partial<OfferingObject>) {
     this.id = offering?.id ? offering.id : null;
     this.type = offering?.type ? offering.type : false;
+    this.category = offering?.category ? offering.category : null;
     this.title = offering?.title ? offering.title : null;
     this.name = offering?.name ? offering.name : null;
     this.subtitle = offering?.subtitle ? offering.subtitle : null;
@@ -59,18 +63,8 @@ export class Offering {
     this.buttonIcon = offering?.button_icon
       ? new Image(offering.button_icon)
       : null;
-    this.actionWord = this.getActionWord(offering?.action_word);
+    this.actionWord = offering?.action_word ? offering.action_word : null;
     this.url = this.getUrl(offering?.url);
-  }
-
-  getActionWord(actionWord: string | undefined | null) {
-    return actionWord
-      ? actionWord
-      : this.type === 'product'
-      ? 'buy'
-      : this.type === 'service'
-      ? 'request'
-      : null;
   }
 
   getUrl(url: string | undefined | null) {
@@ -82,6 +76,8 @@ export class Offering {
   }
 
   fromProject(project: Project) {
+    if (!project.solution || !project.solution?.available) return;
+
     this.id = project?.id ? project.id : null;
     this.title = project?.title ? project.title : null;
     this.name = project?.name ? project.name : null;
@@ -91,23 +87,24 @@ export class Offering {
       : null;
     this.description = project?.description ? project.description : null;
 
-    if (project?.solution) {
-      const solution = project?.solution;
-      this.features = solution.features ? solution.features : null;
-      this.content = solution?.contentURL ? solution.contentURL.url : null;
-      this.pricing = solution?.pricing ? solution.pricing : null;
-      this.icon = solution?.icon ? solution.icon : null;
-      this.gallery = solution?.gallery ? solution.gallery : null;
-      this.buttonIcon = solution?.buttonIcon ? solution.buttonIcon : null;
-      this.actionWord = this.getActionWord(solution?.actionWord);
-      this.url = this.getUrl(solution.projectURLs?.homepage?.url);
-    }
+    const solution = project?.solution;
+    this.type = solution?.available ? solution.available : false;
+    this.category = solution?.category ? solution.category : null;
+    this.features = solution.features ? solution.features : null;
+    this.content = solution?.contentURL ? solution.contentURL.url : null;
+    this.pricing = solution?.pricing ? solution.pricing : null;
+    this.icon = solution?.icon ? solution.icon : null;
+    this.gallery = solution?.gallery ? solution.gallery : null;
+    this.buttonIcon = solution?.buttonIcon ? solution.buttonIcon : null;
+    this.actionWord = solution?.actionWord ?? getActionWord(solution?.category);
+    this.url = this.getUrl(solution.projectURLs?.homepage?.url);
   }
 
   toOfferingObject(): OfferingObject {
     return {
       id: this.id,
       type: this.type,
+      category: this.category,
       title: this.title,
       name: this.name,
       subtitle: this.subtitle,

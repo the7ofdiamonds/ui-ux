@@ -14,6 +14,7 @@ import { Offered } from './Offering';
 import { Image, ImageObject } from './Image';
 
 export type ProjectSolutionObject = {
+  category: string | null;
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
   pricing: PricingObject | null;
@@ -26,6 +27,7 @@ export type ProjectSolutionObject = {
 };
 
 export type ProjectSolutionDataObject = {
+  category: string | null;
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
   pricing: PricingObject | null;
@@ -38,6 +40,7 @@ export type ProjectSolutionDataObject = {
 };
 
 export class ProjectSolution {
+  category: string | null;
   gallery: Gallery | null;
   features: Features | null;
   pricing: Pricing | null;
@@ -49,6 +52,7 @@ export class ProjectSolution {
   available: Offered = false;
 
   constructor(data?: Partial<ProjectSolutionObject>) {
+    this.category = data?.category ? data.category : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : new Gallery();
     this.features = data?.features ? this.getFeatures(data.features) : null;
     this.pricing = data?.pricing ? new Pricing(data.pricing) : null;
@@ -67,6 +71,10 @@ export class ProjectSolution {
         ? new ProjectURLs(data.project_urls)
         : null;
     this.available = data?.available ? data.available : false;
+  }
+
+  setCategory(category: string) {
+    this.category = category;
   }
 
   setGallery(gallery: Gallery) {
@@ -162,11 +170,17 @@ export class ProjectSolution {
         this.setGallery(gallery);
       }
 
+      this.category = data.solution?.category ? data.solution.category : null;
+
+      this.features = data.solution?.features
+        ? this.getFeatures(data.solution?.features)
+        : null;
+
       this.available = data.solution?.available
         ? data.solution?.available
         : false;
 
-        this.pricing = data.solution?.pricing
+      this.pricing = data.solution?.pricing
         ? new Pricing(data.solution.pricing)
         : null;
 
@@ -178,6 +192,7 @@ export class ProjectSolution {
 
   toProjectSolutionObject(): ProjectSolutionObject {
     return {
+      category: this.category,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       features:
         this.features && this.features.list.size > 0
@@ -199,6 +214,7 @@ export class ProjectSolution {
 
   toProjectSolutionDataObject(): ProjectSolutionDataObject {
     return {
+      category: this.category,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       features:
         this.features && this.features.list.size > 0
