@@ -18,12 +18,12 @@ interface HeaderComponentProps {
 export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, leftMenu, centerMenu, rightMenu }) => {
   const [dropdown, setDropdown] = useState('hide');
 
+  const goHome = () => {
+    setDropdown('hide');
+  }
+
   const toggleMenu = () => {
-    if (dropdown == 'hide') {
-      setDropdown('show');
-    } else {
-      setDropdown('hide');
-    }
+    setDropdown(dropdown === 'hide' ? 'show' : 'hide')
   };
 
   return (
@@ -43,7 +43,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, left
           </div>
 
           <div className={styles.center}>
-            <Link to="/" onClick={toggleMenu}>
+            <Link to="/" onClick={goHome}>
               {typeof branding === 'string' ?
                 (<h1 className={styles['header-title']}>{branding}</h1>)
                 : (
