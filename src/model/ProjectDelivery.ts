@@ -48,9 +48,9 @@ export class ProjectDelivery {
       this.setContentURL(repo.contents.delivery.downloadURL);
     }
 
-    if (repo.issues?.delivery) {
+    if (repo?.issues && repo.issues?.delivery) {
       const tasks = new Tasks();
-      repo.issues.toTask(repo.issues.delivery);
+      tasks.setList(new Set(repo.issues.delivery));
 
       const checkList = new CheckList();
       checkList.setTasks(tasks);

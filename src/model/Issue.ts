@@ -1,4 +1,7 @@
-import { SubIssueSummary, SubIssueSummaryObject } from '@/model/SubIssueSummary';
+import {
+  SubIssueSummary,
+  SubIssueSummaryObject,
+} from '@/model/SubIssueSummary';
 import { UserObject, User } from './User';
 
 export type tIssue = {
@@ -160,7 +163,7 @@ export class Issue {
       assignee: this.assignee ? this.assignee.toUserObject() : null,
       assignees: this.assignees
         ? this.assignees.map((assignee) => assignee.toUserObject())
-        : [],
+        : null,
       tracked: this.tracked,
       trackedBy: this.trackedBy,
       repo: this.repo,

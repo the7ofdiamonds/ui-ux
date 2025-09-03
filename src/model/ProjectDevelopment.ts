@@ -43,7 +43,7 @@ export class ProjectDevelopment {
   contentURL: ContentURL | null;
   skills: ProjectSkills | null;
   checkList: CheckList | null;
-  versionsList: ProjectVersions | null;
+  versionsList: ProjectVersions = new ProjectVersions();
   roadmap: FeaturesRoadmap | null;
 
   constructor(data?: Partial<ProjectDevelopmentObject>) {
@@ -59,7 +59,7 @@ export class ProjectDevelopment {
     this.checkList = data?.check_list ? new CheckList(data.check_list) : null;
     this.versionsList = data?.versions_list
       ? new ProjectVersions(data.versions_list)
-      : null;
+      : new ProjectVersions();
     this.roadmap = new FeaturesRoadmap();
   }
 
@@ -114,9 +114,10 @@ export class ProjectDevelopment {
       this.repoURL = new RepoURL(repo.repoURL);
     }
 
-    if (repo.issues?.development) {
+    if (repo?.issues && repo.issues?.development) {
       const tasks = new Tasks();
-      tasks.setList(new Set(repo.issues?.toTask(repo.issues?.development)));
+      tasks.setList(new Set(repo.issues.development));
+
       const checkList = new CheckList();
       checkList.setTasks(tasks);
       this.setCheckList(checkList);
@@ -125,9 +126,7 @@ export class ProjectDevelopment {
 
   fromDocumentData(data: ProjectDataObject) {
     if (data?.process?.development) {
-
       if (data.process.development?.skills) {
-
         this.skills ? this.skills : (this.skills = new ProjectSkills());
 
         if (this.skills instanceof ProjectSkills) {
@@ -177,10 +176,7 @@ export class ProjectDevelopment {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       repo_url: this.repoURL ? this.repoURL.url : null,
       content_url: this.contentURL ? this.contentURL.url : null,
-      skills:
-        this.skills
-          ? this.skills.toProjectSkillsDataObject()
-          : null,
+      skills: this.skills ? this.skills.toProjectSkillsDataObject() : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       versions_list: this.versionsList
         ? this.versionsList.toProjectVersionsObject()

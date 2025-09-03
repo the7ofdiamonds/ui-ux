@@ -1,19 +1,20 @@
 import { Version } from '@/model/Version';
+import { Issue } from './Issue';
 
 export type FeatureObject = {
-  id: string | number| null;
-  description: string| null;
+  id: string | number | null;
+  description: string | null;
   version: string | null;
 };
 
 export class Feature {
-  id: string | number;
-  description: string;
+  id: string | number | null;
+  description: string | null;
   version: Version | null;
 
   constructor(data?: FeatureObject) {
-    this.id = data?.id ?? '';
-    this.description = data?.description ?? '';
+    this.id = data?.id ? data.id : null;
+    this.description = data?.description ? data.description : null;
     this.version = data?.version ? new Version(data.version) : null;
   }
 
@@ -41,6 +42,12 @@ export class Feature {
 
   setVersion(version: string) {
     this.version = new Version(version);
+  }
+
+  fromIssue(issue: Issue) {
+    this.id = issue.id;
+    this.description = issue.title;
+    this.version = issue.milestone ? new Version(issue.milestone) : null;
   }
 
   toFeatureObject(): FeatureObject {

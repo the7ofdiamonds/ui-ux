@@ -164,7 +164,11 @@ export class Project {
       this.setOwner(repo.owner);
     }
 
-    if (repo.contents?.solution?.downloadURL || repo?.homepage) {
+    if (
+      repo.contents?.solution?.downloadURL ||
+      repo?.homepage ||
+      repo?.issues
+    ) {
       const solution = new ProjectSolution();
       solution.fromRepo(repo);
       this.setSolution(solution);

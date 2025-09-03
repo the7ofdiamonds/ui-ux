@@ -3,6 +3,7 @@ import { ProjectQuery } from '@/model/ProjectQuery';
 
 export type tTask = {
   id: string | number;
+  category: string | null;
   description: string;
   status: boolean;
   details: string;
@@ -12,6 +13,7 @@ export type tTask = {
 
 export type TaskObject = {
   id: string | number | null;
+  category: string | null;
   description: string | null;
   status: boolean;
   details: string | null;
@@ -22,6 +24,7 @@ export type TaskObject = {
 
 export type TaskDataObject = {
   id: string | number | null;
+  category: string | null;
   description: string | null;
   status: boolean;
   details: string | null;
@@ -31,18 +34,20 @@ export type TaskDataObject = {
 
 export class Task {
   id: string | number | null;
+  category: string | null;
   description: string | null;
   status: boolean;
   details: string | null;
   weight: number;
   link: string | null;
-  subTasks: Array<Task> | null;
+  subTasks: Array<Task>;
 
   constructor(data?: TaskObject) {
-    this.id = data?.id ?? '';
-    this.description = data?.description ?? '';
+    this.id = data?.id ? data.id : null;
+    this.category = data?.category ? data.category : null;
+    this.description = data?.description ? data.description : null;
     this.status = data?.status ?? false;
-    this.details = data?.details ?? '';
+    this.details = data?.details ? data.details : null;
     this.weight = data?.weight ?? 0;
     this.link = data?.link ? data.link : null;
     this.subTasks = data?.subTasks
@@ -55,6 +60,10 @@ export class Task {
 
   setID(id: string | number) {
     this.id = id;
+  }
+
+  setCategory(category: string) {
+    this.category = category;
   }
 
   setDescription(description: string) {
@@ -83,6 +92,15 @@ export class Task {
 
   fromIssue(issue: Issue) {
     this.id = issue.id ? issue.id : null;
+    this.category = issue.labels
+      ? issue.labels.includes('design')
+        ? 'design'
+        : issue.labels.includes('development')
+        ? 'development'
+        : issue.labels.includes('delivery')
+        ? 'delivery'
+        : null
+      : null;
     this.description = issue.title ? issue.title : null;
     this.status = issue.state === 'OPEN' ? false : true;
     this.link = issue.repo;
@@ -113,6 +131,7 @@ export class Task {
   toTaskObject(): TaskObject {
     return {
       id: this.id,
+      category: this.category,
       description: this.description,
       status: this.status,
       details: this.details,

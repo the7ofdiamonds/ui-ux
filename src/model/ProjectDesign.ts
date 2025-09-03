@@ -64,9 +64,9 @@ export class ProjectDesign {
       this.setContentURL(repo.contents.design.downloadURL);
     }
 
-    if (repo.issues?.design) {
+    if (repo?.issues && repo.issues?.design) {
       const tasks = new Tasks();
-      tasks.setList(new Set(repo.issues?.toTask(repo.issues.design)));
+      tasks.setList(new Set(repo.issues.design));
 
       const checkList = new CheckList();
       checkList.setTasks(tasks);

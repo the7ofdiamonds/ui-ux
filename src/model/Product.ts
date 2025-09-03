@@ -1,13 +1,12 @@
 import { Offered, Offering, OfferingObject } from './Offering';
 
 export type ProductObject = OfferingObject & {};
-
+// Add details from project details and etc.
 export class Product extends Offering {
   readonly type: Offered = 'product';
 
   constructor(product?: Partial<ProductObject>) {
     super({ ...product, type: 'product' });
-    console.log(product?.category);
   }
 
   toProductObject(): ProductObject {

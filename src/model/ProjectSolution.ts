@@ -142,8 +142,8 @@ export class ProjectSolution {
       this.setProjectURLs(projectURLs);
     }
 
-    if (repo.issues?.features) {
-      this.setFeatures(new Set(repo.issues.toFeatures(repo.issues?.features)));
+    if (repo.issues) {
+      this.setFeatures(new Set(repo.issues.features));
     }
   }
 
@@ -171,10 +171,6 @@ export class ProjectSolution {
       }
 
       this.category = data.solution?.category ? data.solution.category : null;
-
-      this.features = data.solution?.features
-        ? this.getFeatures(data.solution?.features)
-        : null;
 
       this.available = data.solution?.available
         ? data.solution?.available

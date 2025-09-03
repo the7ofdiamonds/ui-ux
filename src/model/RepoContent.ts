@@ -17,7 +17,7 @@ export class RepoContent {
   size: number = 0;
   downloadURL: string | null = null;
 
-  constructor(data?: RepoContentObject | Partial<RepoContentObject>) {
+  constructor(data?: Partial<RepoContentObject>) {
     // Get SHA from github as id
     this.id = data?.id ?? '';
     this.name = data?.name ?? '';

@@ -85,7 +85,7 @@ export class Repo {
       ? new Contributors(data.contributors)
       : null;
     this.issues =
-      data?.issues && Array.isArray(data.issues.list)
+      data?.issues && Array.isArray(data.issues.list) && data.issues.list.length > 0
         ? new Issues(data.issues)
         : null;
   }

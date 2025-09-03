@@ -2,54 +2,49 @@ import { Feature } from '@/model/Feature';
 import { Issue, IssueObject, IssueGQL } from '@/model/Issue';
 import { Task } from '@/model/Task';
 
-export type IssuesObject ={
+export type IssuesObject = {
   list: Array<IssueObject> | null;
-}
+};
 
 export class Issues {
-  list: Array<Issue> = [];
-  features: Array<Issue>;
-  tasks: Array<Issue>;
-  design: Array<Issue>;
-  development: Array<Issue>;
-  delivery: Array<Issue>;
+  list: Array<Issue>;
+  features: Array<Feature>;
+  tasks: Array<Task>;
+  design: Array<Task>;
+  development: Array<Task>;
+  delivery: Array<Task>;
 
   constructor(data?: IssuesObject) {
     this.list =
-      data && Array.isArray(data.list) ? data.list.map((issue) => new Issue(issue)) : [];
-    this.features = this.list.filter(
-      (issue) => issue.type && issue.type.includes('Feature')
-    );
-    this.tasks = this.list.filter(
-      (issue) => issue.type && issue.type.includes('Task')
-    );
-    this.design = this.tasks.filter(
-      (issue) => issue.labels && issue.labels.includes('design')
-    );
-    this.development = this.tasks.filter(
-      (issue) => issue.labels && issue.labels.includes('development')
-    );
-    this.delivery = this.tasks.filter(
-      (issue) => issue.labels && issue.labels.includes('delivery')
-    );
+      data && Array.isArray(data.list) && data.list.length > 0
+        ? data.list.map((issue) => new Issue(issue))
+        : [];
+    this.features = this.list.length > 0 ? this.toFeatures(this.list) : [];
+    this.tasks = this.list.length > 0 ? this.toTask(this.list) : [];
+    this.design = this.tasks.length > 0 ? this.getDesignTasks(this.tasks) : [];
+    this.development =
+      this.tasks.length > 0 ? this.getDevelopmentTasks(this.tasks) : [];
+    this.delivery =
+      this.tasks.length > 0 ? this.getDeliveryTasks(this.tasks) : [];
   }
 
   toFeatures(issues: Array<Issue>) {
     return issues
-      .filter((issue) => issue.id && issue.title && issue.milestone)
       .map((issue) => {
-        const feature = new Feature();
-        issue.id ? feature.setID(issue.id) : null;
-        issue.title ? feature.setDescription(issue.title) : null;
-        issue.milestone ? feature.setVersion(issue.milestone) : null;
-        return feature;
-      });
+        if (issue.type === 'Feature') {
+          const feature = new Feature();
+          feature.fromIssue(issue);
+          return feature;
+        }
+        return null;
+      })
+      .filter((feature): feature is Feature => feature !== null);
   }
 
   toTask(issues: Array<Issue>) {
     return issues
       .map((issue) => {
-        if (issue.id && issue.title && issue.state) {
+        if (issue.type === 'Task') {
           const task = new Task();
           task.fromIssue(issue);
           return task;
@@ -57,6 +52,24 @@ export class Issues {
         return null;
       })
       .filter((task): task is Task => task !== null);
+  }
+
+  getDesignTasks(tasks: Array<Task>) {
+    return tasks.length > 0
+      ? tasks.filter((task) => task.category === 'design')
+      : [];
+  }
+
+  getDevelopmentTasks(tasks: Array<Task>) {
+    return tasks.length > 0
+      ? tasks.filter((task) => task.category === 'development')
+      : [];
+  }
+
+  getDeliveryTasks(tasks: Array<Task>) {
+    return tasks.length > 0
+      ? tasks.filter((task) => task.category === 'delivery')
+      : [];
   }
 
   fromGitHubGraphQL(issues?: Array<IssueGQL>) {
