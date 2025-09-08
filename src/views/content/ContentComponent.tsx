@@ -6,40 +6,62 @@ import { marked } from 'marked';
 import styles from './Content.module.scss';
 
 interface ContentComponentProps<T> {
-  title: string | null;
-  query: T;
-  getFile: AsyncThunk<string | null, T, {}>;
-  dispatch: ThunkDispatch<any, any, any>;
+  content?: string | null;
+  query?: T;
+  dispatch?: ThunkDispatch<any, any, any>;
+  getFile?: AsyncThunk<string | null, T, {}>;
+  title?: string | null;
 }
 
-export const ContentComponent = <T,>({ title, query, getFile, dispatch }: ContentComponentProps<T>) => {
+export const ContentComponent = <T,>({ content, query, dispatch, getFile, title }: ContentComponentProps<T>) => {
+  const [contentQuery, setContentQuery] = useState<T | null>(null);
   const [file, setFile] = useState<string | null>(null);
   const [html, setHTML] = useState<string | object | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
+    if (!content && query) {
+      setContentQuery(query);
+    }
+  }, [content, query]);
 
-    if (query) {
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   if (contentQuery && dispatch && getFile) {
+  //     try {
+  //       dispatch(getFile(contentQuery))
+  //         .unwrap()
+  //         .then((file) => {
+  //           if (file) {
+  //             setFile(file)
+  //           } else {
+  //             return null;
+  //           }
+  //         })
+  //         .catch(console.error);
+  //     } catch (error) {
+  //       console.error(error)
+  //     }
+  //   }
+
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [contentQuery, dispatch, getFile]);
+
+  useEffect(() => {
+    if (content) {
       try {
-        dispatch(getFile(query))
-          .unwrap()
-          .then((file) => {
-            if (file) {
-              setFile(file)
-            } else {
-              return null;
-            }
-          })
-          .catch(console.error);
+        const htmlContent = marked.parse(content);
+
+        if (htmlContent) {
+          setHTML(htmlContent);
+        }
       } catch (error) {
         console.error(error)
       }
     }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [query]);
+  }, [content]);
 
   useEffect(() => {
     if (file) {

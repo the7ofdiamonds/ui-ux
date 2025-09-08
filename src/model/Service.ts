@@ -37,6 +37,7 @@ export class Service extends Offering {
       url: this.url,
       action_word: this.actionWord,
       onboarding_link: this.onboardingLink,
+      contentURL: this.contentURL,
     };
   }
 }

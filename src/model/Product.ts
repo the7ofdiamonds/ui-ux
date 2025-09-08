@@ -27,6 +27,7 @@ export class Product extends Offering {
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       url: this.url,
       action_word: this.actionWord,
+      contentURL: this.contentURL,
     };
   }
 }

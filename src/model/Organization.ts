@@ -114,12 +114,8 @@ export class Organization implements iAccount {
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
     this.team = data?.team ? data.team.map((user) => new User(user)) : null;
     this.officeHours = data?.office_hours ? data.office_hours : null;
-    this.products = data?.products
-      ? new Products(data.products)
-      : null;
-    this.services = data?.services
-      ? new Services(data.services)
-      : null;
+    this.products = data?.products ? new Products(data.products) : null;
+    this.services = data?.services ? new Services(data.services) : null;
   }
 
   setLogin(login: string) {
@@ -224,7 +220,7 @@ export class Organization implements iAccount {
     this.repoQueries = repoQueries;
   }
 
-  setPortfolio(portfolio: Portfolio) {
+  setPortfolio(portfolio: Portfolio | null) {
     this.portfolio = portfolio;
   }
 
@@ -236,11 +232,11 @@ export class Organization implements iAccount {
     this.officeHours = officeHours;
   }
 
-  setProducts(products: Products) {
+  setProducts(products: Products | null) {
     this.products = products;
   }
 
-  setServices(services: Services) {
+  setServices(services: Services | null) {
     this.services = services;
   }
 
@@ -364,12 +360,8 @@ export class Organization implements iAccount {
       organizations: null,
       team: this.team ? this.team.map((user) => user.toUserObject()) : null,
       office_hours: this.officeHours,
-      products: this.products
-        ? this.products.toProductsObject()
-        : null,
-      services: this.services
-        ? this.services.toServicesObject()
-        : null,
+      products: this.products ? this.products.toProductsObject() : null,
+      services: this.services ? this.services.toServicesObject() : null,
     };
   }
 }

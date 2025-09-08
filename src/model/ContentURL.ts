@@ -69,7 +69,7 @@ export class ContentURL {
   toRepoContentQuery(): RepoContentQuery | null {
     try {
       if (this.owner == null) {
-        throw new Error('Owner is of repo is required.');
+        throw new Error('Owner of repo is required.');
       }
 
       if (this.repo == null) {

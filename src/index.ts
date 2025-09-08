@@ -58,6 +58,7 @@ export * from './model/Repo';
 export * from './model/RepoAPIURL';
 export * from './model/RepoContent';
 export * from './model/RepoContentQuery';
+export * from './model/RepoContentURL';
 export * from './model/RepoContents';
 export * from './model/Repos';
 export * from './model/RepoSize';
