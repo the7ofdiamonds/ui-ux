@@ -1,23 +1,39 @@
 import { Portfolio } from './Portfolio';
+import { Image, ImageObject } from './Image';
 import { Product, ProductObject } from './Product';
 
 export type ProductsObject = {
   id: string | number | null;
   title: string | null;
   description: string | null;
+  button_image: ImageObject | null;
+  button_link: string | null;
+  button_text: string | null;
   list: ProductObject[] | null;
 };
 
 export class Products {
   public id: string | number | null;
-  public title: string;
+  public title: string = 'products';
   public description: string | null;
+  public buttonImage: Image = new Image({
+    class_name: 'fa-brands fa-wpexplorer',
+  });
+  public buttonLink: string = '/products';
+  public buttonText: string | 'explore';
   public list: Product[];
 
   constructor(products?: ProductsObject) {
     this.id = products?.id ? products.id : null;
     this.title = products?.title ? products.title : 'products';
     this.description = products?.description ? products.description : null;
+    this.buttonImage = products?.button_image
+      ? new Image(products.button_image)
+      : new Image({ class_name: 'fa-brands fa-wpexplorer' });
+    this.buttonLink = products?.button_link
+      ? products.button_link
+      : '/products';
+    this.buttonText = products?.button_text ? products.button_text : 'explore';
     this.list = products?.list
       ? products.list.map((product) => new Product(product))
       : [];
@@ -51,6 +67,9 @@ export class Products {
       id: this.id,
       title: this.title,
       description: this.description,
+      button_image: this.buttonImage ? this.buttonImage.toImageObject() : null,
+      button_link: this.buttonLink,
+      button_text: this.buttonText,
       list:
         this.list.length > 0
           ? this.list.map((product) => product.toProductObject())
