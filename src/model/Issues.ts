@@ -8,24 +8,31 @@ export type IssuesObject = {
 
 export class Issues {
   list: Array<Issue>;
-  features: Array<Feature>;
-  tasks: Array<Task>;
-  design: Array<Task>;
-  development: Array<Task>;
-  delivery: Array<Task>;
+  features: Array<Feature> = [];
+  tasks: Array<Task> = [];
+  design: Array<Task> = [];
+  development: Array<Task> = [];
+  delivery: Array<Task> = [];
 
   constructor(data?: IssuesObject) {
     this.list =
       data && Array.isArray(data.list) && data.list.length > 0
         ? data.list.map((issue) => new Issue(issue))
         : [];
-    this.features = this.list.length > 0 ? this.toFeatures(this.list) : [];
-    this.tasks = this.list.length > 0 ? this.toTask(this.list) : [];
-    this.design = this.tasks.length > 0 ? this.getDesignTasks(this.tasks) : [];
-    this.development =
-      this.tasks.length > 0 ? this.getDevelopmentTasks(this.tasks) : [];
-    this.delivery =
-      this.tasks.length > 0 ? this.getDeliveryTasks(this.tasks) : [];
+
+    this.sortIssues(this.list);
+  }
+
+  getList(issuesArray: Array<IssueObject>): Array<Issue> {
+    return issuesArray && Array.isArray(issuesArray) && issuesArray.length > 0
+      ? issuesArray.map((issueObject) => {
+          return new Issue(issueObject);
+        })
+      : [];
+  }
+
+  setList(list: Array<Issue>) {
+    this.list = list;
   }
 
   toFeatures(issues: Array<Issue>) {
@@ -72,6 +79,16 @@ export class Issues {
       : [];
   }
 
+  sortIssues(list: Array<Issue>) {
+    if (list && Array.isArray(list) && list.length > 0) {
+      this.features = this.toFeatures(list);
+      this.tasks = this.toTask(list);
+      this.design = this.getDesignTasks(this.tasks);
+      this.development = this.getDevelopmentTasks(this.tasks);
+      this.delivery = this.getDeliveryTasks(this.tasks);
+    }
+  }
+
   fromGitHubGraphQL(issues?: Array<IssueGQL>) {
     this.list =
       issues && issues.length > 0
@@ -81,6 +98,8 @@ export class Issues {
             return issue;
           })
         : [];
+
+    this.sortIssues(this.list);
   }
 
   toIssuesObject(): IssuesObject {

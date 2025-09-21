@@ -13,11 +13,11 @@ import {
   ProjectDeliveryDataObject,
   ProjectDeliveryObject,
 } from './ProjectDelivery';
-import { ProjectStatus,ProjectStatusObject } from './ProjectStatus';
-import {ProjectProgress} from './ProjectProgress';
-import { ProjectCheckList,ProjectCheckListObject } from './ProjectCheckList';
+import { ProjectStatus, ProjectStatusObject } from './ProjectStatus';
+import { ProjectProgress } from './ProjectProgress';
+import { ProjectCheckList, ProjectCheckListObject } from './ProjectCheckList';
 import { ProjectDataObject } from './Project';
-import {Repo} from './Repo';
+import { Repo } from './Repo';
 
 export type ProjectProcessObject = {
   status: ProjectStatusObject | null;
@@ -73,10 +73,7 @@ export class ProjectProcess {
       ? new ProjectProgress(this.checkList)
       : null;
 
-    this.status =
-      data?.status
-        ? new ProjectStatus(data?.status)
-        : null;
+    this.status = data?.status ? new ProjectStatus(data?.status) : null;
   }
 
   setStatus(status: ProjectStatus) {
@@ -96,35 +93,34 @@ export class ProjectProcess {
   }
 
   fromRepo(repo: Repo) {
-    let status = null;
-    let design = null;
-    let development = null;
-    let delivery = null;
-
     if (repo.createdAt || repo.updatedAt) {
-      status = new ProjectStatus();
+      const status = new ProjectStatus();
       status.fromRepo(repo);
+      this.setStatus(status)
     }
 
     if (repo.contents?.design || repo.issues?.design) {
-      design = new ProjectDesign();
+      const design = new ProjectDesign();
       design.fromRepo(repo);
+      this.setDesign(design)
     }
 
-    if (repo.contents?.development || repo.skills || repo.repoURL) {
-      development = new ProjectDevelopment();
+    if (
+      repo.contents?.development ||
+      repo.issues?.development ||
+      repo.skills ||
+      repo.repoURL
+    ) {
+      const development = new ProjectDevelopment();
       development.fromRepo(repo);
+      this.setDevelopment(development)
     }
 
-    if (repo.contents?.delivery) {
-      delivery = new ProjectDelivery();
+    if (repo.contents?.delivery || repo.issues?.delivery) {
+      const delivery = new ProjectDelivery();
       delivery.fromRepo(repo);
+      this.setDelivery(delivery)
     }
-
-    status ? this.setStatus(status) : null;
-    design ? this.setDesign(design) : null;
-    development ? this.setDevelopment(development) : null;
-    delivery ? this.setDelivery(delivery) : null;
   }
 
   fromDocumentData(data: ProjectDataObject) {

@@ -19,7 +19,7 @@ export class RepoContents {
   details: RepoContent | null;
   story: RepoContent | null;
 
-  constructor(data?: RepoContentsObject | Partial<RepoContentsObject>) {
+  constructor(data?: Partial<RepoContentsObject>) {
     this.solution = data?.solution ? new RepoContent(data.solution) : null;
     this.design = data?.design ? new RepoContent(data.design) : null;
     this.development = data?.development

@@ -40,6 +40,14 @@
   input[type='checkbox']:disabled:checked::after {
     color: white; /* Keep the checkmark visible */
   }
+
+  li:has(input[type='checkbox']) {
+    list-style: none;
+  }
+
+  ul {
+    margin-left: 1.5rem;
+  }
 }
 
 .sub-task {

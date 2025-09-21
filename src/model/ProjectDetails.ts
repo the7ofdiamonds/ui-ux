@@ -30,7 +30,7 @@ export class ProjectDetails {
   story: ContentURL | null;
   repoSize: RepoSize | null;
 
-  constructor(data?: ProjectDetailsObject) {
+  constructor(data?: Partial<ProjectDetailsObject>) {
     this.privacy = data?.privacy ? data.privacy : 'private';
     this.clientID = data?.client_id ? data.client_id : '0';
     this.content = data?.content ? new ContentURL(data.content) : null;

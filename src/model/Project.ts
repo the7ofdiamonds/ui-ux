@@ -177,7 +177,9 @@ export class Project {
     if (
       repo.createdAt ||
       repo.updatedAt ||
-      repo.contents ||
+      repo.contents?.design?.downloadURL ||
+      repo.contents?.development?.downloadURL ||
+      repo.contents?.delivery?.downloadURL ||
       repo.issues ||
       repo.skills ||
       repo.repoURL
@@ -187,15 +189,15 @@ export class Project {
       this.setProcess(process);
     }
 
-    if (repo.contents && repo.contents.problem) {
+    if (repo.contents?.problem?.downloadURL) {
       const problem = new ProjectProblem();
       problem.fromRepo(repo);
       this.setProblem(problem);
     }
 
     if (
-      repo.contents?.details ||
-      repo.contents?.story ||
+      repo.contents?.details?.downloadURL ||
+      repo.contents?.story?.downloadURL ||
       repo.size ||
       repo.contributors
     ) {

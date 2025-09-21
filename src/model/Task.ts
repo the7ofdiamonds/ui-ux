@@ -4,6 +4,7 @@ import { ProjectQuery } from '@/model/ProjectQuery';
 export type tTask = {
   id: string | number;
   category: string | null;
+  title: string | null;
   description: string;
   status: boolean;
   details: string;
@@ -14,6 +15,7 @@ export type tTask = {
 export type TaskObject = {
   id: string | number | null;
   category: string | null;
+  title: string | null;
   description: string | null;
   status: boolean;
   details: string | null;
@@ -25,6 +27,7 @@ export type TaskObject = {
 export type TaskDataObject = {
   id: string | number | null;
   category: string | null;
+  title: string | null;
   description: string | null;
   status: boolean;
   details: string | null;
@@ -35,6 +38,7 @@ export type TaskDataObject = {
 export class Task {
   id: string | number | null;
   category: string | null;
+  title: string | null;
   description: string | null;
   status: boolean;
   details: string | null;
@@ -45,17 +49,16 @@ export class Task {
   constructor(data?: TaskObject) {
     this.id = data?.id ? data.id : null;
     this.category = data?.category ? data.category : null;
+    this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : null;
     this.status = data?.status ?? false;
     this.details = data?.details ? data.details : null;
     this.weight = data?.weight ?? 0;
     this.link = data?.link ? data.link : null;
-    this.subTasks = data?.subTasks
-      ? data.subTasks.map((typeTask) => {
-          const task = new Task(typeTask);
-          return task;
-        })
-      : [];
+    this.subTasks =
+      data?.subTasks && Array.isArray(data.subTasks) && data.subTasks.length > 0
+        ? data.subTasks.map((task) => new Task(task))
+        : [];
   }
 
   setID(id: string | number) {
@@ -64,6 +67,10 @@ export class Task {
 
   setCategory(category: string) {
     this.category = category;
+  }
+
+  setTitle(title: string) {
+    this.title = title;
   }
 
   setDescription(description: string) {
@@ -82,12 +89,16 @@ export class Task {
     this.weight = weight;
   }
 
-  setSubTask(issuesType: Array<tIssue>) {
-    this.subTasks = issuesType.map((issue) => {
+  getSubTaskFrom(issuesType: Array<tIssue>) {
+    return issuesType.map((issue) => {
       const task = new Task();
       task.fromIssueType(issue);
       return task;
     });
+  }
+
+  setSubTask(subTasks: Array<Task>) {
+    this.subTasks = subTasks;
   }
 
   fromIssue(issue: Issue) {
@@ -101,17 +112,19 @@ export class Task {
         ? 'delivery'
         : null
       : null;
-    this.description = issue.title ? issue.title : null;
+    this.title = issue.title ? issue.title : null;
+    this.description = issue.body ? issue.body : null;
     this.status = issue.state === 'OPEN' ? false : true;
     this.link = issue.repo;
-    issue.tracked && Array.isArray(issue.tracked)
-      ? this.setSubTask(issue.tracked)
-      : null;
+    this.subTasks =
+      issue.tracked && Array.isArray(issue.tracked)
+        ? this.getSubTaskFrom(issue.tracked)
+        : [];
   }
 
   fromIssueType(issue: tIssue) {
     this.id = issue.id;
-    this.description = issue.title;
+    this.title = issue.title;
     this.status = issue.state === 'OPEN' ? false : true;
     this.link = issue.repository.nameWithOwner;
   }
@@ -132,6 +145,7 @@ export class Task {
     return {
       id: this.id,
       category: this.category,
+      title: this.title,
       description: this.description,
       status: this.status,
       details: this.details,

@@ -25,12 +25,12 @@ export type IssueGQL = {
   milestone: {
     id: string;
     title: string;
-  };
-  issueType: {
+  } | null;
+  issueType?: {
     id: string;
     name: string;
     description: string;
-  };
+  } | null;
   labels: {
     nodes: Array<{ name: string; color: string }>;
   };

@@ -24,30 +24,30 @@ export const ContentComponent = <T,>({ content, query, dispatch, getFile, title 
     }
   }, [content, query]);
 
-  // useEffect(() => {
-  //   let isMounted = true;
+  useEffect(() => {
+    let isMounted = true;
 
-  //   if (contentQuery && dispatch && getFile) {
-  //     try {
-  //       dispatch(getFile(contentQuery))
-  //         .unwrap()
-  //         .then((file) => {
-  //           if (file) {
-  //             setFile(file)
-  //           } else {
-  //             return null;
-  //           }
-  //         })
-  //         .catch(console.error);
-  //     } catch (error) {
-  //       console.error(error)
-  //     }
-  //   }
+    if (contentQuery && dispatch && getFile) {
+      try {
+        dispatch(getFile(contentQuery))
+          .unwrap()
+          .then((file) => {
+            if (file) {
+              setFile(file)
+            } else {
+              return null;
+            }
+          })
+          .catch(console.error);
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [contentQuery, dispatch, getFile]);
+    return () => {
+      isMounted = false;
+    };
+  }, [contentQuery, dispatch, getFile]);
 
   useEffect(() => {
     if (content) {

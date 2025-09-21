@@ -4,6 +4,7 @@ import { Gallery, GalleryObject } from './Gallery';
 import { Image, ImageObject } from './Image';
 import { Pricing, PricingObject } from './Pricing';
 import { Project } from './Project';
+import { ProjectDetails, ProjectDetailsObject } from './ProjectDetails';
 
 export type Offered = 'service' | 'product' | false;
 
@@ -17,6 +18,7 @@ export type OfferingObject = {
   promotional_text: string | null;
   description: string | null;
   features: FeaturesObject | null;
+  details: Partial<ProjectDetailsObject> | null;
   contentURL: string | null;
   content: string | null;
   pricing: Partial<PricingObject> | null;
@@ -37,6 +39,7 @@ export class Offering {
   public promotionalText: string | null;
   public description: string | null;
   public features: Features | null;
+  public details: ProjectDetails | null;
   public contentURL: string | null;
   public content: string | null;
   public pricing: Pricing | null;
@@ -58,6 +61,7 @@ export class Offering {
       : null;
     this.description = offering?.description ? offering.description : null;
     this.features = offering?.features ? new Features(offering.features) : null;
+    this.details = offering?.details ? new ProjectDetails(offering.details) : null;
     this.contentURL = offering?.contentURL ? offering.contentURL : null;
     this.content = offering?.content ? offering.content : null;
     this.pricing = offering?.pricing ? new Pricing(offering.pricing) : null;
@@ -106,6 +110,10 @@ export class Offering {
         solution?.actionWord ?? getActionWord(solution?.category);
       this.url = this.getUrl(solution.projectURLs?.homepage?.url);
     }
+
+    if (project?.details) {
+      this.details = project.details;
+    }
   }
 
   toOfferingObject(): OfferingObject {
@@ -119,6 +127,7 @@ export class Offering {
       promotional_text: this.promotionalText,
       description: this.description,
       features: this.features ? this.features.toFeaturesObject() : null,
+      details: this.details ? this.details.toDetailsObject() : null,
       contentURL: this.contentURL,
       content: this.content,
       pricing: this.pricing ? this.pricing?.toPricingObject() : null,
