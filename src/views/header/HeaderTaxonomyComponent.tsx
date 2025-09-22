@@ -12,7 +12,7 @@ interface HeaderTaxonomyComponentProps {
 
 export const HeaderTaxonomyComponent: React.FC<HeaderTaxonomyComponentProps> = ({ skill }) => {
     return (
-        <h1 className='title'>
+        <h1 className={`title ${styles["header-tax"]}`}>
             {skill.image && <ImageComponent image={skill.image} />}
             {skill.title}
         </h1>

@@ -1,1 +1,8 @@
 @use '../../../scss/header.scss';
+
+.header-tax {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
