@@ -1,0 +1,18 @@
+.button {
+  background-color: unset;
+  border-radius: var(--border-radius);
+  box-shadow: none;
+  opacity: var(--opacity);
+  padding: 0;
+
+  h3 {
+    background-color: var(--button-background-color);
+    color: var(--button-color);
+    padding: 0.75rem;
+
+    &.title {
+      border-radius: 0.5em;
+      text-transform: uppercase;
+    }
+  }
+}
