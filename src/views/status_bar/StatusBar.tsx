@@ -1,0 +1,48 @@
+import React, { useEffect, useState } from 'react';
+
+import styles from './StatusBar.module.scss';
+
+export type StatusBarVisibility = 'show' | 'hide';
+export type MessageType = 'info' | 'caution' | 'error' | 'success';
+
+interface StatusBarProps {
+  show: StatusBarVisibility;
+  messageType: MessageType;
+  message: string | null;
+}
+
+export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message }) => {
+  const [showModal, setShowModal] = useState<StatusBarVisibility>('hide');
+
+  useEffect(() => {
+    setShowModal(show)
+  }, [show])
+
+  const minimize = () => {
+    if (showModal == 'show') {
+      setShowModal('hide');
+    }
+
+    if (showModal == 'hide') {
+      setShowModal('show');
+    }
+  };
+
+  return (
+    message && (
+      <span className={`${styles['modal-overlay']} ${showModal === 'show' ? styles['show'] : styles['hide']}`}>
+        <div className={`${showModal === 'show' ? styles.show : styles.hide} ${styles.status}`}>
+          <div className={styles.close}>
+            <button onClick={minimize}>
+              <i className="fa-solid fa-circle-xmark"></i>
+            </button>
+          </div>
+
+          <div className={`${styles['status-bar']} ${styles.card} ${styles[messageType]}`} id="status_bar">
+            <h4>{message}</h4>
+          </div>
+        </div>
+      </span>
+    )
+  );
+}

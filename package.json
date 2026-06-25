@@ -1,0 +1,95 @@
+{
+  "name": "@the7ofdiamonds/ui-ux",
+  "version": "1.0.83",
+  "description": "A modern UI/UX component library by @the7ofdiamonds.",
+  "author": "@the7ofdiamonds",
+  "license": "ISC",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./scss": {
+      "sass": "./scss/index.scss",
+      "default": "./scss/index.scss"
+    }
+  },
+  "files": [
+    "dist",
+    "scss"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/the7ofdiamonds/ui-ux.git"
+  },
+  "bugs": {
+    "url": "https://github.com/the7ofdiamonds/ui-ux/issues"
+  },
+  "homepage": "https://github.com/the7ofdiamonds/ui-ux#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "dev": "vite build --watch",
+    "tsc:dev": "tsc --watch",
+    "vite": "vite -c vite.config.ts",
+    "build": "vite build",
+    "preview": "vite preview --port 8080",
+    "update-prod": "git push git@github.com:the7ofdiamonds/ui-ux.git",
+    "update-dev": "git push ssh://git@gitlab.jclyonsenterprises.com:2424/seven-tech/packages/javascript/ui-ux.git",
+    "workflow": "bash ../workflow.sh",
+    "refactor": "npm run workflow refactor",
+    "test": "echo \"No test specified\" && exit 0",
+    "clean": "rimraf dist node_modules"
+  },
+  "dependencies": {
+    "@octokit/graphql": "^8.2.2",
+    "@octokit/rest": "^21.1.1",
+    "@octokit/types": "^14.1.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "browser-sync": "^3.0.3",
+    "buffer": "^6.0.3",
+    "cors": "^2.8.5",
+    "crypto-browserify": "^3.12.0",
+    "del": "^8.0.0",
+    "glob": "^11.0.1",
+    "marked": "^15.0.5",
+    "moment": "^2.29.4",
+    "path": "^0.12.7",
+    "source-map-js": "^1.0.2",
+    "tslib": "^2.8.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.3",
+    "@types/marked": "^5.0.2",
+    "@types/node": "^22.10.7",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "child_process": "^1.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.10",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "sass": "^1.89.2",
+    "typescript": "^5.7.3",
+    "vite": "5.4.20",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.0",
+    "react-router-dom": "^6.14.2"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
+  }
+}

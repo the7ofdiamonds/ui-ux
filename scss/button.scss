@@ -1,0 +1,28 @@
+button,
+.search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: none;
+  width: fit-content;
+  height: fit-content;
+  background-color: var(--button-background-color, black);
+  border-radius: var(--border-radius, 0.5rem);
+  box-shadow: var(--box-shadow, 4px 4px 10px gray);
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--button-color, white);
+    word-wrap: normal;
+  }
+
+  i {
+    color: var(--button-color, white);
+    padding-left: 0.5em;
+  }
+}

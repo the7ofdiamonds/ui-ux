@@ -1,0 +1,25 @@
+.project-skills-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .button {
+    cursor: pointer;
+  }
+  
+  .icon {
+    padding: 0;
+  }
+
+  i {
+    font-size: 2rem;
+  }
+
+  img {
+    width: 100%;
+    max-width: 4rem;
+    height: auto;
+  }
+}

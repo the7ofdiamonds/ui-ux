@@ -1,0 +1,26 @@
+@use './card.scss';
+
+.status-bar.card {
+  &.info {
+    background-color: var(--color-info);
+  }
+
+  &.success {
+    background-color: var(--color-success);
+  }
+
+  &.caution {
+    background-color: var(--color-caution);
+  }
+
+  &.error {
+    background-color: var(--color-error);
+  }
+
+  h4 {
+    color: var(--color-primary);
+    padding: 0.5em;
+    letter-spacing: normal;
+    text-align: center;
+  }
+}
