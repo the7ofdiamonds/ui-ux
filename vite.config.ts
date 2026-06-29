@@ -20,7 +20,7 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'UIUX',
       formats: ['es', 'cjs'],
-      fileName: (format, name) => `${name}.${format === 'es' ? 'js' : format}`,
+      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
     },
     rollupOptions: rollupOptions,
     minify: false,
