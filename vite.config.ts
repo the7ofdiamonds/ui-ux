@@ -1,11 +1,10 @@
 import { defineConfig } from 'vite';
 
 import dts from 'vite-plugin-dts';
+
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 import path from 'path';
-
-import rollupOptions from './rollup.config';
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
