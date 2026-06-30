@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import type { SkillObject } from '../model/Skill';
 import { Skill } from '../model/Skill';
 import {
