@@ -45,14 +45,14 @@
     "workflow": "bash ../workflow.sh",
     "refactor": "npm run workflow refactor",
     "test": "echo \"No test specified\" && exit 0",
-    "clean": "rimraf dist node_modules"
+    "clean": "rimraf dist node_modules package-lock.json"
   },
   "dependencies": {
-    "@the7ofdiamonds/types": "latest",
-    "@reduxjs/toolkit": "^1.9.5",
+    "@octokit/graphql": "^8.2.2",
     "@octokit/rest": "^21.0.2",
     "@octokit/types": "^13.6.2",
-    "@octokit/graphql": "^8.2.2",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@the7ofdiamonds/types": "latest",
     "marked": "^15.0.5",
     "uuid": "^11.1.0"
   },
@@ -64,7 +64,7 @@
     "rimraf": "^5.0.10",
     "sass": "^1.89.2",
     "typescript": "^5.7.3",
-    "vite": "5.4.20",
+    "vite": "^8.1.2",
     "vite-plugin-css-injected-by-js": "^3.5.2",
     "vite-plugin-dts": "^4.5.4"
   },

@@ -400,10 +400,8 @@ export const handleSkills = () => {
 };
 
 export const useHandleSkillClick = () => {
-  const navigate = useNavigate();
-
   return (skill: Taxonomy) => {
     handleSkills();
-    navigate(`/taxonomy${skill.path}`);
+    return `/taxonomy${skill.path}`;
   };
 };
