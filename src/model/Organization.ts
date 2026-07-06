@@ -165,7 +165,7 @@ export class Organization implements iAccount {
     return new ContactMethods();
   }
 
-  setContactMethonds(contacts: Record<string, any>) {
+  setContactMethods(contacts: Record<string, any>) {
     this.contactMethods = new ContactMethods(contacts);
   }
 

@@ -5,8 +5,8 @@
   "author": "@the7ofdiamonds",
   "license": "ISC",
   "type": "module",
-  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
@@ -14,10 +14,8 @@
       "require": "./dist/index.cjs",
       "types": "./dist/types/index.d.ts"
     },
-    "./scss": {
-      "sass": "./scss/index.scss",
-      "default": "./scss/index.scss"
-    }
+    "./css/*": "./dist/css/*",
+    "./scss/*": "./scss/*"
   },
   "files": [
     "dist",
@@ -48,11 +46,11 @@
     "clean": "rimraf dist node_modules package-lock.json"
   },
   "dependencies": {
+    "@the7ofdiamonds/types": "latest",
     "@octokit/graphql": "^8.2.2",
     "@octokit/rest": "^21.0.2",
     "@octokit/types": "^13.6.2",
     "@reduxjs/toolkit": "^1.9.5",
-    "@the7ofdiamonds/types": "latest",
     "marked": "^15.0.5",
     "uuid": "^11.1.0"
   },
