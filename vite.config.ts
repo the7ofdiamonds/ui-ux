@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 
-import dts from 'vite-plugin-dts';
+import react from '@vitejs/plugin-react';
 
+import dts from 'vite-plugin-dts';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 import path from 'path';
@@ -9,6 +10,7 @@ import path from 'path';
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
   plugins: [
+    react(),
     dts({
       insertTypesEntry: true,
       outDir: 'dist/types'
@@ -31,6 +33,8 @@ export default defineConfig({
         '@reduxjs/toolkit',
         '@the7ofdiamonds/types',
         'react',
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
         'react-dom',
         'react-router-dom',
         'react-redux',

@@ -37,6 +37,7 @@
     "tsc:dev": "tsc --watch",
     "vite": "vite -c vite.config.ts",
     "build": "vite build",
+    "build-pkg": "bash build_package.sh",
     "preview": "vite preview --port 8080",
     "update-prod": "git push git@github.com:the7ofdiamonds/ui-ux.git",
     "update-dev": "git push ssh://git@gitlab.jclyonsenterprises.com:2424/seven-tech/packages/javascript/ui-ux.git",
@@ -56,6 +57,7 @@
     "@types/marked": "^5.0.2",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^6.0.3",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.10",
     "sass": "^1.89.2",
@@ -65,8 +67,8 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "peerDependencies": {
-    "@the7ofdiamonds/types": "latest",
     "@reduxjs/toolkit": "^1.9.5",
+    "@the7ofdiamonds/types": "latest",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^8.1.1",
