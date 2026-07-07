@@ -43,7 +43,7 @@
     "workflow": "bash ../workflow.sh",
     "refactor": "npm run workflow refactor",
     "test": "echo \"No test specified\" && exit 0",
-    "clean": "rimraf dist node_modules package-lock.json"
+    "clean": "rimraf dist node_modules"
   },
   "dependencies": {
     "@the7ofdiamonds/types": "latest",
