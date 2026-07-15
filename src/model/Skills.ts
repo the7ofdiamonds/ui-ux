@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import type { SkillObject } from '../model/Skill';
 import { Skill } from '../model/Skill';
 import {
@@ -400,8 +402,9 @@ export const handleSkills = () => {
 };
 
 export const useHandleSkillClick = () => {
+  const navigate = useNavigate();
   return (skill: Taxonomy) => {
     handleSkills();
-    return `/taxonomy${skill.path}`;
+    return navigate(`${skill.path}`);
   };
 };
