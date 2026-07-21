@@ -13,7 +13,7 @@ export type ProjectDetailsObject = {
   content: string | null;
   team_list: ContributorsObject | null;
   story: string | null;
-  repo_size: number | null;
+  repo_size: String | null;
 };
 
 export type ProjectDetailsDataObject = {
@@ -30,7 +30,7 @@ export class ProjectDetails {
   content: ContentURL | null;
   teamList: Contributors | null;
   story: ContentURL | null;
-  repoSize: RepoSize | null;
+  repoSize: String | null;
 
   constructor(data?: Partial<ProjectDetailsObject>) {
     this.privacy = data?.privacy ? data.privacy : 'private';
@@ -38,7 +38,7 @@ export class ProjectDetails {
     this.content = data?.content ? new ContentURL(data.content) : null;
     this.teamList = data?.team_list ? new Contributors(data.team_list) : null;
     this.story = data?.story ? new ContentURL(data.story) : null;
-    this.repoSize = data?.repo_size ? new RepoSize(data.repo_size) : null;
+    this.repoSize = data?.repo_size ? data.repo_size : '0 KB';
   }
 
   setPrivacy(privacy: string) {
@@ -70,7 +70,7 @@ export class ProjectDetails {
   }
 
   setRepoSize(size: number) {
-    this.repoSize = new RepoSize(size);
+    this.repoSize = new RepoSize(size).display();
   }
 
   setTeamList(team: Array<Contributor>) {
@@ -140,7 +140,7 @@ export class ProjectDetails {
       content: this.content ? this.content.url : null,
       team_list: this.teamList ? this.teamList.toContributorsObject() : null,
       story: this.story ? this.story.url : null,
-      repo_size: this.repoSize ? this.repoSize.amount : null,
+      repo_size: this.repoSize ? this.repoSize : null,
     };
   }
 

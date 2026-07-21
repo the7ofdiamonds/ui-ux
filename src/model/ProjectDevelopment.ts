@@ -50,7 +50,7 @@ export class ProjectDevelopment {
   skills: ProjectSkills | null;
   checkList: CheckList | null;
   versionsList: ProjectVersions = new ProjectVersions();
-  roadmap: FeaturesRoadmap | null;
+  roadmap: FeaturesRoadmap | null = null;
 
   constructor(data?: Partial<ProjectDevelopmentObject>) {
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
@@ -66,7 +66,6 @@ export class ProjectDevelopment {
     this.versionsList = data?.versions_list
       ? new ProjectVersions(data.versions_list)
       : new ProjectVersions();
-    this.roadmap = new FeaturesRoadmap();
   }
 
   setGallery(gallery: Gallery) {

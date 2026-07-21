@@ -32,7 +32,7 @@ import { Owner } from './Owner';
 import { ProjectQuery, type ProjectQueryObject } from './ProjectQuery';
 
 export type ProjectObject = {
-  id: string | null;
+  id: string | number | null;
   name: string | null;
   title: string | null;
   subtitle: string | null;
@@ -48,7 +48,7 @@ export type ProjectObject = {
 };
 
 export type ProjectDataObject = {
-  id: string | null;
+  id: string | number | null;
   title: string | null;
   subtitle: string | null;
   promotional_text: string | null;
@@ -60,7 +60,7 @@ export type ProjectDataObject = {
 };
 
 export class Project {
-  id: string | null;
+  id: string | number | null;
   name: string | null;
   title: string | null;
   subtitle: string | null;
@@ -82,9 +82,7 @@ export class Project {
         ? data.title
         : data?.name
           ? this.getTitle(data.name)
-          : data?.id
-            ? this.getTitle(data.id)
-            : null;
+          : null;
       this.subtitle = data?.subtitle ?? null;
       this.promotionalText = data?.promotional_text ?? null;
       this.description = data?.description ?? null;
@@ -164,14 +162,16 @@ export class Project {
       : 'Untitled Project';
   }
 
+  update(project: Project) {
+    Object.assign(this, project);
+  }
+
   fromRepo(repo: Repo) {
     this.id = repo.id;
     this.name = repo.name;
     this.title = repo.name
       ? this.getTitle(repo.name)
-      : repo.id
-        ? this.getTitle(repo.id)
-        : null;
+      : null;
     this.description = repo.description;
 
     if (repo.owner) {

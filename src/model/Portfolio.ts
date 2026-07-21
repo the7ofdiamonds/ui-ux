@@ -182,6 +182,7 @@ export class Portfolio {
 
     this.projects.forEach((project) => {
       if (project.id == id) {
+        console.log(project.id)
         filteredProject = project;
       }
     });
@@ -189,11 +190,11 @@ export class Portfolio {
     return filteredProject;
   }
 
-  filterProject(name: string): Project | null {
+  filterProject(query: ProjectQuery): Project | null {
     let filteredProject = null;
 
     this.projects.forEach((project) => {
-      if (project.name == name) {
+      if (project.query?.owner === query.owner && project.query?.repo === query.repo) {
         filteredProject = project;
       }
     });
@@ -244,10 +245,23 @@ export class Portfolio {
     }
 
     if (projectQuery.repo) {
-      project = this.filterProject(projectQuery.repo);
+      project = this.filterProject(projectQuery);
     }
 
     return project;
+  }
+
+
+  addProject(project: Project) {
+    if (!(project instanceof Project) || !project?.query) return;
+    const existing = this.filterProject(project.query);
+
+    if (existing) {
+      existing.update(project);
+      this.projects.add(existing);
+    } else {
+      this.projects.add(project);
+    }
   }
 
   fromRepos(repos: Repos) {

@@ -38,12 +38,10 @@ export type GitHubRepoFileResponse =
 
 export type GitHubRepoFileData = GitHubRepoFileResponse['data'];
 
-export type CommitsResponse = GetResponseTypeFromEndpointMethod<
+export type GitHubCommits = GetResponseTypeFromEndpointMethod<
   typeof octokit.rest.repos.listCommits
->;
+>['data'];
 
-export type GitHubCommit = GetResponseTypeFromEndpointMethod<
-  typeof octokit.rest.repos.listCommits
->['data'][number];
+export type GitHubCommit = GitHubCommits[number];
 
 export type GitHubUser = GitHubUserAccount & RepoContributor & {};

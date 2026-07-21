@@ -1,13 +1,18 @@
-import {Feature} from './Feature';
-import {Version} from './Version';
+import { Feature } from './Feature';
+import { Features } from './Features';
 
 export class FeaturesRoadmap {
   path: Array<Feature> | null;
 
-  constructor(features: Set<Feature> = new Set()) {
-    this.path =
-      features.size > 0
-        ? Array.from(features).sort((a, b) => a.order(b.version ?? new Version('1.0.0')))
-        : null;
+  constructor(features: Set<Feature>) {
+    const fList = new Features();
+    fList.setList(features)
+    this.path = fList.order()
+  }
+
+  display() {
+    if (!this.path) return null;
+
+    return this.path.map((feature) => feature.toFeatureObject())
   }
 }

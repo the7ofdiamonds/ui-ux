@@ -1,7 +1,7 @@
 import { Commit } from "./Commit";
 import type { CommitObject } from "./Commit";
 
-import type { CommitsResponse, GitHubCommit } from "./GitHub";
+import type { GitHubCommits, GitHubCommit } from "./GitHub";
 
 export class Commits {
     list: Commit[];
@@ -10,11 +10,11 @@ export class Commits {
         this.list = list ? list.map((commit) => new Commit(commit)) : [];
     }
 
-    fromResponse(response: Array<GitHubCommit>) {
-        if(!response) return;
-        this.list = response.map((r) => {
+    fromResponse(commits: GitHubCommits) {
+        if (!commits) return;
+        this.list = commits.map((c: GitHubCommit) => {
             const commit = new Commit();
-            commit.fromGitHub(r.commit);
+            commit.fromGitHub(c);
             return commit;
         });
         return this;

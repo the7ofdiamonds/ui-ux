@@ -17,7 +17,7 @@ import { Issues } from './Issues';
 import type { IssueGQL } from './Issue';
 import type { OwnerGQL } from './Owner';
 
-import type { CommitsResponse, GitHubRepo } from '../model/GitHub';
+import type { GitHubRepo } from '../model/GitHub';
 import type { GitLabRepoObject } from '../model/GitLabRepo';
 
 import { Commits } from './Commits';
@@ -38,7 +38,7 @@ export type RepositoryGQL = {
 };
 
 export interface RepoObject {
-  id: string | null;
+  id: number | string | null;
   name: string | null;
   type: RepoType | null;
   privacy: boolean;
@@ -62,7 +62,7 @@ export interface RepoObject {
 export type RepoType = 'GitHub' | 'GitLab';
 
 export class Repo {
-  id: string | null;
+  id: number | string | null;
   type: RepoType | null;
   name: string | null;
   privacy: boolean;
@@ -153,7 +153,7 @@ export class Repo {
   }
 
   fromGitHub(repo: GitHubRepo) {
-    this.id = repo?.name;
+    this.id = repo?.id;
     this.type = 'GitHub';
     this.name = repo.name;
     this.privacy = repo?.private;

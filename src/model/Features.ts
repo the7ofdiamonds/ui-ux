@@ -1,5 +1,6 @@
 import type { FeatureObject } from './Feature';
 import { Feature } from './Feature';
+import { Version } from './Version';
 
 export type FeaturesObject = {
   id: string | number | null;
@@ -19,6 +20,23 @@ export class Features {
 
   setList(list: Set<Feature>) {
     this.list = list;
+  }
+
+  order(): Array<Feature> {
+    return this.list && this.list.size > 0
+      ? Array.from(this.list).sort((a, b) => {
+        const aFeature =
+          a instanceof Feature
+            ? a
+            : new Feature(a as FeatureObject);
+        const bFeature =
+          b instanceof Feature
+            ? b
+            : new Feature(b as FeatureObject);
+
+        return aFeature.order(bFeature.version ?? new Version('1.0.0'))
+      })
+      : [];
   }
 
   toFeaturesObject(): FeaturesObject {

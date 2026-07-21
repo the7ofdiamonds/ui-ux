@@ -1,5 +1,5 @@
 import type { GitHubCommit } from "./GitHub";
-import {formatTime} from "../utils/String";
+import { formatTime } from "../utils/String";
 
 export type CommitObject = {
     date: string | null;
@@ -18,11 +18,11 @@ export class Commit {
         this.message = commit ? commit.message : null;
     }
 
-    fromGitHub(commit: GitHubCommit) {
-        if (!commit) return;
-        this.date = formatTime(commit.committer?.date) ?? '';
-        this.author = commit.committer?.name ?? '';
-        this.message = commit.message ?? '';
+    fromGitHub(githubCommit: GitHubCommit) {
+        if (!githubCommit) return;
+        this.date = githubCommit?.commit && githubCommit?.commit?.author?.date ? formatTime(githubCommit.commit.author.date) : '';
+        this.author = githubCommit.commit.author?.name ?? '';
+        this.message = githubCommit.commit.message ?? '';
         return this;
     }
 

@@ -17,23 +17,9 @@ import { Issues } from './Issues';
 import type { IssueGQL } from './Issue';
 import type { OwnerGQL } from './Owner';
 
-import type { CommitsResponse, GitHubRepo } from '../model/GitHub';
 import { Commits } from './Commits';
 import type { CommitObject } from "./Commit";
 
-// export type RepositoryGQL = {
-//   id: string;
-//   name: string;
-//   description: string;
-//   url: string;
-//   owner: OwnerGQL;
-//   languages: {
-//     edges: Array<LanguageGQL>;
-//   };
-//   issues: {
-//     nodes: IssueGQL;
-//   };
-// };
 export interface GitLabOwnerObject {
   id: string | null;
   name: string | null;
