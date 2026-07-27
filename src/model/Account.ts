@@ -67,10 +67,10 @@ export interface iAccount {
   skills: Skills | null;
   getRoles: (roles: Array<RoleObject>) => Array<Role>;
   setRoles: (roles: Array<RoleObject>) => void;
-  getContactMethods: (contacts: Record<string, any>) => ContactMethods;
+  getContactMethods: (contacts: ContactMethodsObject) => ContactMethods;
   setContactMethods: (contacts: ContactMethods) => void;
   getOrganizations: (organizations: Array<OrganizationObject>) => Organizations;
-  setOrganizations: (organizations: Array<OrganizationObject>) => void;
+  setOrganizations: (organizations: Organizations) => void;
   setReposURL: (url: string) => void;
   setRepos: (repos: Repos) => void;
   getRepoQueries: (data: Array<Record<string, any>>) => Array<GitHubRepoQuery>;
@@ -186,8 +186,8 @@ export class Account implements iAccount {
     return new Organizations();
   }
 
-  setOrganizations(organizations: Array<OrganizationObject>) {
-    this.organizations = new Organizations(organizations);
+  setOrganizations(organizations: Organizations) {
+    this.organizations = organizations;
   }
 
   setReposURL(url: string) {
@@ -240,6 +240,10 @@ export class Account implements iAccount {
 
   setSkills(skills: Skills) {
     this.skills = skills;
+  }
+
+  setContactMethods(contacts: ContactMethods) {
+    this.contactMethods = contacts;
   }
 
   fromGitHub(data: GitHubUserAccount) {

@@ -3,20 +3,21 @@ import { Organization } from './Organization';
 import type { OrganizationGQL } from './GitHubGQL';
 
 export class Organizations {
-  list: Array<Organization>;
+  list: Array<Organization> = [];
   count: number;
 
   constructor(data?: Array<OrganizationObject>) {
-    let organizations: Array<Organization> = [];
-
     if (Array.isArray(data) && data.length > 0) {
       data.map((organization) => {
-        organizations.push(new Organization(organization));
+        this.list.push(new Organization(organization));
       });
     }
 
-    this.list = organizations;
-    this.count = organizations.length;
+    this.count = this.list.length;
+  }
+
+  add(organization: Organization) {
+    this.list.push(organization);
   }
 
   fromGitHubGraphQL(organizations: Array<OrganizationGQL>) {

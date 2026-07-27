@@ -1,5 +1,5 @@
 import type { AccountObject, iAccount } from '../model/Account';
-import { ContactMethods } from '../model/ContactMethods';
+import { ContactMethods, type ContactMethodsObject } from '../model/ContactMethods';
 import { GitHubRepoQuery } from '../model/GitHubRepoQuery';
 import type { OrganizationObject } from '../model/Organization';
 import { Organizations } from '../model/Organizations';
@@ -44,7 +44,7 @@ export class User implements iAccount {
   public reposURL: string | null;
   public repos: Repos | null;
   public repoQueries: Array<GitHubRepoQuery>;
-  public skills: Skills;
+  public skills: Skills | null;
   public portfolio: Portfolio | null;
   public username: string | null;
   public firstName: string | null;
@@ -82,8 +82,8 @@ export class User implements iAccount {
         : [];
     this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
     this.location = data?.location ? data.location : null;
-    this.contactMethods = data
-      ? this.getContactMethods(data)
+    this.contactMethods = data?.contact_methods
+      ? this.getContactMethods(data.contact_methods)
       : null;
     this.organizationsURL = data?.organizations_url
       ? data.organizations_url
@@ -94,9 +94,7 @@ export class User implements iAccount {
     this.reposURL = data?.repos_url ? data.repos_url : null;
     this.repos = data?.repos ? new Repos(data.repos) : null;
     this.repoQueries = data?.repo_queries
-      ? data.repo_queries.map(
-        (repoQuery) => new GitHubRepoQuery(repoQuery.owner, repoQuery.repo)
-      )
+      ? data.repo_queries.map(repoQuery => new GitHubRepoQuery(repoQuery))
       : [];
     this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
@@ -154,24 +152,9 @@ export class User implements iAccount {
   }
 
   getContactMethods(
-    data: Record<string, any> | GitHubUserAccount
+    contact_methods: ContactMethodsObject
   ): ContactMethods {
-    if (data.html_url || data.login || data.blog) {
-      const contactMethods = new ContactMethods();
-      contactMethods.setContactGitHub(data.login);
-
-      if (data.blog) {
-        contactMethods.setContactWebsite(data.blog);
-      }
-
-      return contactMethods;
-    }
-
-    if ('contact_methods' in data) {
-      return new ContactMethods(data.contact_methods);
-    }
-
-    return new ContactMethods();
+    return new ContactMethods(contact_methods);
   }
 
   setContactMethonds(contacts: ContactMethods) {
@@ -190,8 +173,8 @@ export class User implements iAccount {
     return new Organizations();
   }
 
-  setOrganizations(organizations: Array<OrganizationObject>) {
-    this.organizations = new Organizations(organizations);
+  setOrganizations(organizations: Organizations) {
+    this.organizations = organizations;
   }
 
   setReposURL(url: string) {
@@ -210,11 +193,11 @@ export class User implements iAccount {
   getRepoQueries(data: Array<Record<string, any>>): Array<GitHubRepoQuery> {
     let repoQueries: Array<GitHubRepoQuery> = [];
 
-    if (Array.isArray(data) && data.length > 0) {
-      data.forEach((query) => {
-        repoQueries.push(new GitHubRepoQuery(query.owner?.login, query.id));
-      });
-    }
+    // if (Array.isArray(data) && data.length > 0) {
+    //   data.forEach((query) => {
+    //     repoQueries.push(new GitHubRepoQuery({owner: query.owner?.login, query.id}));
+    //   });
+    // }
 
     return repoQueries;
   }
@@ -222,18 +205,18 @@ export class User implements iAccount {
   setRepoQueries(repos: Array<RepoObject>) {
     let repoQueries: Array<GitHubRepoQuery> = [];
 
-    if (repos.length > 0) {
-      repos.forEach((repo) => {
-        const repoQuery =
-          repo?.owner?.login && repo?.id
-            ? new GitHubRepoQuery(repo?.owner?.login, repo?.id)
-            : null;
+    // if (repos.length > 0) {
+    //   repos.forEach((repo) => {
+    //     const repoQuery =
+    //       repo?.owner?.login && repo?.id
+    //         ? new GitHubRepoQuery(repo?.owner?.login, repo?.id)
+    //         : null;
 
-        if (repoQuery) {
-          repoQueries.push(repoQuery);
-        }
-      });
-    }
+    //     if (repoQuery) {
+    //       repoQueries.push(repoQuery);
+    //     }
+    //   });
+    // }
 
     this.repoQueries = repoQueries;
   }
@@ -246,6 +229,10 @@ export class User implements iAccount {
     this.skills = skills;
   }
 
+  setContactMethods(contacts: ContactMethods) {
+    this.contactMethods = contacts;
+  }
+
   fromGitHub(data: GitHubUser) {
     this.id = data?.login ? data?.login : this.id;
     this.createdAt = data?.created_at ? data?.created_at : this.createdAt;
@@ -256,7 +243,7 @@ export class User implements iAccount {
     this.location = data?.location ? data?.location : this.location;
     this.reposURL = data?.repos_url ? data?.repos_url : this.reposURL;
     this.website = data?.blog ? data?.blog : null;
-    this.contactMethods = this.getContactMethods(data);
+    // this.contactMethods = this.getContactMethods(data);
   }
 
   fromGitHubGraphQL(response: UserGQL) {
@@ -327,6 +314,41 @@ export class User implements iAccount {
     this.website = json?.website || null;
     this.login = json?.login || null;
     this.contactMethods = json?.contact_methods ? new ContactMethods(json.contact_methods) : null
+  }
+
+  fromUserObject(data?: Partial<UserObject>) {
+    this.id = data?.id ? data.id : null;
+    this.createdAt = data?.created_at ? data.created_at : null;
+    this.updatedAt = data?.updated_at ? data.updated_at : null;
+    this.login = data?.login ? data.login : null;
+    this.username = data?.username ? data.username : null;
+    this.firstName = data?.first_name ? data.first_name : null;
+    this.lastName = data?.last_name ? data.last_name : null;
+    this.name = data?.first_name || data?.last_name ? this.getName() : null;
+    this.title = data?.title ? data.title : null;
+    this.bio = data?.bio ? data.bio : null;
+    this.email = data?.email ? data.email : null;
+    this.phone = data?.phone ? data.phone : null;
+    this.website = data?.website ? data.website : null;
+    this.story =
+      data?.story && typeof data.story === 'string' ? data.story : null;
+    this.nickname = data?.nickname ? data.nickname : null;
+    this.nicename = data?.nicename ? data.nicename : null;
+    this.roles =
+      data?.roles && data.roles.length > 0
+        ? data.roles.map((roleObject) => new Role(roleObject))
+        : [];
+    this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
+    this.location = data?.location ? data.location : null;
+    this.organizationsURL = data?.organizations_url
+      ? data.organizations_url
+      : null;
+    this.organizations = data?.organizations
+      ? new Organizations(data.organizations)
+      : null;
+    this.reposURL = data?.repos_url ? data.repos_url : null;
+    this.repos = data?.repos ? new Repos(data.repos) : null;
+    this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
   }
 
   toUserObject(): UserObject {

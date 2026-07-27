@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import type { MessageType, StatusBarVisibility } from '../../views/status_bar/StatusBar';
-import { StatusBar} from '../../views/status_bar/StatusBar';
+import { StatusBar } from '../../views/status_bar/StatusBar';
 
 import { Main } from '../../views/main/Main';
+
+import styles from './Document.module.scss';
 
 interface DocumentComponentProps {
     documentURL: string;
@@ -34,7 +36,8 @@ export const DocumentComponent: React.FC<DocumentComponentProps> = ({ documentUR
     return (
         <Main>
             {url && <iframe
-                id="pdf_viewer"
+                id="PDF Viewer"
+                className={styles['pdf-viewer']}
                 src={`${url}#view=fit`}
                 title="PDF Viewer"
                 allowFullScreen

@@ -1,0 +1,22 @@
+  .pdf-viewer {
+    display: block;
+    border: 0 !important;
+    padding: 0;
+    margin: auto;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: transparent;
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+
+    #document {
+      width: 100%;
+    }
+
+    &::-webkit-scrollbar {
+      width: 0px !important;
+      background: transparent !important;
+      -ms-overflow-style: none;
+      display: none !important;
+    }
+  }

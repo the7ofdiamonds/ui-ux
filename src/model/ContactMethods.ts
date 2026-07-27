@@ -199,7 +199,7 @@ export class ContactMethods {
     this.setContactWebsite(data?.website);
     this.setContactEmail(data?.email);
     this.setContactPhone(data?.phone);
-    
+
     return this;
   }
 
