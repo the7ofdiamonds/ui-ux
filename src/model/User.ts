@@ -65,7 +65,7 @@ export class User implements iAccount {
     this.username = data?.username ? data.username : null;
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
-    this.name = data?.first_name || data?.last_name ? this.getName() : null;
+    this.name = data?.name ? data.name : null;
     this.title = data?.title ? data.title : null;
     this.bio = data?.bio ? data.bio : null;
     this.email = data?.email ? data.email : null;
@@ -303,10 +303,8 @@ export class User implements iAccount {
     this.id = '0';
     this.avatarURL = json.avatar_url || null;
     this.name = json?.name
-      ? json.name
-      : json?.first_name && json?.last_name
-        ? `${json?.first_name} ${json?.last_name}`
-        : null;
+      ? json?.name
+      : null;
     this.title = json?.title || null;
     this.email = json?.contact_methods?.email?.value || null;
     this.phone = json?.contact_methods?.phone?.value || null;
@@ -324,14 +322,14 @@ export class User implements iAccount {
     this.username = data?.username ? data.username : null;
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
-    this.name = data?.first_name || data?.last_name ? this.getName() : null;
+    // this.name = data?.name ? data.name : null;
     this.title = data?.title ? data.title : null;
     this.bio = data?.bio ? data.bio : null;
     this.email = data?.email ? data.email : null;
     this.phone = data?.phone ? data.phone : null;
     this.website = data?.website ? data.website : null;
-    this.story =
-      data?.story && typeof data.story === 'string' ? data.story : null;
+    // this.story =
+    //   data?.story && typeof data.story === 'string' ? data.story : null;
     this.nickname = data?.nickname ? data.nickname : null;
     this.nicename = data?.nicename ? data.nicename : null;
     this.roles =

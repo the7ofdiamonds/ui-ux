@@ -6,6 +6,7 @@ import { marked } from 'marked';
 import styles from './Content.module.scss';
 
 interface ContentComponentProps<T> {
+  id?: string | null;
   content?: string | null;
   query?: T;
   dispatch?: ThunkDispatch<any, any, any>;
@@ -13,7 +14,7 @@ interface ContentComponentProps<T> {
   title?: string | null;
 }
 
-export const ContentComponent = <T,>({ content, query, dispatch, getFile, title }: ContentComponentProps<T>) => {
+export const ContentComponent = <T,>({ id, content, query, dispatch, getFile, title }: ContentComponentProps<T>) => {
   const [contentQuery, setContentQuery] = useState<T | null>(null);
   const [file, setFile] = useState<string | null>(null);
   const [html, setHTML] = useState<string | object | null>(null);
@@ -80,7 +81,7 @@ export const ContentComponent = <T,>({ content, query, dispatch, getFile, title 
   return (
     <>
       {html && html != "" && (
-        <div className={styles.content}>
+        <div className={styles.content} id={id}>
           {title && <h4 className='title'>{title}</h4>}
           <div className={styles['content-html']} dangerouslySetInnerHTML={{ __html: html }}></div>
         </div>
