@@ -27,16 +27,16 @@ export class Skill extends Taxonomy implements ISkill {
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
     this.path =
-      data?.id && data?.path
-        ? `/skill/${data.path}/${data.id}`
-        : `/skill/${data?.path}`;
+      data?.type && data.id
+        ? `/skill/${data.type}/${data.id}`
+        : `#`;
     this.image = data?.image
       ? new Image({
-          id: this.id,
-          title: this.title,
-          url: data?.image?.url,
-          class_name: data?.image?.class_name,
-        })
+        id: this.id,
+        title: this.title,
+        url: data?.image?.url,
+        class_name: data?.image?.class_name,
+      })
       : null;
     this.usage = data?.usage ?? 0;
   }
@@ -107,7 +107,7 @@ export class Database extends Skill {
 
 export class Language extends Skill {
   readonly type: string = 'language';
-  path: string;
+  // path: string;
 
   constructor(data?: Partial<SkillObject>) {
     super({
