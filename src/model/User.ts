@@ -246,36 +246,34 @@ export class User implements iAccount {
     // this.contactMethods = this.getContactMethods(data);
   }
 
-  fromGitHubGraphQL(response: UserGQL) {
-    const org = response ? response : null;
+  fromGitHubGraphQL(userGQL: UserGQL) {
+    if (!userGQL) return;
 
-    if (!org) {
-      return;
-    }
+    const user = userGQL?.viewer;
 
-    this.id = org.id ? org.id : null;
-    this.avatarURL = org.avatarUrl ? org.avatarUrl : null;
-    this.name = org.name ? org.name : null;
-    this.bio = org.bio ? org.bio : null;
-    this.email = org.email ? org.email : null;
-    this.login = org.login ? org.login : null;
+    this.id = user.id ? user.id : null;
+    this.avatarURL = user.avatarUrl ? user.avatarUrl : null;
+    this.name = user.name ? user.name : null;
+    this.bio = user.bio ? user.bio : null;
+    this.email = user.email ? user.email : null;
+    this.login = user.login ? user.login : null;
 
     if (
-      org.organizations &&
-      Array.isArray(org.organizations.nodes) &&
-      org.organizations.nodes.length > 0
+      user.organizations &&
+      Array.isArray(user.organizations.nodes) &&
+      user.organizations.nodes.length > 0
     ) {
-      this.organizations = new Organizations();
-      this.organizations.fromGitHubGraphQL(org.organizations.nodes);
+      if (!this.organizations) this.organizations = new Organizations();
+      this.organizations.fromGitHubGraphQL(user.organizations.nodes);
     }
 
     if (
-      org.repositories &&
-      Array.isArray(org.repositories.nodes) &&
-      org.repositories.nodes.length > 0
+      user.repositories &&
+      Array.isArray(user.repositories.nodes) &&
+      user.repositories.nodes.length > 0
     ) {
       const repos = new Repos();
-      repos.fromGitHubGraphQL(org.repositories.nodes);
+      repos.fromGitHubGraphQL(user.repositories.nodes);
       this.repos = repos;
     }
 

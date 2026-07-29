@@ -30,7 +30,7 @@ export class Skill extends Taxonomy implements ISkill {
       data?.type && data.id
         ? `/skill/${data.type}/${data.id}`
         : `#`;
-    this.image = data?.image
+    this.image = data?.image && (data?.image?.url?.trim() || data?.image?.class_name?.trim())
       ? new Image({
         id: this.id,
         title: this.title,

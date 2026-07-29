@@ -69,7 +69,7 @@ export class Organization implements iAccount {
   public email: string | null;
   public website: string | null;
   public phone: string | null;
-  public contactMethods: ContactMethods = new ContactMethods();
+  public contactMethods: ContactMethods | null;
   public location: string | null;
   public organizationsURL: string | null;
   public organizations: Organizations | null;
@@ -86,42 +86,46 @@ export class Organization implements iAccount {
   public products: Products | null;
   public services: Services | null;
 
-  constructor(data?: OrganizationObject | Partial<OrganizationObject>) {
+  constructor(data?: Partial<OrganizationObject>) {
     this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at ? data?.created_at : null;
     this.updatedAt = data?.updated_at ? data.updated_at : null;
-    this.roles =
-      data?.roles && data.roles.length > 0
-        ? data.roles.map((roleObject) => new Role(roleObject))
-        : [];
-    this.login = data?.login ? data.login : null;
     this.avatarURL = data?.avatar_url ? data?.avatar_url : null;
-    this.bio = data?.bio ? data.bio : null;
+    this.login = data?.login ? data.login : null;
     this.description = data?.description ? data.description : null;
     this.name = data?.name ? data.name : null;
     this.company = data?.company ? data.company : null;
     this.blog = data?.blog ? data.blog : null;
     this.location = data?.location ? data.location : null;
+    this.email = data?.email ? data.email : null;
+    this.website = data?.website ? data?.website : null;
+    this.phone = data?.phone ? data.phone : null;
+    this.contactMethods = data?.contact_methods
+      ? new ContactMethods(data.contact_methods)
+      : null;
+    this.reposURL = data?.repos_url ? data?.repos_url : null;
+    this.repos = data?.repos ? new Repos(data.repos) : null;
+
+    this.repoQueries = data?.repo_queries
+      ? this.getRepoQueries(data?.repo_queries)
+      : [];
+
+    this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
+    this.skills = data?.skills ? new Skills(data.skills) : new Skills();
+    this.team = data?.team ? data.team.map((user) => new User(user)) : null;
+
+    this.roles =
+      data?.roles && data.roles.length > 0
+        ? data.roles.map((roleObject) => new Role(roleObject))
+        : [];
+    this.bio = data?.bio ? data.bio : null;
     this.organizationsURL = data?.organizations_url
       ? data.organizations_url
       : null;
     this.organizations = data?.organizations
       ? new Organizations(data.organizations)
       : null;
-    this.email = data?.email ? data.email : null;
-    this.website = data?.website ? data?.website : null;
-    this.phone = data?.phone ? data.phone : null;
-    this.contactMethods = data
-      ? this.getContactMethods(data)
-      : this.contactMethods;
-    this.reposURL = data?.repos_url ? data?.repos_url : null;
-    this.repos = data?.repos ? new Repos(data.repos) : null;
-    this.repoQueries = data?.repo_queries
-      ? this.getRepoQueries(data?.repo_queries)
-      : [];
-    this.portfolio = data?.portfolio ? new Portfolio(data.portfolio) : null;
-    this.skills = data?.skills ? new Skills(data.skills) : new Skills();
-    this.team = data?.team ? data.team.map((user) => new User(user)) : null;
+
     this.officeHours = data?.office_hours ? data.office_hours : null;
     this.products = data?.products ? new Products(data.products) : null;
     this.services = data?.services ? new Services(data.services) : null;
@@ -249,6 +253,47 @@ export class Organization implements iAccount {
     this.services = services;
   }
 
+  update(organization: Organization): Organization {
+    this.id = this.id ? this.id : organization.id;
+    this.createdAt = this.createdAt ? this.createdAt : organization?.createdAt;
+    this.updatedAt = this.updatedAt ? this.updatedAt : organization.updatedAt;
+    this.avatarURL = this.avatarURL ? this.avatarURL : organization?.avatarURL;
+    this.login = this.login ? this.login : organization.login;
+    this.description = this.description ? this.description : organization.description;
+    this.name = this.name ? this.name : organization.name;
+    this.company = this.company ? this.company : organization.company;
+    this.blog = this.blog ? this.blog : organization.blog;
+    this.location = this.location ? this.location : organization.location;
+    this.email = this.email ? this.email : organization.email;
+    this.website = this.website ? this.website : organization?.website;
+    this.phone = this.phone ? this.phone : organization.phone;
+
+    this.contactMethods = this.contactMethods
+      ? this.contactMethods : organization.contactMethods;
+    this.reposURL = this.reposURL ? this.reposURL : organization?.reposURL;
+    this.repos = this.repos ? this.repos : organization.repos;
+
+    this.repoQueries = this.repoQueries
+      ? this.repoQueries : organization.repoQueries;
+
+    this.portfolio = this.portfolio ? this.portfolio : organization.portfolio;
+    this.skills = this.skills ? this.skills : organization.skills;
+    this.team = this.team ? this.team : organization.team;
+
+    this.roles = this.roles ? this.roles : organization.roles;
+    this.bio = this.bio ? this.bio : organization.bio;
+    this.organizationsURL = this.organizationsURL
+      ? this.organizationsURL : organization.organizationsURL;
+    this.organizations = this.organizations
+      ? this.organizations : organization.organizations;
+
+    this.officeHours = this.officeHours ? this.officeHours : organization.officeHours;
+    this.products = this.products ? this.products : organization.products;
+    this.services = this.services ? this.services : organization.services;
+
+    return this;
+  }
+
   fromJSON(json: Record<string, any>) {
     this.id = '0';
     this.login = json.login ? json.login : null;
@@ -263,7 +308,10 @@ export class Organization implements iAccount {
       : null;
     this.website = json.website ? json.website : null;
 
-    this.contactMethods.fromJson(json.contact_methods);
+    if (json.contact_methods) {
+      if (this.contactMethods === null) this.contactMethods = new ContactMethods();
+      this.contactMethods.fromJson(json.contact_methods);
+    }
 
     this.team = json.team
       ? json.team.map((user: UserObject) => {

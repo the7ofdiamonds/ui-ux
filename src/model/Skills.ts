@@ -74,8 +74,8 @@ export class Skills implements ISKills<SkillObject> {
     this.list =
       data && data.list && data.list.length > 0
         ? data.list.map((skill) => {
-            return new Skill(skill);
-          })
+          return new Skill(skill);
+        })
         : [];
     this.count = this.list.length;
 
@@ -368,6 +368,14 @@ export class Skills implements ISKills<SkillObject> {
     return null;
   }
 
+  withImage() {
+    if (this.list.length === 0) return null;
+    return this.list.filter((skill) => {
+      const image = skill?.image;
+      return image && (image.className || image.url);
+    })
+  }
+
   toSkillsObject(): SkillsObject {
     return {
       list:
@@ -382,8 +390,8 @@ export class Skills implements ISKills<SkillObject> {
       list:
         this.list && this.list.length > 0
           ? this.list
-              .map((projectSkill) => projectSkill.id)
-              .filter((id): id is string => typeof id === 'string')
+            .map((projectSkill) => projectSkill.id)
+            .filter((id): id is string => typeof id === 'string')
           : null,
     };
   }

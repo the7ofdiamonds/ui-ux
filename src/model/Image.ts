@@ -3,6 +3,7 @@ export type ImageObject = {
   title: string | null;
   url: string | null;
   class_name: string | null;
+  data: string | null;
 };
 
 export class Image {
@@ -11,14 +12,15 @@ export class Image {
   title: string | null;
   url: string | null;
   className: string | null;
-  data: string | null = null;
+  data: string | null;
 
   constructor(data?: Partial<ImageObject>) {
     this.id = data?.id ?? null;
     this.title = data?.title ?? null;
-    this.url = data?.url ?? null;
+    this.url = data?.url && data.url.trim() ? data?.url : null;
     this.type = this.url ? this.getTypeFromString(this.url) : 'icon';
-    this.className = data?.class_name ?? this.createClassName();
+    this.className = data?.class_name ? data.class_name : null;
+    this.data = data?.data ? data.data : null;
   }
 
   setID(id: string) {
@@ -41,13 +43,13 @@ export class Image {
     if (str.startsWith('data:image/svg+xml')) {
       return 'svg+xml';
     }
-    
+
     const match = str.match(/\.(\w+)(\?.*)?$/);
     return match ? match[1].toLowerCase() : 'unknown';
   }
 
   async loadSVG(url: string): Promise<string> {
-    const res = await fetch(url).catch(() => {  throw new Error(`Failed to fetch SVG from URL: ${url}`); });
+    const res = await fetch(url).catch(() => { throw new Error(`Failed to fetch SVG from URL: ${url}`); });
 
     return await res.text().catch(() => { throw new Error(`Failed to read SVG content from response for URL: ${url}`); });
   }
@@ -120,6 +122,7 @@ export class Image {
       title: this.title,
       url: this.url,
       class_name: this.className,
+      data: this.data
     };
   }
 }

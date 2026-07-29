@@ -7,17 +7,43 @@ import { Image } from '../../model/Image';
 import styles from './Image.module.scss';
 
 interface ImageComponentProps {
-  image: Image
+  image: Image | null;
 }
 
 export const ImageComponent: React.FC<ImageComponentProps> = ({ image }) => {
-  const [svg, setSvg] = useState<string | null>(image.data);
+  const [className, setClassName] = useState<string | null>(image?.className);
+  const [url, setUrl] = useState<string | null>(image?.url);
+  const [type, setType] = useState<string | null>(image?.type);
+  const [title, setTitle] = useState<string | null>(image?.title);
+  const [svg, setSvg] = useState<string | null>(image?.data);
 
-  const { className, url, type, title } = image;
+  useEffect(() => {
+    if (image?.className) {
+      setClassName(image?.className);
+    }
+  }, [image?.className]);
 
   useEffect(() => {
     if (image && !image.className) {
-      image.createClassName();
+      setClassName(image.createClassName());
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (image) {
+      setUrl(image.url);
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (image) {
+      setType(image.type);
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (image) {
+      setTitle(image.title);
     }
   }, [image]);
 
