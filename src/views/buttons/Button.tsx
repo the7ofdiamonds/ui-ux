@@ -10,15 +10,9 @@ interface ButtonProps {
     url?: string | null;
 }
 
-export const Button: React.FC<ButtonProps> = ({ action, description, children, title, url }) => {
-    const goToLink = () => {
-        if (url) {
-            window.location.href = url;
-        }
-    };
-
+export const Button: React.FC<ButtonProps> = ({ action, description, children, title }) => {
     return (
-        <button className={styles.button} onClick={action ?? goToLink} title={description}>
+        <button className={styles.button} onClick={action} title={description}>
             {children}
             <h3 className={`${styles.title} ${styles.h3}`}>{title}</h3>
         </button>

@@ -129,3 +129,5 @@ export * from './views/taxonomy/bar/TaxonomyBar';
 export * from './views/taxonomy/button/TaxButton';
 export * from './views/taxonomy/TaxList';
 export * from './views/taxonomy/TaxListIcon';
+
+export * from './views/NotFound';

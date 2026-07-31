@@ -11,15 +11,13 @@ interface ButtonImageExternalProps {
     description?: string;
     image: Image | null;
     name: string | null;
-    url: string | null;
 }
 
-export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ action, description, image, name, url }) => {
+export const ButtonImage: React.FC<ButtonImageExternalProps> = ({ action, description, image, name }) => {
     return (
         <Button
             action={action}
-            title={description ?? name}
-            url={url}>
+            title={description ?? name}>
             {image && <ImageComponent image={image} />}
         </Button>
     )
