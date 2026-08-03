@@ -2,6 +2,7 @@ import type { ImageObject } from '../model/Image';
 import { Image } from '../model/Image';
 
 export type GalleryObject = {
+  id: string | number | null;
   logos: Array<ImageObject> | null;
   icons: Array<ImageObject> | null;
   animations: Array<ImageObject> | null;
@@ -11,15 +12,16 @@ export type GalleryObject = {
 };
 
 export class Gallery {
+  id: string | number | null;
   logos: Array<Image>;
   icons: Array<Image>;
   animations: Array<Image>;
   umlDiagrams: Array<Image>;
   screenshots: Array<Image>;
   previews: Array<Image>;
-  images: Array<Image>;
 
   constructor(data?: GalleryObject | Partial<GalleryObject>) {
+    this.id = data?.id ? data.id : null;
     this.logos = Array.isArray(data?.logos)
       ? this.toArrayImage(data.logos)
       : [];
@@ -38,14 +40,10 @@ export class Gallery {
     this.previews = Array.isArray(data?.previews)
       ? this.toArrayImage(data.previews)
       : [];
-    this.images = [
-      ...this.logos,
-      ...this.icons,
-      ...this.animations,
-      ...this.umlDiagrams,
-      ...this.screenshots,
-      ...this.previews,
-    ];
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setLogos(logos: Array<Image>) {
@@ -72,12 +70,24 @@ export class Gallery {
     this.previews = previews;
   }
 
+  get images(): Image[] {
+    return [
+      ...this.logos,
+      ...this.icons,
+      ...this.animations,
+      ...this.umlDiagrams,
+      ...this.screenshots,
+      ...this.previews
+    ];
+  }
+
   toArrayImage(data: Array<ImageObject>) {
     return data.map((image) => new Image(image));
   }
 
   toGalleryObject(): GalleryObject {
     return {
+      id: this.id,
       logos:
         Array.isArray(this.logos) && this.logos.length > 0
           ? this.logos.map((logo) => logo.toImageObject())

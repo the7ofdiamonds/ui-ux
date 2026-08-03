@@ -2,18 +2,21 @@ import type { CheckListObject } from './CheckList';
 import { CheckList } from './CheckList';
 
 export type ProjectCheckListObject = {
+  id: string | number | null;
   design_check_list: CheckListObject | null;
   development_check_list: CheckListObject | null;
   delivery_check_list: CheckListObject | null;
 };
 
 export class ProjectCheckList {
+  id: string | number | null;
   designCheckList: CheckList | null;
   developmentCheckList: CheckList | null;
   deliveryCheckList: CheckList | null;
   totalWeight: number;
 
   constructor(data?: ProjectCheckListObject | Partial<ProjectCheckListObject>) {
+    this.id = data?.id ? data.id : null;
     this.designCheckList = data?.design_check_list
       ? new CheckList(data.design_check_list)
       : null;
@@ -24,6 +27,10 @@ export class ProjectCheckList {
       ? new CheckList(data.delivery_check_list)
       : null;
     this.totalWeight = this.getTotalWeight();
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setDesignCheckList(checkList: CheckList) {
@@ -48,6 +55,7 @@ export class ProjectCheckList {
 
   toProjectCheckListObject(): ProjectCheckListObject {
     return {
+      id: this.id,
       design_check_list: this.designCheckList
         ? this.designCheckList.toCheckListObject()
         : null,

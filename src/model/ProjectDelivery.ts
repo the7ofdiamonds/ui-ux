@@ -9,28 +9,36 @@ import type { ProjectDataObject } from '../model/Project';
 import { Tasks } from './Tasks';
 
 export type ProjectDeliveryObject = {
+  id: string | number | null;
   check_list: CheckListObject | null;
   gallery: GalleryObject | null;
   content_url: string | null;
 };
 
 export type ProjectDeliveryDataObject = {
+  id: string | number | null;
   check_list: CheckListObject | null;
   gallery: GalleryObject | null;
   content_url: string | null;
 };
 
 export class ProjectDelivery {
+  id: string | number | null;
   checkList: CheckList | null;
   gallery: Gallery | null;
   contentURL: ContentURL | null;
 
   constructor(data?: ProjectDeliveryObject | Partial<ProjectDeliveryObject>) {
+    this.id = data?.id ? data.id : null;
     this.checkList = data?.check_list ? new CheckList(data.check_list) : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.contentURL = data?.content_url
-      ? new ContentURL(data.content_url)
+      ? new ContentURL({ url: data.content_url })
       : null;
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setCheckList(checkList: CheckList) {
@@ -41,13 +49,13 @@ export class ProjectDelivery {
     this.gallery = gallery;
   }
 
-  setContentURL(url: string) {
-    this.contentURL = new ContentURL(url);
+  setContentURL(contentURL: ContentURL) {
+    this.contentURL = contentURL;
   }
 
   fromRepo(repo: Repo) {
     if (repo.contents?.delivery?.downloadURL) {
-      this.setContentURL(repo.contents.delivery.downloadURL);
+      this.setContentURL(new ContentURL({ url: repo.contents.delivery.downloadURL }));
     }
 
     if (repo?.issues && repo.issues?.delivery) {
@@ -85,6 +93,7 @@ export class ProjectDelivery {
 
   toProjectDeliveryObject(): ProjectDeliveryObject {
     return {
+      id: this.id,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
@@ -93,6 +102,7 @@ export class ProjectDelivery {
 
   toProjectDeliveryDataObject(): ProjectDeliveryDataObject {
     return {
+      id: this.id,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,

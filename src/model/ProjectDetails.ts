@@ -8,6 +8,7 @@ import type { ContributorsObject } from './Contributors';
 import { Contributors } from './Contributors';
 
 export type ProjectDetailsObject = {
+  id: string | number | null;
   privacy: string | null;
   client_id: string | null;
   content: string | null;
@@ -17,6 +18,7 @@ export type ProjectDetailsObject = {
 };
 
 export type ProjectDetailsDataObject = {
+  id: string | number | null;
   privacy: string | null;
   client_id: string | null;
   content: string | null;
@@ -25,6 +27,7 @@ export type ProjectDetailsDataObject = {
 };
 
 export class ProjectDetails {
+  id: string | number | null;
   privacy: string | null;
   clientID: string | null;
   content: ContentURL | null;
@@ -33,12 +36,17 @@ export class ProjectDetails {
   repoSize: String | null;
 
   constructor(data?: Partial<ProjectDetailsObject>) {
+    this.id = data?.id ? data.id : null;
     this.privacy = data?.privacy ? data.privacy : 'private';
     this.clientID = data?.client_id ? data.client_id : '0';
-    this.content = data?.content ? new ContentURL(data.content) : null;
+    this.content = data?.content ? new ContentURL({ url: data.content }) : null;
     this.teamList = data?.team_list ? new Contributors(data.team_list) : null;
-    this.story = data?.story ? new ContentURL(data.story) : null;
+    this.story = data?.story ? new ContentURL({ url: data.story }) : null;
     this.repoSize = data?.repo_size ? data.repo_size : '0 KB';
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setPrivacy(privacy: string) {
@@ -135,6 +143,7 @@ export class ProjectDetails {
 
   toDetailsObject(): ProjectDetailsObject {
     return {
+      id: this.id,
       privacy: this.privacy,
       client_id: this.clientID,
       content: this.content ? this.content.url : null,
@@ -146,6 +155,7 @@ export class ProjectDetails {
 
   toDetailsDataObject(): ProjectDetailsDataObject {
     return {
+      id: this.id,
       privacy: this.privacy,
       client_id: this.clientID,
       content: this.content ? this.content.url : null,

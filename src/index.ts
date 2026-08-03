@@ -89,6 +89,8 @@ export * from './utils/Headers';
 export * from './utils/Location';
 export * from './utils/String';
 
+export * from './views/badge/Badge';
+
 export * from './views/buttons/Button';
 export * from './views/buttons/ButtonImage';
 export * from './views/buttons/ButtonSubmit';

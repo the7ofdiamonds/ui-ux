@@ -3,6 +3,7 @@ import { RepoContentQuery } from './RepoContentQuery';
 import { marked } from 'marked';
 
 export interface ContentURLObject {
+  id: string | number | null;
   owner: string | null;
   repo: string | null;
   path: string | null;
@@ -12,6 +13,7 @@ export interface ContentURLObject {
 }
 
 export class ContentURL {
+  id: string | number | null;
   owner: string | null;
   repo: string | null;
   path: string | null;
@@ -19,14 +21,50 @@ export class ContentURL {
   url: string | null;
   isValid: boolean;
 
-  constructor(url: string) {
-    let parts: Array<string> = [];
+  constructor(data: Partial<ContentURLObject>) {
+    this.id = data?.id ? data?.id : null;
+    this.owner = data?.owner ? data.owner : null;
+    this.repo = data?.repo ? data.repo : null;
+    this.path = data?.path ? data.path : null;
+    this.branch = data?.branch ? data.branch : null;
 
+    try {
+      if (!data?.url || typeof data?.url !== 'string') {
+        throw new Error('URL must be a string.');
+      }
+
+      this.url = new URL(data.url).toString();
+      this.isValid = true;
+    } catch (error) {
+      const err = error as Error;
+      console.error('Error fetching content:', err);
+      this.url = null;
+      this.isValid = false;
+    }
+  }
+
+  setID(id: string | number) { this.id = id; }
+
+  setURL(url: string) {
+    try {
+      if (typeof url !== 'string') {
+        throw new Error('URL must be a string.');
+      }
+
+      return new URL(url).toString();
+    } catch (error) {
+      const err = error as Error;
+      console.error('Error fetching content:', err);
+    }
+  }
+
+  from(url: string) {
+    let parts: Array<string> = [];
     this.isValid = false;
 
     try {
       if (typeof url !== 'string') {
-        throw new Error('URL must be an email.');
+        throw new Error('URL must be a string.');
       }
 
       const pathname = new URL(url).pathname;
@@ -45,6 +83,8 @@ export class ContentURL {
     this.path = parts[4] ?? null;
     this.branch = parts[3] ?? null;
     this.url = url;
+
+    return this;
   }
 
   fromMdtoHTML(md: string) {
@@ -57,6 +97,7 @@ export class ContentURL {
 
   toContentURLObject(): ContentURLObject {
     return {
+      id: this.id,
       owner: this.owner,
       repo: this.repo,
       path: this.path,

@@ -18,8 +18,16 @@ export class Features {
       : new Set();
   }
 
+  setID(id: string | number | null) {
+    this.id = id;
+  }
+
   setList(list: Set<Feature>) {
     this.list = list;
+  }
+
+  add(feature: Feature) {
+    this.list.add(feature);
   }
 
   order(): Array<Feature> {

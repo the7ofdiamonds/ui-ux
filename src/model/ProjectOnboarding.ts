@@ -6,7 +6,7 @@ import type { ContactMethodsObject } from './ContactMethods';
 import { ContactMethods } from './ContactMethods';
 
 export type ProjectOnboardingObject = {
-  id: string | null;
+  id: string | number | null;
   client_id: string | null;
   project_title: string | null;
   deadline: string | null;
@@ -21,7 +21,7 @@ export type ProjectOnboardingObject = {
 };
 
 export class ProjectOnboarding {
-  id: string | null;
+  id: string | number | null;
   clientID: string | null;
   projectTitle: string | null;
   deadline: string | null;
@@ -53,7 +53,7 @@ export class ProjectOnboarding {
     this.plan = data?.plan ? data.plan : null;
   }
 
-  setID(id: string) {
+  setID(id: string | number) {
     this.id = id;
   }
 

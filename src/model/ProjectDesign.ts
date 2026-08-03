@@ -14,6 +14,7 @@ import type { ProjectDataObject } from '../model/Project';
 import { Tasks } from './Tasks';
 
 export type ProjectDesignObject = {
+  id: string | number | null;
   gallery: GalleryObject | null;
   check_list: CheckListObject | null;
   colors: ColorsObject | null;
@@ -21,6 +22,7 @@ export type ProjectDesignObject = {
 };
 
 export type ProjectDesignDataObject = {
+  id: string | number | null;
   gallery: GalleryObject | null;
   check_list: CheckListObject | null;
   colors: ColorsObject | null;
@@ -28,12 +30,14 @@ export type ProjectDesignDataObject = {
 };
 
 export class ProjectDesign {
+  id: string | number | null;
   gallery: Gallery | null;
   checkList: CheckList | null;
   colors: Colors | null;
   contentURL: ContentURL | null;
 
   constructor(data?: Partial<ProjectDesignObject>) {
+    this.id = data?.id ? data.id : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.checkList = data?.check_list ? new CheckList(data.check_list) : null;
     this.colors =
@@ -44,8 +48,12 @@ export class ProjectDesign {
         ? new Colors(data.colors)
         : null;
     this.contentURL = data?.content_url
-      ? new ContentURL(data.content_url)
+      ? new ContentURL({ url: data.content_url })
       : null;
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setGallery(gallery: Gallery) {
@@ -60,13 +68,13 @@ export class ProjectDesign {
     this.colors = colors;
   }
 
-  setContentURL(url: string) {
-    this.contentURL = new ContentURL(url);
+  setContentURL(contentURL: ContentURL) {
+    this.contentURL = contentURL;
   }
 
   fromRepo(repo: Repo) {
     if (repo.contents?.design?.downloadURL) {
-      this.setContentURL(repo.contents.design.downloadURL);
+      this.setContentURL(new ContentURL({ url: repo.contents.design.downloadURL }));
     }
 
     if (repo?.issues && repo.issues?.design) {
@@ -110,6 +118,7 @@ export class ProjectDesign {
 
   toProjectDesignObject(): ProjectDesignObject {
     return {
+      id: this.id,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       colors: this.colors ? this.colors.toColorsObject() : null,
@@ -119,6 +128,7 @@ export class ProjectDesign {
 
   toProjectDesignDataObject(): ProjectDesignDataObject {
     return {
+      id: this.id,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       colors: this.colors ? this.colors.toColorsObject() : null,

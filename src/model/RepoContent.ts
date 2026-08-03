@@ -25,7 +25,7 @@ export class RepoContent {
     this.type = data?.type ?? '';
     this.size = data?.size ?? 0;
     this.downloadURL = data?.download_url
-      ? new ContentURL(data.download_url).url
+      ? new ContentURL({ url: data.download_url }).url
       : null;
   }
 

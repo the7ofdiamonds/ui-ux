@@ -1,0 +1,31 @@
+.badge {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 0.5rem;
+
+  .badge-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-success);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+
+    h5 {
+      padding: 0.5em;
+    }
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .badge {
+    flex-direction: column;
+
+    .badge-number {
+      margin-right: -1em;
+    }
+  }
+}

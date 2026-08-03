@@ -87,7 +87,7 @@ export class Project {
       this.promotionalText = data?.promotional_text ?? null;
       this.description = data?.description ?? null;
       this.solution = data?.solution
-        ? new ProjectSolution(data.solution)
+        ? new ProjectSolution({...data.solution, id: data?.id })
         : null;
       this.process = data?.process ? new ProjectProcess(data.process) : null;
       this.owner = data?.owner ? new Owner(data.owner) : new Owner();

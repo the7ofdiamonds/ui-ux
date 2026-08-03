@@ -87,6 +87,10 @@ export class ProjectURLs {
     });
   }
 
+  hasData(): boolean {
+    return !!(this.homepage) || !!(this.ios) || !!(this.android);
+  }
+
   toProjectURLsObject(): ProjectURLsObject {
     return {
       homepage: this.homepage ? this.homepage.toProjectURLObject() : null,

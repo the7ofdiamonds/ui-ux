@@ -20,6 +20,7 @@ import type { ImageObject } from './Image';
 import { Image } from './Image';
 
 export type ProjectSolutionObject = {
+  id: string | number | null;
   category: string | null;
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
@@ -33,6 +34,7 @@ export type ProjectSolutionObject = {
 };
 
 export type ProjectSolutionDataObject = {
+  id: string | number | null;
   category: string | null;
   gallery: GalleryObject | null;
   features: Array<FeatureObject> | null;
@@ -46,6 +48,7 @@ export type ProjectSolutionDataObject = {
 };
 
 export class ProjectSolution {
+  id: string | number | null;
   category: string | null;
   gallery: Gallery | null;
   features: Features | null;
@@ -58,6 +61,7 @@ export class ProjectSolution {
   available: Offered = false;
 
   constructor(data?: Partial<ProjectSolutionObject>) {
+    this.id = data?.id ? data.id : null;
     this.category = data?.category ? data.category : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : new Gallery();
     this.features = data?.features ? this.getFeatures(data.features) : null;
@@ -79,6 +83,10 @@ export class ProjectSolution {
     this.available = data?.available ? data.available : false;
   }
 
+  setID(id: string | number) {
+    this.id = id;
+  }
+
   setCategory(category: string) {
     this.category = category;
   }
@@ -87,9 +95,7 @@ export class ProjectSolution {
     this.gallery = gallery;
   }
 
-  setFeatures(list: Set<Feature>) {
-    const features = new Features();
-    features.setList(list);
+  setFeatures(features: Features) {
     this.features = features;
   }
 
@@ -149,7 +155,8 @@ export class ProjectSolution {
     }
 
     if (repo.issues) {
-      this.setFeatures(new Set(repo.issues.features));
+      repo.issues.features.forEach((feature) =>
+        this.features?.add(feature));
     }
   }
 
@@ -194,6 +201,7 @@ export class ProjectSolution {
 
   toProjectSolutionObject(): ProjectSolutionObject {
     return {
+      id: this.id,
       category: this.category,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       features:
@@ -216,6 +224,7 @@ export class ProjectSolution {
 
   toProjectSolutionDataObject(): ProjectSolutionDataObject {
     return {
+      id: this.id,
       category: this.category,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       features:

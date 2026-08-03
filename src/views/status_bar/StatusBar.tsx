@@ -14,22 +14,18 @@ interface StatusBarProps {
 export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message }) => {
   const [showModal, setShowModal] = useState<StatusBarVisibility>('hide');
 
-  useEffect(() => {
-    setShowModal(show)
-  }, [show])
-
   const minimize = () => {
-    if (showModal == 'show') {
+    if (showModal == 'show' && show == 'hide') {
       setShowModal('hide');
     }
 
-    if (showModal == 'hide') {
+    if (showModal == 'hide' && show == 'show') {
       setShowModal('show');
     }
   };
 
   return (
-    message && (
+    message && message.trim() && (
       <span className={`${styles['modal-overlay']} ${showModal === 'show' ? styles['show'] : styles['hide']}`}>
         <div className={`${showModal === 'show' ? styles.show : styles.hide} ${styles.status}`}>
           <div className={styles.close}>

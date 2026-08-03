@@ -26,6 +26,7 @@ import type { ProjectDataObject } from '../model/Project';
 import { Tasks } from './Tasks';
 
 export type ProjectDevelopmentObject = {
+  id: string | number | null;
   gallery: GalleryObject | null;
   repo_url: string | null;
   content_url: string | null;
@@ -35,6 +36,7 @@ export type ProjectDevelopmentObject = {
 };
 
 export type ProjectDevelopmentDataObject = {
+  id: string | number | null;
   gallery: GalleryObject | null;
   repo_url: string | null;
   content_url: string | null;
@@ -44,6 +46,7 @@ export type ProjectDevelopmentDataObject = {
 };
 
 export class ProjectDevelopment {
+  id: string | number | null;
   gallery: Gallery | null;
   repoURL: RepoURL | null;
   contentURL: ContentURL | null;
@@ -53,10 +56,11 @@ export class ProjectDevelopment {
   roadmap: FeaturesRoadmap | null = null;
 
   constructor(data?: Partial<ProjectDevelopmentObject>) {
+    this.id = data?.id ? data.id : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.repoURL = data?.repo_url ? new RepoURL(data.repo_url) : null;
     this.contentURL = data?.content_url
-      ? new ContentURL(data.content_url)
+      ? new ContentURL({ url: data.content_url })
       : null;
     this.skills =
       data?.skills && isProjectSkillsObject(data.skills)
@@ -66,6 +70,10 @@ export class ProjectDevelopment {
     this.versionsList = data?.versions_list
       ? new ProjectVersions(data.versions_list)
       : new ProjectVersions();
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setGallery(gallery: Gallery) {
@@ -108,7 +116,7 @@ export class ProjectDevelopment {
 
   fromRepo(repo: Repo) {
     if (repo.contents?.development?.downloadURL) {
-      this.contentURL = new ContentURL(repo.contents.development.downloadURL);
+      this.contentURL = new ContentURL({ url: repo.contents.development.downloadURL });
     }
 
     if (repo.skills) {
@@ -162,6 +170,7 @@ export class ProjectDevelopment {
 
   toProjectDevelopmentObject(): ProjectDevelopmentObject {
     return {
+      id: this.id,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       repo_url: this.repoURL ? this.repoURL.url : null,
       content_url: this.contentURL ? this.contentURL.url : null,
@@ -178,6 +187,7 @@ export class ProjectDevelopment {
 
   toProjectDevelopmentDataObject(): ProjectDevelopmentDataObject {
     return {
+      id: this.id,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       repo_url: this.repoURL ? this.repoURL.url : null,
       content_url: this.contentURL ? this.contentURL.url : null,

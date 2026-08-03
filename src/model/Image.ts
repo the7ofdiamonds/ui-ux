@@ -104,6 +104,8 @@ export class Image {
   }
 
   setTitle(title: string) {
+                                    console.log(title)
+
     this.title = title;
   }
 

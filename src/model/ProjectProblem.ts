@@ -7,7 +7,7 @@ import { Repo } from '../model/Repo';
 import type { ProjectDataObject } from '../model/Project';
 
 export type ProjectProblemObject = {
-  id: string | null;
+  id: string | number | null;
   gallery: GalleryObject | null;
   content_url: string | null;
   whitepaper_url: string | null;
@@ -30,13 +30,14 @@ export type ProjectProblemObject = {
 };
 
 export type ProjectProblemDataObject = {
+  id: string | number | null;
   gallery: GalleryObject | null;
   content_url: string | null;
   whitepaper_url: string | null;
 };
 
 export class ProjectProblem {
-  id: string | null;
+  id: string | number | null;
   gallery: Gallery | null;
   contentURL: ContentURL | null;
   whitepaperURL: DocumentURL | null;
@@ -61,7 +62,7 @@ export class ProjectProblem {
     this.id = data?.id ? data.id : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.contentURL = data?.content_url
-      ? new ContentURL(data.content_url)
+      ? new ContentURL({url:data.content_url})
       : null;
     this.whitepaperURL = data?.whitepaper_url
       ? new DocumentURL(data.whitepaper_url)
@@ -98,16 +99,20 @@ export class ProjectProblem {
       : null;
   }
 
+  setID(id: string | number) {
+    this.id = id;
+  }
+
   setGallery(gallery: Gallery) {
     this.gallery = gallery;
   }
 
-  setContentURL(url: string) {
-    this.contentURL = new ContentURL(url);
+  setContentURL(contentURL: ContentURL) {
+    this.contentURL = contentURL;
   }
 
-  setWhitepaperURL(url: string) {
-    this.whitepaperURL = new DocumentURL(url);
+  setWhitepaperURL(whitepaperURL: DocumentURL) {
+    this.whitepaperURL = whitepaperURL;
   }
 
   fromRepo(repo: Repo) {
@@ -116,12 +121,14 @@ export class ProjectProblem {
       repo.contents.problem &&
       repo.contents.problem.downloadURL
     ) {
-      this.setContentURL(repo.contents.problem.downloadURL);
+      this.setContentURL(new ContentURL({url: repo.contents.problem.downloadURL}));
     }
   }
 
   fromDocumentData(data: ProjectDataObject) {
     if (data?.problem) {
+      this.id = data?.problem?.id ? data.problem?.id : null;
+
       if (data.problem?.gallery) {
         const gallery = new Gallery(data?.problem.gallery);
         this.setGallery(gallery);
@@ -160,6 +167,7 @@ export class ProjectProblem {
 
   toProjectProblemDataObject(): ProjectProblemDataObject {
     return {
+      id: this.id,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
       whitepaper_url: this.whitepaperURL?.url ? this.whitepaperURL.url : null,

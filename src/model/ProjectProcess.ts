@@ -28,6 +28,7 @@ import type { ProjectDataObject } from './Project';
 import { Repo } from './Repo';
 
 export type ProjectProcessObject = {
+  id: string | number | null;
   status: ProjectStatusObject | null;
   design: ProjectDesignObject | null;
   development: ProjectDevelopmentObject | null;
@@ -35,6 +36,7 @@ export type ProjectProcessObject = {
 };
 
 export type ProjectProcessDataObject = {
+  id: string | number | null;
   status: ProjectStatusObject | null;
   design: ProjectDesignDataObject | null;
   development: ProjectDevelopmentDataObject | null;
@@ -42,6 +44,7 @@ export type ProjectProcessDataObject = {
 };
 
 export class ProjectProcess {
+  id: string | number | null;
   design: ProjectDesign | null;
   development: ProjectDevelopment | null;
   delivery: ProjectDelivery | null;
@@ -49,6 +52,7 @@ export class ProjectProcess {
   checkList: ProjectCheckList | null;
 
   constructor(data?: Partial<ProjectProcessObject>) {
+    this.id = data?.id ? data.id : null;
     this.design = data?.design ? new ProjectDesign(data.design) : null;
     this.development = data?.development
       ? new ProjectDevelopment(data.development)
@@ -56,6 +60,7 @@ export class ProjectProcess {
     this.delivery = data?.delivery ? new ProjectDelivery(data.delivery) : null;
 
     const projectCheckListObject: ProjectCheckListObject = {
+      id: this.id,
       design_check_list:
         this.design && this.design.checkList
           ? this.design.checkList.toCheckListObject()
@@ -72,8 +77,8 @@ export class ProjectProcess {
 
     this.checkList =
       projectCheckListObject.design_check_list ||
-      projectCheckListObject.development_check_list ||
-      projectCheckListObject.delivery_check_list
+        projectCheckListObject.development_check_list ||
+        projectCheckListObject.delivery_check_list
         ? new ProjectCheckList(projectCheckListObject)
         : null;
 
@@ -82,6 +87,10 @@ export class ProjectProcess {
       : null;
 
     this.status = data?.status ? new ProjectStatus(data?.status) : null;
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setStatus(status: ProjectStatus) {
@@ -159,6 +168,7 @@ export class ProjectProcess {
 
   toProjectProcessObject(): ProjectProcessObject {
     return {
+      id: this.id,
       status: this.status ? this.status.toProjectStatusObject() : null,
       design: this.design ? this.design.toProjectDesignObject() : null,
       development: this.development
@@ -170,6 +180,7 @@ export class ProjectProcess {
 
   toProjectProcessDataObject(): ProjectProcessDataObject {
     return {
+      id: this.id,
       status: this.status ? this.status.toProjectStatusObject() : null,
       design: this.design ? this.design.toProjectDesignDataObject() : null,
       development: this.development

@@ -7,6 +7,7 @@ import type { CommitObject } from './Commit';
 import { Commits } from './Commits';
 
 export type ProjectStatusObject = {
+  id: string | number | null;
   created_at: string | null;
   updated_at: string | null;
   progress: number | null;
@@ -14,12 +15,14 @@ export type ProjectStatusObject = {
 };
 
 export class ProjectStatus {
+  id: string | number | null;
   createdAt: string | null;
   updatedAt: string | null;
   progress: ProjectProgress | null;
   commits: Commits | null;
 
   constructor(data?: ProjectStatusObject) {
+    this.id = data?.id ? data.id : null;
     this.createdAt = data?.created_at
       ? this.getCreatedAt(data?.created_at)
       : null;
@@ -33,6 +36,10 @@ export class ProjectStatus {
     }
 
     this.commits = data?.commits ? new Commits(data.commits) : null;
+  }
+
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setCreatedAt(dateTime: string | null) {
@@ -77,6 +84,7 @@ export class ProjectStatus {
 
   toProjectStatusObject(): ProjectStatusObject {
     return {
+      id: this.id,
       created_at: this.createdAt,
       updated_at: this.updatedAt,
       progress:
