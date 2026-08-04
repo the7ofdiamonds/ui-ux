@@ -29,20 +29,20 @@ export type ProjectDetailsDataObject = {
 export class ProjectDetails {
   id: string | number | null;
   privacy: string | null;
-  clientID: string | null;
-  content: ContentURL | null;
   teamList: Contributors | null;
-  story: ContentURL | null;
   repoSize: String | null;
+  content: ContentURL | null;
+  story: ContentURL | null;
+  clientID: string | null;
 
   constructor(data?: Partial<ProjectDetailsObject>) {
     this.id = data?.id ? data.id : null;
-    this.privacy = data?.privacy ? data.privacy : 'private';
-    this.clientID = data?.client_id ? data.client_id : '0';
+    this.privacy = data?.privacy ? data.privacy : null;
+    this.teamList = data?.team_list?.list && data?.team_list?.list.length > 0 ? new Contributors(data.team_list) : null;
+    this.repoSize = data?.repo_size ? data.repo_size : null;
     this.content = data?.content ? new ContentURL({ url: data.content }) : null;
-    this.teamList = data?.team_list ? new Contributors(data.team_list) : null;
     this.story = data?.story ? new ContentURL({ url: data.story }) : null;
-    this.repoSize = data?.repo_size ? data.repo_size : '0 KB';
+    this.clientID = data?.client_id ? data.client_id : null;
   }
 
   setID(id: string | number) {
@@ -53,12 +53,12 @@ export class ProjectDetails {
     this.privacy = privacy;
   }
 
-  setClientID(id: string | null) {
+  setClientID(id: string) {
     this.clientID = id;
   }
 
-  setContentURL(url: string) {
-    this.content = new ContentURL(url);
+  setContentURL(content: ContentURL) {
+    this.content = content;
   }
 
   getTeamList(data: Array<ContributorObject>) {
@@ -74,7 +74,7 @@ export class ProjectDetails {
   }
 
   setStory(url: string) {
-    this.story = new ContentURL(url);
+    this.story = new ContentURL({ url: url });
   }
 
   setRepoSize(size: number) {
@@ -86,6 +86,17 @@ export class ProjectDetails {
       this.teamList = new Contributors();
     }
     this.teamList.set(team);
+  }
+
+  hasData(): boolean {
+    if (
+      this.privacy || this.teamList ||
+      this.content || this.story ||
+      this.clientID) {
+      return true;
+    }
+
+    return false;
   }
 
   fromRepo(repo: Repo) {

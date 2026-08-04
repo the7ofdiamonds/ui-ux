@@ -58,7 +58,7 @@ export class ProjectProblem {
   triedSolutionsResults: string | null;
   idealResolution: string | null;
 
-  constructor(data?: ProjectProblemObject) {
+  constructor(data?: Partial<ProjectProblemObject>) {
     this.id = data?.id ? data.id : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.contentURL = data?.content_url

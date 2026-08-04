@@ -71,7 +71,7 @@ export class ProjectSolution {
     this.actionWord = data?.action_word ? data.action_word : null;
 
     this.contentURL = data?.content_url
-      ? new ContentURL(data.content_url)
+      ? new ContentURL({ id: data.content_url })
       : null;
     this.projectURLs =
       data?.project_urls &&

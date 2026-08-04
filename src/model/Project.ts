@@ -38,13 +38,13 @@ export type ProjectObject = {
   subtitle: string | null;
   promotional_text: string | null;
   description: string | null;
-  solution: ProjectSolutionObject | null;
-  process: ProjectProcessObject | null;
-  problem: ProjectProblemObject | null;
-  owner: Partial<OwnerObject> | null;
-  details: ProjectDetailsObject | null;
-  query: ProjectQueryObject | null;
   path: string | null;
+  query: Partial<ProjectQueryObject> | null;
+  solution: Partial<ProjectSolutionObject> | null;
+  process: Partial<ProjectProcessObject> | null;
+  problem: Partial<ProjectProblemObject> | null;
+  owner: Partial<OwnerObject> | null;
+  details: Partial<ProjectDetailsObject> | null;
 };
 
 export type ProjectDataObject = {
@@ -52,11 +52,11 @@ export type ProjectDataObject = {
   title: string | null;
   subtitle: string | null;
   promotional_text: string | null;
-  solution: ProjectSolutionDataObject | null;
-  process: ProjectProcessDataObject | null;
-  problem: ProjectProblemDataObject | null;
-  owner: OwnerObject | null;
-  details: ProjectDetailsDataObject | null;
+  solution: Partial<ProjectSolutionDataObject> | null;
+  process: Partial<ProjectProcessDataObject> | null;
+  problem: Partial<ProjectProblemDataObject> | null;
+  owner: Partial<OwnerObject> | null;
+  details: Partial<ProjectDetailsDataObject> | null;
 };
 
 export class Project {
@@ -66,39 +66,34 @@ export class Project {
   subtitle: string | null;
   promotionalText: string | null;
   description: string | null;
+  path: string | null;
+  query: ProjectQuery | null;
   solution: ProjectSolution | null;
   process: ProjectProcess | null;
   problem: ProjectProblem | null;
   owner: Owner | null;
   details: ProjectDetails | null;
-  query: ProjectQuery | null;
-  path: string | null;
 
   constructor(data?: Partial<ProjectObject>) {
-    try {
-      this.id = data?.id ? data.id : null;
-      this.name = data?.name ? data.name : null;
-      this.title = data?.title
-        ? data.title
-        : data?.name
-          ? this.getTitle(data.name)
-          : null;
-      this.subtitle = data?.subtitle ?? null;
-      this.promotionalText = data?.promotional_text ?? null;
-      this.description = data?.description ?? null;
-      this.solution = data?.solution
-        ? new ProjectSolution({...data.solution, id: data?.id })
+    this.id = data?.id ? data.id : null;
+    this.name = data?.name ? data.name : null;
+    this.title = data?.title
+      ? data.title
+      : data?.name
+        ? this.getTitle(data.name)
         : null;
-      this.process = data?.process ? new ProjectProcess(data.process) : null;
-      this.owner = data?.owner ? new Owner(data.owner) : new Owner();
-      this.details = data?.details ? new ProjectDetails(data.details) : null;
-      this.problem = data?.problem ? new ProjectProblem(data?.problem) : null;
-      this.query = data?.query ? new ProjectQuery(data?.query) : null;
-      this.path = data?.path ?? null;
-    } catch (error) {
-      let err = error as Error;
-      throw new Error(err.message);
-    }
+    this.subtitle = data?.subtitle ?? null;
+    this.promotionalText = data?.promotional_text ?? null;
+    this.description = data?.description ?? null;
+    this.path = data?.path ?? null;
+    this.query = data?.query ? new ProjectQuery(data?.query) : null;
+    this.solution = data?.solution
+      ? new ProjectSolution({ ...data.solution, id: data?.id })
+      : null;
+    this.process = data?.process ? new ProjectProcess({ ...data.process, id: data?.id }) : null;
+    this.problem = data?.problem ? new ProjectProblem({...data.problem, id: data?.id}) : null;
+    this.owner = data?.owner ? new Owner(data.owner) : null;
+    this.details = data?.details ? new ProjectDetails({...data.details, id: data?.id}) : null;
   }
 
   setID(id: string) {

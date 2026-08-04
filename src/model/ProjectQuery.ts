@@ -16,7 +16,7 @@ export class ProjectQuery {
   owner: string | null;
   repo: string | null;
 
-  constructor(query?: ProjectQueryObject) {
+  constructor(query?: Partial<ProjectQueryObject>) {
     this.id = query?.id ?? null;
     this.repoType = query?.repo_type ?? null;
     this.owner = query?.owner ?? null;

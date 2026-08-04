@@ -101,6 +101,21 @@ export * from './views/content/ContentComponent';
 export * from './views/description/DescriptionComponent';
 export * from './views/document/DocumentComponent';
 
+export * from './views/edit/check_list/EditCheckList';
+export * from './views/edit/colors/EditColorsList';
+export * from './views/edit/description/EditDescription';
+export * from './views/edit/features/EditFeatures';
+export * from './views/edit/gallery/EditGallery';
+export * from './views/edit/images/EditImages';
+export * from './views/edit/name/EditName';
+export * from './views/edit/path/EditPath';
+export * from './views/edit/project_url/EditProjectURL';
+export * from './views/edit/project_versions/EditProjectVersions';
+export * from './views/edit/promotional_text/EditPromotionalText';
+export * from './views/edit/skills/EditSkills';
+export * from './views/edit/subtitle/EditSubtitle';
+export * from './views/edit/title/EditTitle';
+
 export * from './views/features/FeaturesComponent';
 
 export * from './views/footer/FooterComponent';
