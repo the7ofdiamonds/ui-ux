@@ -1,9 +1,9 @@
 import React, { useEffect, useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import type { ProjectSkillsObject } from '@the7ofdiamonds/ui-ux';
-import { ProjectSkills } from '@the7ofdiamonds/ui-ux';
-import { Framework, Language, ProjectType, Service, Technology } from '@the7ofdiamonds/ui-ux';
+import { ProjectSkills } from '../../../model/ProjectSkills';
+import { Framework, Language, ProjectType, Technology } from '../../../model/Skill';
+import { Service } from '../../../model/Service';
 import { Skills } from '@the7ofdiamonds/ui-ux';
 
 import type { AppDispatch, RootState } from '../../../../../model/store';

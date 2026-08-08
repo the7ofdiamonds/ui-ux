@@ -1,7 +1,7 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ProjectVersions } from '@the7ofdiamonds/ui-ux'
+import { ProjectVersions } from '../../../model/ProjectVersions'
 
 // import { useAppDispatch } from '../../../../../model/hooks';
 

@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, Dispatch, SetStateAction } from 'react'
 
-import { Badge, Image, StatusBar } from '@the7ofdiamonds/ui-ux';
+import { Image } from '../../../model/Image';
+import { Badge } from '../../../views/badge/Badge';
+import { StatusBar } from '../../status_bar/StatusBar';
 
 import styles from './Images.module.scss';
 

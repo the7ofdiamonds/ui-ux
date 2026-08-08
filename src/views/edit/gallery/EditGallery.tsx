@@ -1,7 +1,10 @@
 import React, { useEffect, useState, MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Gallery, Image, StatusBar } from '@the7ofdiamonds/ui-ux';
+import { Gallery } from '../../../model/Gallery';
+import { Image } from '../../../model/Image';
+import { StatusBar } from '../../status_bar/StatusBar';
+
 import type { GalleryObject } from '@the7ofdiamonds/ui-ux';
 
 import EditImages from '../images/EditImages';
