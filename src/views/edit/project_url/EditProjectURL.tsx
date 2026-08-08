@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 
-import { ProjectURLs, ProjectURL } from '@the7ofdiamonds/ui-ux';
+import { ProjectURLs } from '../../../model/ProjectURLs';
+import { ProjectURL } from '../../../model/ProjectURL';
 
 import { FormLabelInput } from '../form/FormLabelInput';
 import { StatusBar } from '../../status_bar/StatusBar';
