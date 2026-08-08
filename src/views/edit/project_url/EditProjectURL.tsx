@@ -1,135 +1,110 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, ChangeEvent } from 'react';
 
-import { ProjectURLs } from '@the7ofdiamonds/ui-ux';
+import { ProjectURLs, ProjectURL } from '@the7ofdiamonds/ui-ux';
 
-// import { updateProjectURLs } from '../../../../../controllers/updateSlice';
-
-import type { AppDispatch } from '../../../../../model/store';
+import { FormLabelInput } from '../form/FormLabelInput';
+import { StatusBar } from '../../status_bar/StatusBar';
 
 import styles from './ProjectURL.module.scss';
 
 interface EditProjectURLProps {
     projectURLs: ProjectURLs | undefined | null;
+    setProjectURLs: React.Dispatch<React.SetStateAction<ProjectURLs>>;
 }
 
-export const EditProjectURL: React.FC<EditProjectURLProps> = ({ projectURLs }) => {
-    const urls = new ProjectURLs();
-    const homepage = urls.homepage;
-    const ios = urls.ios;
-    const android = urls.android;
+export const EditProjectURL: React.FC<EditProjectURLProps> = ({ projectURLs, setProjectURLs }) => {
+    const instruction = "Enter or edit the project URLs.";
 
-    const dispatch = useDispatch<AppDispatch>();
+    const homepage: ProjectURL | null = projectURLs?.homepage ?? new ProjectURL({ url: '' });
+    const ios: ProjectURL | null = projectURLs?.ios ?? new ProjectURL({ url: '' });
+    const android: ProjectURL | null = projectURLs?.android ?? new ProjectURL({ url: '' });
 
-    const [homepageURL, setHomepageURL] = useState<string | null>(null);
-    const [iosURL, setIosURL] = useState<string | null>(null);
-    const [androidURL, setAndroidURL] = useState<string | null>(null);
+    const [homepageURL, setHomepageURL] = useState<string | null>(homepage?.url);
+    const [iosURL, setIosURL] = useState<string | null>(ios?.url);
+    const [androidURL, setAndroidURL] = useState<string | null>(android?.url);
 
-    const [message, setMessage] = useState<string>('');
+    const [message, setMessage] = useState<string>(instruction);
     const [messageType, setMessageType] = useState<string>('info');
     const [showStatusBar, setShowStatusBar] = useState<'show' | 'hide'>('hide');
 
-    useEffect(() => {
-        if (projectURLs?.homepage) {
-            setHomepageURL(projectURLs.homepage.url);
-        }
-    }, [projectURLs?.homepage, setHomepageURL]);
+    const handleProjectURLsChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const target = e.target as HTMLInputElement;
 
-    useEffect(() => {
-        if (projectURLs?.ios) {
-            setIosURL(projectURLs.ios.url);
-        }
-    }, [projectURLs?.ios, setIosURL]);
+        const { name, value } = target;
 
-    useEffect(() => {
-        if (projectURLs?.android) {
-            setAndroidURL(projectURLs.android.url);
-        }
-    }, [projectURLs?.android, setAndroidURL]);
-
-    const handleHomepageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        try {
-            const target = e.target as HTMLInputElement;
-
-            const { name, value } = target;
-
-            if (name === 'homepage_url') {
+        switch (name) {
+            case 'homepage_url':
                 setHomepageURL(value);
-            }
-        } catch (error) {
-            const err = error as Error;
-            setMessage(err.message);
-            setMessageType('error');
-        }
-    };
+                break;
 
-    const handleIosChange = (e: ChangeEvent<HTMLInputElement>) => {
-        try {
-            const target = e.target as HTMLInputElement;
-
-            const { name, value } = target;
-
-            if (name === 'ios_url') {
+            case 'ios_url':
                 setIosURL(value);
-            }
-        } catch (error) {
-            const err = error as Error;
-            setMessage(err.message);
-            setMessageType('error');
-        }
-    };
+                break;
 
-    const handleAndroidChange = (e: ChangeEvent<HTMLInputElement>) => {
-        try {
-            const target = e.target as HTMLInputElement;
-
-            const { name, value } = target;
-
-            if (name === 'android_url') {
+            case 'android_url':
                 setAndroidURL(value);
-            }
-        } catch (error) {
-            const err = error as Error;
-            setMessage(err.message);
-            setMessageType('error');
+                break;
         }
+
+        setMessage(instruction)
+        setMessageType('info')
     };
 
     const handleUpdateProjectURLs = () => {
-        // dispatch(updateProjectURLs({
-        //     homepage: homepageURL,
-        //     ios: iosURL,
-        //     android: androidURL
-        // }));
+        try {
+            const updatedProjectURLs = new ProjectURLs();
+
+            if (homepageURL) {
+                try {
+                    updatedProjectURLs.setHomepage(homepageURL)
+                } catch (error) {
+                    const err = error as Error;
+                    throw new Error(`${err.message} for home page.`);
+                }
+            }
+
+            if (iosURL) {
+                try {
+                    updatedProjectURLs.setIos(iosURL)
+                } catch (error) {
+                    const err = error as Error;
+                    throw new Error(`${err.message} for the iOS store.`);
+                }
+            }
+
+            if (androidURL) {
+                try {
+                    updatedProjectURLs.setAndroid(androidURL)
+                } catch (error) {
+                    const err = error as Error;
+                    throw new Error(`${err.message} for the Android store.`);
+                }
+            }
+
+            setProjectURLs(updatedProjectURLs)
+        } catch (error) {
+            const err = error as Error;
+            setMessage(err.message);
+            setMessageType('error');
+            setShowStatusBar('show')
+            return;
+        }
     };
 
     return (
         <div className={styles.edit} id='update_urls'>
             <h3>Project URLs</h3>
 
-            {homepage &&
-                (<div className={styles['form-item-flex']}>
-                    <label className={styles.label} htmlFor="homepage_url">{homepage.name}:</label>
-                    <input className={styles.input} type="text" id="homepage" value={homepageURL ?? ''} placeholder={homepage.description ?? ''} name='homepage_url' onChange={handleHomepageChange} />
-                </div>)
-            }
+            <FormLabelInput id="homepage_url" label={homepage.name} text={homepageURL} description={homepage.description} name='homepage_url' change={handleProjectURLsChange} />
 
-            {ios &&
-                (<div className={styles['form-item-flex']}>
-                    <label className={styles.label} htmlFor="ios_url">{ios.name}:</label>
-                    <input className={styles.input} type="text" id="ios" value={iosURL ?? ''} placeholder={ios.description ?? ''} name='ios_url' onChange={handleIosChange} />
-                </div>)
-            }
+            <FormLabelInput id="ios_url" label={ios.name} text={iosURL} description={ios.description} name='ios_url' change={handleProjectURLsChange} />
 
-            {android &&
-                (<div className={styles['form-item-flex']}>
-                    <label className={styles.label} htmlFor="android_url">{android.name}:</label>
-                    <input className={styles.input} type="text" id="android" value={androidURL ?? ''} placeholder={android.description ?? ''} name='android_url' onChange={handleAndroidChange} />
-                </div>)
-            }
+            <FormLabelInput id="ios_url" label={android.name} text={androidURL} description={android.description} name='android_url' change={handleProjectURLsChange} />
+
+            <StatusBar show={showStatusBar} messageType={messageType} message={message} />
 
             <button className={styles.button} onClick={handleUpdateProjectURLs}>
-                <h3>Update Project Urls</h3>
+                <h3>Update Project Url</h3>
             </button>
         </div>
     )

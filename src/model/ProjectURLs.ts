@@ -4,40 +4,62 @@ import type { ProjectURLObject } from '../model/ProjectURL';
 import { ProjectURL } from '../model/ProjectURL';
 
 export type ProjectURLsObject = {
-  homepage: ProjectURLObject | null;
-  ios: ProjectURLObject | null;
-  android: ProjectURLObject | null;
+  id: string | number | null;
+  homepage: Partial<ProjectURLObject> | null;
+  ios: Partial<ProjectURLObject> | null;
+  android: Partial<ProjectURLObject> | null;
 };
 
 export type ProjectURLsDataObject = {
+  id: string | number | null;
   homepage: string | null;
   ios: string | null;
   android: string | null;
 };
 
 export class ProjectURLs {
+  id: string | number | null;
   homepage: ProjectURL | null;
   ios: ProjectURL | null;
   android: ProjectURL | null;
 
   constructor(data?: Partial<ProjectURLsObject>) {
-    this.homepage = null;
-    this.ios = null;
-    this.android = null;
+    this.id = data?.id ? data.id : null;
+    this.homepage = this.getHomepage(data?.homepage?.url ?? '');
+    this.ios = this.getIos(data?.ios?.url ?? '');
+    this.android = this.getAndroid(data?.android?.url ?? '');
+  }
 
-    data?.homepage?.url ? this.setHomepage(data.homepage.url) : this.homepage;
-    data?.ios?.url ? this.setIos(data.ios.url) : this.ios;
-    data?.android?.url ? this.setAndroid(data.android.url) : this.android;
+  setID(id: string | number) {
+    this.id = id;
   }
 
   setHomepage(url: string) {
-    if (!url) {
-      this.homepage = null;
-    }
+    try {
+      let name = 'Homepage';
+      const projectURL = new ProjectURL({
+        id: name.toLowerCase(),
+        name: name,
+        description: 'Website of the project',
+        image: new Image({
+          id: name.toLowerCase(),
+          class_name: 'fa-solid fa-house',
+        }).toImageObject(),
+      });
 
+      projectURL.setUrl(url)
+
+      this.homepage = projectURL;
+    } catch (error) {
+      const err = error as Error;
+      throw new Error(err.message);
+    }
+  }
+
+  getHomepage(url: string) {
     let name = 'Homepage';
 
-    this.homepage = new ProjectURL({
+    return new ProjectURL({
       id: name.toLowerCase(),
       name: name,
       description: 'Website of the project',
@@ -50,13 +72,31 @@ export class ProjectURLs {
   }
 
   setIos(url: string) {
-    if (!url) {
-      this.ios = null;
-    }
+    try {
+      let name = 'Apple App Store';
+      const projectURL = new ProjectURL({
+        id: name.toLowerCase(),
+        name: name,
+        description: 'Link to iOS application',
+        image: new Image({
+          id: name.toLowerCase(),
+          class_name: 'fa-brands fa-app-store-ios',
+        }).toImageObject(),
+      });
 
+      projectURL.setUrl(url)
+
+      this.ios = projectURL
+    } catch (error) {
+      const err = error as Error;
+      throw new Error(err.message);
+    }
+  }
+
+  getIos(url: string) {
     let name = 'Apple App Store';
 
-    this.ios = new ProjectURL({
+    return new ProjectURL({
       id: name.toLowerCase(),
       name: name,
       description: 'Link to iOS application',
@@ -69,13 +109,31 @@ export class ProjectURLs {
   }
 
   setAndroid(url: string) {
-    if (!url) {
-      this.android = null;
-    }
+    try {
+      let name = 'Google Play Store';
+      const projectURL = new ProjectURL({
+        id: name.toLowerCase(),
+        name: name,
+        description: 'Link to Android application',
+        image: new Image({
+          id: name.toLowerCase(),
+          class_name: 'fa-brands fa-google-play',
+        }).toImageObject(),
+      });
 
+      projectURL.setUrl(url)
+
+      this.android = projectURL;
+    } catch (error) {
+      const err = error as Error;
+      throw new Error(err.message);
+    }
+  }
+
+  getAndroid(url: string) {
     let name = 'Google Play Store';
 
-    this.android = new ProjectURL({
+    return new ProjectURL({
       id: name.toLowerCase(),
       name: name,
       description: 'Link to Android application',
@@ -93,6 +151,7 @@ export class ProjectURLs {
 
   toProjectURLsObject(): ProjectURLsObject {
     return {
+      id: this.id,
       homepage: this.homepage ? this.homepage.toProjectURLObject() : null,
       ios: this.ios ? this.ios.toProjectURLObject() : null,
       android: this.android ? this.android.toProjectURLObject() : null,
@@ -101,6 +160,7 @@ export class ProjectURLs {
 
   toProjectURLsDataObject(): ProjectURLsDataObject {
     return {
+      id: this.id,
       homepage: this.homepage?.url ? this.homepage.url : null,
       ios: this.ios?.url ? this.ios.url : null,
       android: this.android?.url ? this.android.url : null,

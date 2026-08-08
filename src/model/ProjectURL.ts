@@ -24,8 +24,38 @@ export class ProjectURL {
     this.image = data?.image ? new Image(data.image) : null;
   }
 
+  isValid(url: string): boolean {
+    try {
+
+      if (!url) {
+        throw new Error('No URL has been provided.');
+      }
+
+      if (typeof url !== 'string') {
+        throw new Error('URL must be a string.');
+      }
+
+      new URL(url);
+
+      return true;
+    } catch (error) {
+      const err = error as Error;
+      throw new Error(err.message);
+    }
+  }
+
   setUrl(url: string) {
-    this.url = url;
+    try {
+
+      if (!this.isValid(url)) {
+        this.url = null;
+      }
+      
+      this.url = url;
+    } catch (error) {
+      const err = error as Error;
+      throw new Error(err.message);
+    }
   }
 
   toProjectURLObject(): ProjectURLObject {

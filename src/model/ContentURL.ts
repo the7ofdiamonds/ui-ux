@@ -9,7 +9,6 @@ export interface ContentURLObject {
   path: string | null;
   branch: string | null;
   url: string | null;
-  isValid: boolean;
 }
 
 export class ContentURL {
@@ -19,7 +18,6 @@ export class ContentURL {
   path: string | null;
   branch: string | null;
   url: string | null;
-  isValid: boolean;
 
   constructor(data: Partial<ContentURLObject>) {
     this.id = data?.id ? data?.id : null;
@@ -27,64 +25,67 @@ export class ContentURL {
     this.repo = data?.repo ? data.repo : null;
     this.path = data?.path ? data.path : null;
     this.branch = data?.branch ? data.branch : null;
-
-    try {
-      if (!data?.url || typeof data?.url !== 'string') {
-        throw new Error('URL must be a string.');
-      }
-
-      this.url = new URL(data.url).toString();
-      this.isValid = true;
-    } catch (error) {
-      const err = error as Error;
-      console.error('Error fetching content:', err);
-      this.url = null;
-      this.isValid = false;
-    }
+    this.url = data?.url ? data.url : null;
   }
 
   setID(id: string | number) { this.id = id; }
 
-  setURL(url: string) {
+  isValid(url: string): boolean {
     try {
+
+      if (!url) {
+        throw new Error('No URL has been provided.');
+      }
+
       if (typeof url !== 'string') {
         throw new Error('URL must be a string.');
       }
 
-      return new URL(url).toString();
+      new URL(url);
+
+      return true;
     } catch (error) {
       const err = error as Error;
-      console.error('Error fetching content:', err);
+      throw new Error(err.message);
+    }
+  }
+
+  setUrl(url: string) {
+    try {
+
+      if (this.isValid(url)) {
+        this.url = url;
+      }
+
+      this.url = null;
+    } catch (error) {
+      const err = error as Error;
+      throw new Error(err.message);
     }
   }
 
   from(url: string) {
-    let parts: Array<string> = [];
-    this.isValid = false;
-
     try {
-      if (typeof url !== 'string') {
-        throw new Error('URL must be a string.');
-      }
+      this.isValid(url)
+      let parts: Array<string> = [];
 
       const pathname = new URL(url).pathname;
       parts = pathname.split('/');
+
+      if (parts.length >= 5) {
+        this.owner = parts[1] ?? null;
+        this.repo = parts[2] ?? null;
+        this.path = parts[4] ?? null;
+        this.branch = parts[3] ?? null;
+      }
+
+      this.url = url;
+
+      return this;
     } catch (error) {
       const err = error as Error;
       console.error('Error fetching content:', err);
     }
-
-    if (parts.length >= 5) {
-      this.isValid = true;
-    }
-
-    this.owner = parts[1] ?? null;
-    this.repo = parts[2] ?? null;
-    this.path = parts[4] ?? null;
-    this.branch = parts[3] ?? null;
-    this.url = url;
-
-    return this;
   }
 
   fromMdtoHTML(md: string) {
@@ -103,7 +104,6 @@ export class ContentURL {
       path: this.path,
       branch: this.branch,
       url: this.url,
-      isValid: this.isValid,
     };
   }
 
