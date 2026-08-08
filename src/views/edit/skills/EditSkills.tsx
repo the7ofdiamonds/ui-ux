@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ProjectSkills } from '../../../model/ProjectSkills';
 import { Framework, Language, ProjectType, Technology } from '../../../model/Skill';
 import { Service } from '../../../model/Service';
-import { Skills } from '@the7ofdiamonds/ui-ux';
+import { Skills } from '../../../model/Skills';
 
 import type { AppDispatch, RootState } from '../../../../../model/store';
 
