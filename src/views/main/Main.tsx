@@ -3,13 +3,14 @@ import React from 'react'
 import styles from './Main.module.scss';
 
 interface MainProps {
-    children?: React.ReactNode;
     fullHeight?: boolean;
+    id?: string;
+    children?: React.ReactNode;
 }
 
-export const Main: React.FC<MainProps> = ({ children, fullHeight }) => {
+export const Main: React.FC<MainProps> = ({ fullHeight, id, children }) => {
     return (
-        <main className={`${styles.main} ${fullHeight ? styles['full-height'] : ''}`}>
+        <main className={`${styles.main} ${fullHeight ? styles['full-height'] : ''}`} id={id}>
             {children}
         </main>
     )

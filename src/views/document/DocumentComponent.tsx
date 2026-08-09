@@ -41,14 +41,6 @@ export const DocumentComponent: React.FC<DocumentComponentProps> = ({ documentUR
                 src={`${url}#view=fit`}
                 title="PDF Viewer"
                 allowFullScreen
-                style={{
-                    border: 0,
-                    margin: 0,
-                    padding: 0,
-                    display: "block",
-                    width: '100%',
-                    height: '100%'
-                }}
             />}
             {message && <StatusBar show={showStatusBar} messageType={messageType} message={message} />}
         </Main>);

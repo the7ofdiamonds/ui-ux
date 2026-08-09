@@ -17,7 +17,7 @@ export const SiteMapComponent: React.FC<SiteMapComponentProps> = ({ siteMap }) =
                     <div className={styles['site-map-info-links']}>
                         <ul>
                             {siteMap.info.map((link) => (
-                                <li key={link.href}><a href={link.href}>{link.text}</a></li>
+                                <li key={link.href}><a href={link.href}><h6>{link.text}</h6></a></li>
                             ))}
                         </ul>
                     </div>
@@ -29,7 +29,7 @@ export const SiteMapComponent: React.FC<SiteMapComponentProps> = ({ siteMap }) =
                     <div className={styles['site-map-communication-links']}>
                         <ul>
                             {siteMap.communication.map((link) => (
-                                <li key={link.href}><a href={link.href}>{link.text}</a></li>
+                                <li key={link.href}><a href={link.href}><h6>{link.text}</h6></a></li>
                             ))}
                         </ul>
                     </div>
@@ -41,7 +41,7 @@ export const SiteMapComponent: React.FC<SiteMapComponentProps> = ({ siteMap }) =
                     <div className={styles['site-map-account-links']}>
                         <ul>
                             {siteMap.account.map((link) => (
-                                <li key={link.href}><a href={link.href}>{link.text}</a></li>
+                                <li key={link.href}><a href={link.href}><h6>{link.text}</h6></a></li>
                             ))}
                         </ul>
                     </div>
@@ -53,7 +53,7 @@ export const SiteMapComponent: React.FC<SiteMapComponentProps> = ({ siteMap }) =
                     <div className={styles['site-map-offer-links']}>
                         <ul>
                             {siteMap.offer.map((link) => (
-                                <li key={link.href}><a href={link.href}>{link.text}</a></li>
+                                <li key={link.href}><a href={link.href}><h6>{link.text}</h6></a></li>
                             ))}
                         </ul>
                     </div>
