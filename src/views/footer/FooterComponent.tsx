@@ -16,7 +16,7 @@ export const FooterComponent: React.FC<FooterComponentProps> = ({ children, name
       {children}
       <span className={styles.legal}>© Copyright 2010 - {year} {name}. All Rights Reserved.</span>
       {version && (
-        <span className={styles.legal}>{version}</span>
+        <span className={styles.version}>{version}</span>
       )}
     </footer>
   );
