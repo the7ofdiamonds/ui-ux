@@ -1,20 +1,29 @@
 @use 'paragraph.scss';
+@use 'title.scss';
 
 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   width: 100%;
   max-width: 1000px;
   scroll-margin: var(--scroll-margin);
+
+  .title {
+    padding: 0 0.5em;
+  }
 
   .content-html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
+
+    p {
+      text-indent: 2em;
+    }
 
     a {
       font-weight: 700;

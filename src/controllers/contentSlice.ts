@@ -33,7 +33,9 @@ export const getContent = createAsyncThunk(
       const content = await fetch(url, {
         headers: headers,
       });
+     console.log('Content-Type:', content.headers.get('content-type'));
 
+      console.log('Content:', content);
       return content.text();
     } catch (error) {
       const err = error as Error;

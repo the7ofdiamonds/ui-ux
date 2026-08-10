@@ -39,6 +39,7 @@ header {
 
       &:hover {
         background-color: black;
+
         h2 {
           color: white;
         }
@@ -139,25 +140,16 @@ header {
 
   .header {
     background-color: var(--header-background-color, white);
+
     a {
       color: var(--header-font-color, black);
     }
-  }
 
-  .header:hover {
-    background-color: var(--header-background-color-alt, black);
-
-    nav.dropdown,
-    .rightSide .hamburger {
-      background-color: var(--header-background-color-alt, black);
-      color: var(--header-font-color-alt, white);
-    }
-
-    a {
+    .top:hover,
+    a:hover {
       background-color: var(--header-background-color-alt, black);
 
-      .title,
-      .header-title {
+      h1 {
         color: var(--header-font-color-alt, white);
       }
     }

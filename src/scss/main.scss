@@ -4,13 +4,17 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
   scroll-margin: var(--scroll-margin);
 
-  &.full-height{
+  .title {
+    padding: 0 0.5em;
+  }
+
+  &.full-height {
     min-height: 100vh;
   }
-  
+
   &.error {
     margin-top: -5rem;
   }

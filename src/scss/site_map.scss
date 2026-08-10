@@ -4,8 +4,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 0.5rem;
   width: 100%;
 }
 
@@ -17,12 +16,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: 0.25rem;
   flex: 1;
 
+  h5,
+  h6 {
+    text-align: center;
+    letter-spacing: 0.375em;
+    margin-right: -0.375em;
+    font-family: var(--heading-font);
+  }
+
   h5 {
-    font-weight: 700;
+    font-weight: 1000;
+    padding: 0.25em 0.5em;
+  }
+
+  h6 {
+    padding: 0.5em;
   }
 }
 
@@ -33,10 +44,31 @@
   ul {
     li {
       list-style: none;
-      padding: 0.25rem;
+
       a {
         text-decoration: none;
         color: var(--font-color);
+      }
+    }
+  }
+}
+
+.site-map-info-links,
+.site-map-communication-links,
+.site-map-account-links,
+.site-map-offer-links {
+  ul {
+    li:hover {
+      background-color: var(--header-background-color-alt, black);
+      border-radius: var(--border-radius, 0.5rem);
+      box-shadow: var(--box-shadow, 4px 4px 10px gray);
+
+      a {
+        h6 {
+          color: var(--header-font-color-alt, white);
+          font-weight: 1000;
+          text-transform: uppercase;
+        }
       }
     }
   }
