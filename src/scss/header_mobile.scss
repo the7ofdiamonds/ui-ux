@@ -1,16 +1,9 @@
-.header {
-  align-items: center;
-  justify-content: center;
-
-  .leftSide {
-    display: none;
-  }
-
-  .center {
-    width: 100%;
-  }
-  
-  .right-menu {
-    display: none;
+@media screen and (max-width: 700px) {
+  .header {
+    nav.dropdown {
+      ul {
+        flex-direction: column;
+      }
+    }
   }
 }

@@ -5,7 +5,6 @@
 @use './title.scss';
 
 header {
-  grid-area: Navigation;
   position: fixed;
   top: 0;
   z-index: 1000;
@@ -14,143 +13,92 @@ header {
   padding: 0.25rem 0;
   overflow: auto;
 
-  a {
-    text-decoration: none;
-    list-style: none;
-  }
-
-  h2 {
-    word-wrap: normal;
-  }
-
-  ul {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    width: 100%;
-
-    li {
-      width: 100%;
-      list-style: none;
-
-      h2 {
-        padding: 0.25em;
-      }
-
-      &:hover {
-        background-color: black;
-
-        h2 {
-          color: white;
-        }
-      }
-    }
-  }
-
   .header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
     min-height: 5rem;
     overflow: hidden;
     background-color: var(--header-background-color);
     box-shadow: var(--box-shadow);
 
-    .top {
-      display: flex;
-      width: 100%;
-      height: 5rem;
+    a {
+      text-decoration: none;
+      list-style: none;
+      color: var(--header-font-color, black);
     }
 
-    .leftSide,
-    .rightSide {
+    h2 {
+      word-wrap: normal;
+    }
+
+    ul {
       display: flex;
       align-items: center;
-      position: relative;
+      gap: 0.5em;
+      width: 100%;
 
-      a {
+      li {
+        width: 100%;
+        list-style: none;
+
         h2 {
-          padding: 0 1rem;
+          padding: 0.25em;
+        }
+
+        &:hover {
+          background-color: black;
+
+          h2 {
+            color: white;
+          }
         }
       }
     }
 
-    .leftSide {
-      grid-area: LeftSide;
-      justify-content: start;
-    }
-
-    .left-menu {
-      display: none;
-    }
-
-    .center {
-      grid-area: Center;
+    .top {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
       height: 5rem;
-      padding: 0 1rem;
 
-      a {
-        width: 100%;
-      }
 
-      .logo {
+      .leftSide,
+      .rightSide {
         display: flex;
         align-items: center;
+        position: relative;
+
+        a {
+
+          h2 {
+            padding: 0 1rem;
+          }
+        }
+      }
+
+      .center {
+        grid-area: Center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        width: auto;
-        height: 100%;
-      }
-    }
+        height: 5rem;
+        padding: 0 1rem;
+        width: 100%;
 
-    .rightSide {
-      grid-area: RightSide;
-      justify-content: end;
-    }
-  }
+        a {
+          width: 100%;
+        }
 
-  nav.dropdown {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75em;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-height: 100vh;
-    transition: height 2s;
-    background-color: var(--header-background-color);
-
-    ul {
-      flex-direction: column;
-    }
-
-    .menu-top-container {
-      overflow: hidden;
-
-      .menu {
-        display: grid;
-        grid-auto-rows: 4rem;
-      }
-    }
-  }
-
-  .header {
-    background-color: var(--header-background-color, white);
-
-    a {
-      color: var(--header-font-color, black);
-    }
-
-    .top:hover,
-    a:hover {
-      background-color: var(--header-background-color-alt, black);
-
-      h1 {
-        color: var(--header-font-color-alt, white);
+        .logo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: auto;
+          height: 100%;
+        }
       }
     }
   }
@@ -176,6 +124,58 @@ header {
 
     100% {
       opacity: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .header {
+    .leftSide {
+      grid-area: LeftSide;
+      justify-content: start;
+
+      .left-menu {
+        display: none;
+      }
+    }
+
+    .top:hover {
+      background-color: var(--header-background-color-alt, black);
+
+      h1,
+      h2 {
+        color: var(--header-font-color-alt, white);
+      }
+    }
+
+    nav.dropdown {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75em;
+      width: 100%;
+      max-height: 100vh;
+      transition: height 2s;
+      background-color: var(--header-background-color);
+
+      .menu-top-container {
+        overflow: hidden;
+
+        .menu {
+          display: grid;
+          grid-auto-rows: 4rem;
+        }
+      }
+    }
+
+    .rightSide {
+      grid-area: RightSide;
+      justify-content: end;
+
+      .right-menu {
+        display: none;
+      }
     }
   }
 }
