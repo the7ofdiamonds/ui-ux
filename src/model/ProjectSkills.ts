@@ -181,7 +181,7 @@ export class ProjectSkills implements ISKills<ProjectSkillObject> {
       case 'Dockerfile':
         skill = new ProjectSkill();
         skill.setID('docker');
-        skill.setType('platform');
+        skill.setType('cicd');
         skill.setTitle('Docker');
         break;
 

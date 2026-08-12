@@ -63,7 +63,7 @@ export class ProjectSolution {
   constructor(data?: Partial<ProjectSolutionObject>) {
     this.id = data?.id ? data.id : null;
     this.category = data?.category ? data.category : null;
-    this.gallery = data?.gallery ? new Gallery(data.gallery) : new Gallery();
+    this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.features = data?.features ? this.getFeatures(data.features) : null;
     this.pricing = data?.pricing ? new Pricing(data.pricing) : null;
     this.icon = data?.icon ? new Image(data.icon) : null;
@@ -131,8 +131,8 @@ export class ProjectSolution {
     this.actionWord = actionWord;
   }
 
-  setContentURL(url: string) {
-    this.contentURL = new ContentURL(url);
+  setContentURL(contentURL: ContentURL) {
+    this.contentURL = contentURL;
   }
 
   setProjectURLs(projectURLs: ProjectURLs) {
@@ -145,7 +145,7 @@ export class ProjectSolution {
 
   fromRepo(repo: Repo) {
     if (repo.contents?.solution?.downloadURL) {
-      this.setContentURL(repo.contents.solution.downloadURL);
+      this.setContentURL(new ContentURL({ url: repo.contents.solution.downloadURL }));
     }
 
     if (repo?.homepage) {
@@ -154,7 +154,7 @@ export class ProjectSolution {
       this.setProjectURLs(projectURLs);
     }
 
-    if (repo.issues) {
+    if (repo?.issues) {
       repo.issues.features.forEach((feature) =>
         this.features?.add(feature));
     }

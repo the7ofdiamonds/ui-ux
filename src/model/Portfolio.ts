@@ -45,15 +45,30 @@ export class Portfolio {
   }
 
   filterProjects(taxonomy: string, term: string): Set<Project> {
-    let updatedProjects: Set<Project> = new Set();
+    try {
+      let updatedProjects: Set<Project> = new Set();
 
-    if (taxonomy && term) {
-      Array.from(this.projects).forEach((project: Project) => {
+      if (!taxonomy || !term) {
+        console.error({ "taxonomy": taxonomy, "term": term })
+        console.error("Either the taxonomy or term is null")
+        return updatedProjects;
+      }
+
+      if (this.projects.size === 0) throw new Error("No projects to search.");
+
+      for (const project of Array.from(this.projects)) {
+        const skills = project?.process?.development?.skills;
+
+        if (!skills) continue;
+
         if (
           taxonomy === 'project-type' &&
-          project?.process?.development?.skills?.types
+          skills?.types &&
+          skills.types.size > 0
         ) {
-          project.process.development.skills.types.forEach((type) => {
+          console.log(taxonomy)
+          console.log(skills)
+          skills.types.forEach((type) => {
             if (type.id === term) {
               updatedProjects.add(project);
             }
@@ -62,9 +77,10 @@ export class Portfolio {
 
         if (
           taxonomy == 'language' &&
-          project?.process?.development?.skills?.languages
+          skills?.languages &&
+          skills.languages.size > 0
         ) {
-          project.process.development.skills.languages.forEach((language) => {
+          skills.languages.forEach((language) => {
             if (language.id === term) {
               updatedProjects.add(project);
             }
@@ -73,9 +89,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'framework' &&
-          project?.process?.development?.skills?.frameworks
+          skills?.frameworks &&
+          skills.frameworks.size > 0
         ) {
-          project.process.development.skills.frameworks.forEach((framework) => {
+          skills.frameworks.forEach((framework) => {
             if (framework.id === term) {
               updatedProjects.add(project);
             }
@@ -84,9 +101,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'technology' &&
-          project?.process?.development?.skills?.technologies
+          skills?.technologies &&
+          skills.technologies.size > 0
         ) {
-          project.process.development.skills.technologies.forEach(
+          skills.technologies.forEach(
             (technology) => {
               if (technology.id === term) {
                 updatedProjects.add(project);
@@ -97,9 +115,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'software' &&
-          project?.process?.development?.skills?.softwareApplications
+          skills?.softwareApplications &&
+          skills.softwareApplications.size > 0
         ) {
-          project.process.development.skills.softwareApplications.forEach((software) => {
+          skills.softwareApplications.forEach((software) => {
             if (software.id === term) {
               updatedProjects.add(project);
             }
@@ -108,9 +127,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'database' &&
-          project?.process?.development?.skills?.databases
+          skills?.databases &&
+          skills.databases.size > 0
         ) {
-          project.process.development.skills.databases.forEach((database) => {
+          skills.databases.forEach((database) => {
             if (database.id === term) {
               updatedProjects.add(project);
             }
@@ -119,9 +139,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'builder' &&
-          project?.process?.development?.skills?.buildTools
+          skills?.buildTools &&
+          skills.buildTools.size > 0
         ) {
-          project.process.development.skills.buildTools.forEach((builder) => {
+          skills.buildTools.forEach((builder) => {
             if (builder.id === term) {
               updatedProjects.add(project);
             }
@@ -130,9 +151,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'server' &&
-          project?.process?.development?.skills?.servers
+          skills?.servers &&
+          skills.servers.size > 0
         ) {
-          project.process.development.skills.servers.forEach((server) => {
+          skills.servers.forEach((server) => {
             if (server.id === term) {
               updatedProjects.add(project);
             }
@@ -141,9 +163,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'cicd' &&
-          project?.process?.development?.skills?.cicdTools
+          skills?.cicdTools &&
+          skills.cicdTools.size > 0
         ) {
-          project.process.development.skills.cicdTools.forEach((cicdTool) => {
+          skills.cicdTools.forEach((cicdTool) => {
             if (cicdTool.id === term) {
               updatedProjects.add(project);
             }
@@ -152,9 +175,10 @@ export class Portfolio {
 
         if (
           taxonomy === 'platform' &&
-          project?.process?.development?.skills?.platforms
+          skills?.platforms &&
+          skills.platforms.size > 0
         ) {
-          project.process.development.skills.platforms.forEach((platform) => {
+          skills.platforms.forEach((platform) => {
             if (platform.id === term) {
               updatedProjects.add(project);
             }
@@ -163,18 +187,22 @@ export class Portfolio {
 
         if (
           taxonomy === 'cloud' &&
-          project?.process?.development?.skills?.cloudProviders
+          skills?.cloudProviders &&
+          skills.cloudProviders.size > 0
         ) {
-          project.process.development.skills.cloudProviders.forEach((cloud) => {
+          skills.cloudProviders.forEach((cloud) => {
             if (cloud.id === term) {
               updatedProjects.add(project);
             }
           });
         }
-      });
-    }
+      };
 
-    return updatedProjects;
+      return updatedProjects;
+    } catch (error) {
+      console.error(error);
+      throw new Error((error as Error).message);
+    }
   }
 
   filterProjectByID(id: string): Project | null {

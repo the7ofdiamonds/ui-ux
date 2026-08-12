@@ -4,7 +4,7 @@ import { Image } from './Image';
 
 export type TaxonomyObject = {
   id: string | number | null;
-  type: string;
+  type: string | null;
   title: string | null;
   path: string | null;
   description?: string | null;
@@ -31,11 +31,11 @@ export class Taxonomy {
     this.usage = data?.usage ?? 0;
     this.image = data?.image
       ? new Image({
-          id: this.id,
-          title: this.title,
-          url: data?.image?.url,
-          class_name: data?.image?.class_name,
-        })
+        id: this.id,
+        title: this.title,
+        url: data?.image?.url,
+        class_name: data?.image?.class_name,
+      })
       : null;
   }
 

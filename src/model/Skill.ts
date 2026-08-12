@@ -27,9 +27,9 @@ export class Skill extends Taxonomy implements ISkill {
     this.title = data?.title ? data.title : null;
     this.description = data?.description ? data.description : '';
     this.path =
-      data?.type && data.id
-        ? `/skill/${data.type}/${data.id}`
-        : `#`;
+      data?.path
+        ? data?.path
+        : null;
     this.image = data?.image && (data?.image?.url?.trim() || data?.image?.class_name?.trim())
       ? new Image({
         id: this.id,
@@ -61,9 +61,6 @@ export class Skill extends Taxonomy implements ISkill {
 
 export class ProjectType extends Skill {
   readonly type: string = 'project_type';
-  path: string = this.id
-    ? `/skill/project-type/${this.id}`
-    : '/skill/project-type';
 
   constructor(data?: Partial<SkillObject>) {
     super({
@@ -71,8 +68,9 @@ export class ProjectType extends Skill {
       type: 'project_type',
       path: `/skill/project-type/${data?.id}`,
     });
-    this.path = this.id
-      ? `/skill/project-type/${this.id}`
+    this.id = data?.id ? data.id : null;
+    this.path = data?.id
+      ? `/skill/project-type/${data?.id}`
       : '/skill/project-type';
   }
 }
