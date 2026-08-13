@@ -25,20 +25,18 @@ export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message
   };
 
   return (
-    message && message.trim() && (
-      <span className={`${styles['modal-overlay']} ${showModal === 'show' ? styles['show'] : styles['hide']}`}>
-        <div className={`${showModal === 'show' ? styles.show : styles.hide} ${styles.status}`}>
-          <div className={styles.close}>
-            <button onClick={minimize}>
-              <i className="fa-solid fa-circle-xmark"></i>
-            </button>
-          </div>
-
-          <div className={`${styles['status-bar']} ${styles.card} ${styles[messageType]}`} id="status_bar">
-            <h4>{message}</h4>
-          </div>
+    message && messageType && (<span className={`${styles['modal-overlay']} ${(showModal === 'show' || show === 'show') ? styles['show'] : styles['hide']}`}>
+      <div className={`${(showModal === 'show' || show === 'show') ? styles.show : styles.hide} ${styles.status}`}>
+        <div className={styles.close}>
+          <button onClick={minimize}>
+            <i className="fa-solid fa-circle-xmark"></i>
+          </button>
         </div>
-      </span>
-    )
+
+        <div className={`${styles['status-bar']} ${styles.card} ${styles[messageType]}`} id="status_bar">
+          <h4>{message}</h4>
+        </div>
+      </div>
+    </span>)
   );
 }

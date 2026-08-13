@@ -29,10 +29,10 @@ export const CheckListComponent: React.FC<CheckListProps> = ({ checkList }) => {
   }, [checkList]);
 
   useEffect(() => {
-    if (checkList.tasks) {
+    if (checkList?.tasks?.list?.size > 0) {
       setTasks(checkList.tasks)
     }
-  }, [checkList]);
+  }, [checkList?.tasks?.list?.size]);
 
   return (
     <>
