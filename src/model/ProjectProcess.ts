@@ -126,6 +126,7 @@ export class ProjectProcess {
       repo.contents?.development ||
       repo.issues?.development ||
       repo.skills ||
+      repo.tags ||
       repo.repoURL
     ) {
       const development = new ProjectDevelopment();

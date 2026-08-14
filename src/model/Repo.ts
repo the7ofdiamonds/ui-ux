@@ -22,6 +22,7 @@ import type { GitLabRepoObject } from '../model/GitLabRepo';
 
 import { Commits } from './Commits';
 import type { CommitObject } from "./Commit";
+import { Tags, type TagsObject } from './Tags';
 
 export type RepositoryGQL = {
   id: string;
@@ -51,6 +52,7 @@ export interface RepoObject {
   api_url: string | null;
   repo_url: string | null;
   skills: ProjectSkillsObject | null;
+  tags: TagsObject | null;
   contents: RepoContentsObject | null;
   contributors_url: string | null;
   contributors: ContributorsObject | null;
@@ -75,6 +77,7 @@ export class Repo {
   apiURL: string | null;
   repoURL: string | null;
   skills: ProjectSkills | null;
+  tags: Tags | null;
   contents: RepoContents | null;
   contributorsURL: string | null;
   contributors: Contributors | null;
@@ -96,6 +99,7 @@ export class Repo {
     this.apiURL = data?.api_url ? data.api_url : null;
     this.repoURL = data?.repo_url ? data.repo_url : null;
     this.skills = data?.skills ? new ProjectSkills(data.skills) : null;
+    this.tags = data?.tags ? new Tags(data.tags) : null;
     this.contents = data?.contents ? new RepoContents(data.contents) : null;
     this.contributorsURL = data?.contributors_url
       ? data.contributors_url
@@ -109,6 +113,10 @@ export class Repo {
         : null;
     this.commits = data?.commits && data.commits.length > 0 ? new Commits(data?.commits) : null;
     this.path = data?.path ? data.path : null;
+  }
+
+  setTags(tags: Tags) {
+    this.tags = tags;
   }
 
   fromGitHubGraphQL(repo: RepositoryGQL) {
@@ -292,6 +300,7 @@ export class Repo {
       api_url: this.apiURL,
       repo_url: this.repoURL,
       skills: this.skills ? this.skills.toProjectSkillsObject() : null,
+      tags: this.tags,
       contents: this.contents ? this.contents.toRepoContentsObject() : null,
       contributors_url: this.contributorsURL,
       contributors: this.contributors

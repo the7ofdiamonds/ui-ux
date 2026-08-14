@@ -91,9 +91,9 @@ export class Project {
       ? new ProjectSolution({ ...data.solution, id: data?.id })
       : null;
     this.process = data?.process ? new ProjectProcess({ ...data.process, id: data?.id }) : null;
-    this.problem = data?.problem ? new ProjectProblem({...data.problem, id: data?.id}) : null;
+    this.problem = data?.problem ? new ProjectProblem({ ...data.problem, id: data?.id }) : null;
     this.owner = data?.owner ? new Owner(data.owner) : null;
-    this.details = data?.details ? new ProjectDetails({...data.details, id: data?.id}) : null;
+    this.details = data?.details ? new ProjectDetails({ ...data.details, id: data?.id }) : null;
   }
 
   setID(id: string) {
@@ -191,6 +191,7 @@ export class Project {
       repo.contents?.delivery?.downloadURL ||
       repo.issues ||
       repo.skills ||
+      repo.tags ||
       repo.repoURL ||
       repo.commits
     ) {

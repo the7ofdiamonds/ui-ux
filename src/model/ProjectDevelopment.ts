@@ -24,6 +24,7 @@ import { FeaturesRoadmap } from '../model/FeaturesRoadmap';
 import { Repo } from '../model/Repo';
 import type { ProjectDataObject } from '../model/Project';
 import { Tasks } from './Tasks';
+import { Tag } from './Tag';
 
 export type ProjectDevelopmentObject = {
   id: string | number | null;
@@ -121,6 +122,13 @@ export class ProjectDevelopment {
 
     if (repo.skills) {
       this.skills = repo.skills;
+    }
+
+    if (repo?.tags?.list && repo.tags.list?.length > 0) {
+      const versionsList = repo.tags.list
+        .map((tag: Tag) => tag?.name)
+        .filter((name): name is string => name !== null && name !== undefined);
+      this.versionsList = new ProjectVersions({ history: versionsList });
     }
 
     if (repo.repoURL) {

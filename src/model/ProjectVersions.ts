@@ -13,7 +13,7 @@ export class ProjectVersions {
 
   constructor(data?: Partial<ProjectVersionsObject>) {
     this.history = data?.history ? new Set(data?.history) : new Set();
-    this.current = data?.current ?? '1.0.0';
+    this.current = data?.current ? data?.current : data?.history ? data?.history[0] : '1.0.0';
     this.future = data?.future ? new Set(data?.future) : new Set();
   }
 

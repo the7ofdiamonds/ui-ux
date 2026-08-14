@@ -79,6 +79,7 @@ export * from './model/SiteMap';
 export * from './model/Skill';
 export * from './model/Skills';
 export * from './model/SubIssueSummary';
+export * from './model/Tag';
 export * from './model/Task';
 export * from './model/Tasks';
 export * from './model/Taxonomy';
