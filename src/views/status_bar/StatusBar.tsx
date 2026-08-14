@@ -12,14 +12,14 @@ interface StatusBarProps {
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message }) => {
-  const [showModal, setShowModal] = useState<StatusBarVisibility>('hide');
+  const [showModal, setShowModal] = useState<StatusBarVisibility>(show);
 
   const minimize = () => {
-    if (showModal == 'show' && show == 'hide') {
+    if (showModal == 'show') {
       setShowModal('hide');
     }
 
-    if (showModal == 'hide' && show == 'show') {
+    if (showModal == 'hide') {
       setShowModal('show');
     }
   };

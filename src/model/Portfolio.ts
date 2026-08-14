@@ -66,8 +66,6 @@ export class Portfolio {
           skills?.types &&
           skills.types.size > 0
         ) {
-          console.log(taxonomy)
-          console.log(skills)
           skills.types.forEach((type) => {
             if (type.id === term) {
               updatedProjects.add(project);
