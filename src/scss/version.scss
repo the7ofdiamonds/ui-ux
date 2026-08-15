@@ -2,10 +2,15 @@
 
 .version {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: lowercase;
     opacity: 0.85;
     padding: 0 0.5em;
+}
+
+footer {
+    .version {
+        font-size: 0.75rem;
+    }
 }

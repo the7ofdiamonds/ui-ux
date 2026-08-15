@@ -5,19 +5,15 @@ import styles from './Footer.module.scss';
 interface FooterComponentProps {
   children?: React.ReactNode;
   name: string;
-  version?: string;
 }
 
-export const FooterComponent: React.FC<FooterComponentProps> = ({ children, name, version }) => {
+export const FooterComponent: React.FC<FooterComponentProps> = ({ children, name }) => {
   const year = new Date().getFullYear();
 
   return (
     <footer>
       {children}
       <span className={styles.legal}>© Copyright 2010 - {year} {name}. All Rights Reserved.</span>
-      {version && (
-        <span className={styles.version}>{version}</span>
-      )}
     </footer>
   );
 }

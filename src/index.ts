@@ -149,3 +149,5 @@ export * from './views/taxonomy/TaxList';
 export * from './views/taxonomy/TaxListIcon';
 
 export * from './views/NotFound';
+
+export * from './views/version/Version';
