@@ -25,9 +25,9 @@ export class ProjectURLs {
 
   constructor(data?: Partial<ProjectURLsObject>) {
     this.id = data?.id ? data.id : null;
-    this.homepage = this.getHomepage(data?.homepage?.url ?? '');
-    this.ios = this.getIos(data?.ios?.url ?? '');
-    this.android = this.getAndroid(data?.android?.url ?? '');
+    this.homepage = data?.homepage?.url ? this.getHomepage(data.homepage.url) : null;
+    this.ios = data?.ios?.url ? this.getIos(data.ios.url) : null;
+    this.android = data?.android?.url ? this.getAndroid(data.android.url) : null;
   }
 
   setID(id: string | number) {
@@ -80,7 +80,7 @@ export class ProjectURLs {
         description: 'Link to iOS application',
         image: new Image({
           id: name.toLowerCase(),
-          class_name: 'fa-brands fa-app-store-ios',
+          class_name: 'fa fa-brands fa-app-store-ios',
         }).toImageObject(),
       });
 
@@ -103,7 +103,7 @@ export class ProjectURLs {
       url: url,
       image: new Image({
         id: name.toLowerCase(),
-        class_name: 'fa-brands fa-app-store-ios',
+        class_name: 'fa fa-brands fa-app-store-ios',
       }).toImageObject(),
     });
   }
@@ -117,7 +117,7 @@ export class ProjectURLs {
         description: 'Link to Android application',
         image: new Image({
           id: name.toLowerCase(),
-          class_name: 'fa-brands fa-google-play',
+          class_name: 'fa fa-brands fa-google-play',
         }).toImageObject(),
       });
 
@@ -140,7 +140,7 @@ export class ProjectURLs {
       url: url,
       image: new Image({
         id: name.toLowerCase(),
-        class_name: 'fa-brands fa-google-play',
+        class_name: 'fa fa-brands fa-google-play',
       }).toImageObject(),
     });
   }

@@ -8,12 +8,12 @@ export type ProjectVersionsObject = {
 
 export class ProjectVersions {
   history: Set<string>;
-  current: string = '1.0.0';
+  current: string | null;
   future: Set<string>;
 
   constructor(data?: Partial<ProjectVersionsObject>) {
     this.history = data?.history ? new Set(data?.history) : new Set();
-    this.current = data?.current ? data?.current : data?.history ? data?.history[0] : '1.0.0';
+    this.current = data?.current ? data?.current : data?.history ? data?.history[0] : null;
     this.future = data?.future ? new Set(data?.future) : new Set();
   }
 
