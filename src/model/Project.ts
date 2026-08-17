@@ -198,6 +198,7 @@ export class Project {
       const process = new ProjectProcess();
       process.fromRepo(repo);
       this.setProcess(process);
+  
     }
 
     if (repo.contents?.problem?.downloadURL) {
@@ -223,6 +224,8 @@ export class Project {
       this.query = query;
       this.path = repo?.path ? `portfolio/${repo.path}` : null;
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {

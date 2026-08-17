@@ -139,6 +139,8 @@ export class ProjectProcess {
       delivery.fromRepo(repo);
       this.setDelivery(delivery)
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {

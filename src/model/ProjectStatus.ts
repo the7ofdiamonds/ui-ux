@@ -78,6 +78,8 @@ export class ProjectStatus {
     if (repo.commits) {
       this.setCommits(repo.commits);
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) { }

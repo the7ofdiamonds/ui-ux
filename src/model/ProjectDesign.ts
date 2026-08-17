@@ -85,6 +85,8 @@ export class ProjectDesign {
       checkList.setTasks(tasks);
       this.setCheckList(checkList);
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {

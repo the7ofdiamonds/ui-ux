@@ -71,7 +71,7 @@ export class ProjectSolution {
     this.actionWord = data?.action_word ? data.action_word : null;
 
     this.contentURL = data?.content_url
-      ? new ContentURL({ id: data.content_url })
+      ? new ContentURL({ url: data.content_url })
       : null;
     this.projectURLs =
       data?.project_urls &&
@@ -158,6 +158,8 @@ export class ProjectSolution {
       repo.issues.features.forEach((feature) =>
         this.features?.add(feature));
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {

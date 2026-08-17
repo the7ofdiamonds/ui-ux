@@ -143,6 +143,8 @@ export class ProjectDevelopment {
       checkList.setTasks(tasks);
       this.setCheckList(checkList);
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {

@@ -115,7 +115,7 @@ export class ProjectDetails {
       repo.contents.details.size > 0 &&
       repo.contents.details.downloadURL
     ) {
-      this.setContentURL(repo.contents.details.downloadURL);
+      this.setContentURL(new ContentURL({ url: repo.contents.details.downloadURL }));
     }
 
     if (
@@ -138,6 +138,8 @@ export class ProjectDetails {
     ) {
       this.setTeamList(repo.contributors.list);
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {

@@ -123,6 +123,8 @@ export class ProjectProblem {
     ) {
       this.setContentURL(new ContentURL({url: repo.contents.problem.downloadURL}));
     }
+
+    return this;
   }
 
   fromDocumentData(data: ProjectDataObject) {
