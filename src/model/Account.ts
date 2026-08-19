@@ -22,7 +22,7 @@ import type { AccountGQL, FromGitHubGraphQL } from './GitHubGQL';
 
 
 export type AccountObject = {
-  id: string | null;
+  id: string | number | null;
   created_at: string | null;
   updated_at: string | null;
   type?: string | null;
@@ -45,7 +45,7 @@ export type AccountObject = {
 };
 
 export interface iAccount {
-  id: string | null;
+  id: string | number | null;
   createdAt: string | null;
   updatedAt: string | null;
   type: string | null;

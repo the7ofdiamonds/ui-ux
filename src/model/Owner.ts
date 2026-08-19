@@ -1,4 +1,7 @@
 import type { GitLabOwnerObject } from './GitLabRepo';
+import { User } from './User';
+import { Organization } from './Organization';
+
 export type OwnerGQL = {
   id: string;
   __typename: string;
@@ -6,7 +9,7 @@ export type OwnerGQL = {
 };
 
 export interface OwnerObject {
-  id: string | null;
+  id: string | number | null;
   type: string | null;
   login: string | null;
   name: string | null;
@@ -18,7 +21,7 @@ export interface OwnerObject {
 }
 
 export class Owner {
-  id: string | null;
+  id: string | number | null;
   type: string | null;
   login: string | null;
   name: string | null;
@@ -52,6 +55,51 @@ export class Owner {
     this.login = owner?.username ? owner.username : null;
     this.avatarURL = owner?.avatar_url ? owner.avatar_url : null;
     this.url = owner?.web_url ? owner.web_url : null;
+  }
+
+  toAccount() {
+    try {
+      if (!this.type || (typeof this.type !== 'string')) {
+        throw new Error("Ttype is required and is expected to be a string")
+      }
+
+      if (this.type === 'User') {
+        const user = new User();
+
+        if (this.id) user.setID(this.id)
+
+        if (this.name) user.setName(this.name)
+
+        if (this.login) user.setLogin(this.login)
+
+        if (this.avatarURL) user.setAvatarURL(this.avatarURL)
+
+        // if (this.url) user.setWebsite(this.url)
+
+        return user;
+      }
+
+      if (this.type === 'Organization') {
+        const organization = new Organization();
+
+        if (this.id) organization.setID(this.id)
+
+        if (this.name) organization.setName(this.name)
+
+        if (this.login) organization.setLogin(this.login)
+
+        if (this.avatarURL) organization.setAvatarURL(this.avatarURL)
+
+        // if (this.url) organization.setWebsite(this.url)
+
+        return organization;
+      }
+
+      return null;
+    } catch (error) {
+      let err = error as Error;
+      console.error(err.message)
+    }
   }
 
   toOwnerObject(): OwnerObject {

@@ -32,7 +32,7 @@ import type { ServicesObject } from './Services';
 import { Services } from './Services';
 
 export interface OrganizationObject extends AccountObject {
-  id: string | null;
+  id: string | number | null;
   created_at: string | null;
   updated_at: string | null;
   avatar_url: string | null;
@@ -57,10 +57,10 @@ export interface OrganizationObject extends AccountObject {
 }
 
 export class Organization implements iAccount {
-  public id: string | null;
+  public id: string | number | null;
   public createdAt: string | null;
   public updatedAt: string | null;
-  public type: string = 'organization';
+  public type: string = 'Organization';
   public login: string | null;
   public name: string | null;
   public roles: Array<Role>;
@@ -131,8 +131,24 @@ export class Organization implements iAccount {
     this.services = data?.services ? new Services(data.services) : null;
   }
 
+  setID(id: string | number) {
+    this.id = id;
+  }
+
+  setName(name: string) {
+    this.name = name;
+  }
+
   setLogin(login: string) {
     this.login = login;
+  }
+
+  setAvatarURL(avatarURL: string) {
+    this.avatarURL = avatarURL;
+  }
+
+  setWebsite(website: string) {
+    this.website = website;
   }
 
   getRoles(roles: Array<RoleObject>): Array<Role> {

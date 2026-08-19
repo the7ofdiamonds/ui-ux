@@ -27,10 +27,10 @@ export type UserObject = AccountObject & {
 };
 
 export class User implements iAccount {
-  public id: string | null;
+  public id: string | number | null;
   public createdAt: string | null;
   public updatedAt: string | null;
-  public type: string = 'user';
+  public type: string = 'User';
   public login: string | null;
   public name: string | null;
   public roles: Array<Role>;
@@ -100,7 +100,7 @@ export class User implements iAccount {
     this.skills = data?.skills ? new Skills(data.skills) : new Skills();
   }
 
-  setID(id: string) {
+  setID(id: string | number) {
     this.id = id;
   }
 
@@ -112,8 +112,16 @@ export class User implements iAccount {
     this.title = title;
   }
 
+  setLogin(login: string) {
+    this.login = login;
+  }
+
   setAvatarURL(url: string) {
     this.avatarURL = url;
+  }
+
+  setWebsite(website: string) {
+    this.website = website;
   }
 
   setStory(url: string) {
