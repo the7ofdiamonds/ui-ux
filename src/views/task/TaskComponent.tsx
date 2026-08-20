@@ -5,7 +5,7 @@ import { Task } from '../../model/Task'
 import { TaskCheckbox } from './TaskCheckbox';
 import { TaskTitle } from './TaskTitle';
 
-import { TaskDescription } from './TaskDescription';
+import { TaskDescription } from './description/TaskDescription';
 
 import styles from './Task.module.scss';
 

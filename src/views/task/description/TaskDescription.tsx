@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 import { marked } from 'marked';
 
-import { Task } from '../../model/Task'
+import { Task } from '../../../model/Task'
 
-import styles from './Task.module.scss';
+import styles from './TaskDescription.module.scss';
 
 type TaskDescriptionProps = {
     task: Task;
