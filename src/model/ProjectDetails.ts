@@ -6,6 +6,8 @@ import { Repo } from '../model/Repo';
 import type { ProjectDataObject } from '../model/Project';
 import type { ContributorsObject } from './Contributors';
 import { Contributors } from './Contributors';
+import type { OwnerObject } from './Owner';
+import { Owner } from './Owner';
 
 export type ProjectDetailsObject = {
   id: string | number | null;
@@ -15,6 +17,7 @@ export type ProjectDetailsObject = {
   team_list: ContributorsObject | null;
   story: string | null;
   repo_size: String | null;
+  owner: Partial<OwnerObject> | null;
 };
 
 export type ProjectDetailsDataObject = {
@@ -24,6 +27,7 @@ export type ProjectDetailsDataObject = {
   content: string | null;
   team_list: Array<string> | null;
   story: string | null;
+  owner: Partial<OwnerObject> | null;
 };
 
 export class ProjectDetails {
@@ -34,6 +38,7 @@ export class ProjectDetails {
   content: ContentURL | null;
   story: ContentURL | null;
   clientID: string | null;
+  owner: Owner | null;
 
   constructor(data?: Partial<ProjectDetailsObject>) {
     this.id = data?.id ? data.id : null;
@@ -43,6 +48,7 @@ export class ProjectDetails {
     this.content = data?.content ? new ContentURL({ url: data.content }) : null;
     this.story = data?.story ? new ContentURL({ url: data.story }) : null;
     this.clientID = data?.client_id ? data.client_id : null;
+    this.owner = data?.owner ? new Owner(data.owner) : null;
   }
 
   setID(id: string | number) {
@@ -59,6 +65,10 @@ export class ProjectDetails {
 
   setContentURL(content: ContentURL) {
     this.content = content;
+  }
+
+  setOwner(owner: Owner) {
+    this.owner = owner;
   }
 
   getTeamList(data: Array<ContributorObject>) {
@@ -139,6 +149,8 @@ export class ProjectDetails {
       this.setTeamList(repo.contributors.list);
     }
 
+    if(repo?.owner) this.setOwner(repo?.owner)
+
     return this;
   }
 
@@ -163,6 +175,7 @@ export class ProjectDetails {
       team_list: this.teamList ? this.teamList.toContributorsObject() : null,
       story: this.story ? this.story.url : null,
       repo_size: this.repoSize ? this.repoSize : null,
+      owner: this.owner ? this.owner.toOwnerObject() : null
     };
   }
 
@@ -178,6 +191,7 @@ export class ProjectDetails {
           .filter((id): id is string => id !== null)
         : null,
       story: this.story ? this.story.url : null,
+      owner: this.owner ? this.owner.toOwnerObject() : null
     };
   }
 }

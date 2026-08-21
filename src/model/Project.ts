@@ -27,8 +27,6 @@ import {
   ProjectDetails
 } from './ProjectDetails';
 import { Repo } from './Repo';
-import type { OwnerObject } from './Owner';
-import { Owner } from './Owner';
 import { ProjectQuery, type ProjectQueryObject } from './ProjectQuery';
 
 export type ProjectObject = {
@@ -43,7 +41,6 @@ export type ProjectObject = {
   solution: Partial<ProjectSolutionObject> | null;
   process: Partial<ProjectProcessObject> | null;
   problem: Partial<ProjectProblemObject> | null;
-  owner: Partial<OwnerObject> | null;
   details: Partial<ProjectDetailsObject> | null;
 };
 
@@ -55,7 +52,6 @@ export type ProjectDataObject = {
   solution: Partial<ProjectSolutionDataObject> | null;
   process: Partial<ProjectProcessDataObject> | null;
   problem: Partial<ProjectProblemDataObject> | null;
-  owner: Partial<OwnerObject> | null;
   details: Partial<ProjectDetailsDataObject> | null;
 };
 
@@ -71,7 +67,6 @@ export class Project {
   solution: ProjectSolution | null;
   process: ProjectProcess | null;
   problem: ProjectProblem | null;
-  owner: Owner | null;
   details: ProjectDetails | null;
 
   constructor(data?: Partial<ProjectObject>) {
@@ -92,7 +87,6 @@ export class Project {
       : null;
     this.process = data?.process ? new ProjectProcess({ ...data.process, id: data?.id }) : null;
     this.problem = data?.problem ? new ProjectProblem({ ...data.problem, id: data?.id }) : null;
-    this.owner = data?.owner ? new Owner(data.owner) : null;
     this.details = data?.details ? new ProjectDetails({ ...data.details, id: data?.id }) : null;
   }
 
@@ -132,10 +126,6 @@ export class Project {
     this.problem = problem;
   }
 
-  setOwner(owner: Owner) {
-    this.owner = owner;
-  }
-
   setDetails(details: ProjectDetails) {
     this.details = details;
   }
@@ -169,10 +159,6 @@ export class Project {
       : null;
     this.description = repo.description;
 
-    if (repo.owner) {
-      this.setOwner(repo.owner);
-    }
-
     if (
       repo.contents?.solution?.downloadURL ||
       repo?.homepage ||
@@ -198,7 +184,7 @@ export class Project {
       const process = new ProjectProcess();
       process.fromRepo(repo);
       this.setProcess(process);
-  
+
     }
 
     if (repo.contents?.problem?.downloadURL) {
@@ -211,7 +197,8 @@ export class Project {
       repo.contents?.details?.downloadURL ||
       repo.contents?.story?.downloadURL ||
       repo.size ||
-      repo.contributors
+      repo.contributors ||
+      repo.owner
     ) {
       const details = new ProjectDetails();
       details.fromRepo(repo);
@@ -266,7 +253,6 @@ export class Project {
       process: this.process ? this.process.toProjectProcessObject() : null,
       problem: this.problem ? this.problem.toProjectProblemObject() : null,
       details: this.details ? this.details.toDetailsObject() : null,
-      owner: this.owner ? this.owner.toOwnerObject() : null,
       query: this.query ? this.query.toProjectQueryObject() : null,
       path: this.path,
     };
@@ -283,8 +269,7 @@ export class Project {
         : null,
       process: this.process ? this.process.toProjectProcessDataObject() : null,
       problem: this.problem ? this.problem.toProjectProblemDataObject() : null,
-      details: this.details ? this.details.toDetailsDataObject() : null,
-      owner: this.owner ? this.owner.toOwnerObject() : null,
+      details: this.details ? this.details.toDetailsDataObject() : null
     };
   }
 }
