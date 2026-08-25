@@ -24,24 +24,6 @@
         display: flex;
         justify-content: end;
         gap: 0.5rem;
-
-        button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: unset;
-          background-color: unset;
-          box-shadow: unset;
-          margin-right: -1rem;
-
-          i {
-            background-color: white;
-            color: black;
-            border-radius: 50%;
-            font-size: 1.85rem;
-            box-shadow: var(--box-shadow);
-          }
-        }
       }
     }
   }

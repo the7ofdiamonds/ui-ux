@@ -40,6 +40,7 @@ export interface OrganizationObject extends AccountObject {
   description: string | null;
   name: string | null;
   company: string | null;
+  founded_on: string | null;
   blog: string | null;
   location: string | null;
   email: string | null;
@@ -68,6 +69,7 @@ export class Organization implements iAccount {
   public bio: string | null;
   public email: string | null;
   public website: string | null;
+  public startingYear: number | null;
   public phone: string | null;
   public contactMethods: ContactMethods | null;
   public location: string | null;
@@ -79,6 +81,7 @@ export class Organization implements iAccount {
   public skills: Skills;
   public portfolio: Portfolio | null;
   public company: string | null;
+  public founded: string | null;
   public description: string | null;
   public blog: string | null;
   public team: Array<User> | null;
@@ -95,10 +98,12 @@ export class Organization implements iAccount {
     this.description = data?.description ? data.description : null;
     this.name = data?.name ? data.name : null;
     this.company = data?.company ? data.company : null;
+    this.founded = data?.founded_on ? data?.founded_on : null;
     this.blog = data?.blog ? data.blog : null;
     this.location = data?.location ? data.location : null;
     this.email = data?.email ? data.email : null;
     this.website = data?.website ? data?.website : null;
+    this.startingYear = data?.starting_year ? data.starting_year : null;
     this.phone = data?.phone ? data.phone : null;
     this.contactMethods = data?.contact_methods
       ? new ContactMethods(data.contact_methods)
@@ -185,8 +190,9 @@ export class Organization implements iAccount {
     return new ContactMethods();
   }
 
-  setContactMethods(contacts: Record<string, any>) {
-    this.contactMethods = new ContactMethods(contacts);
+  setContactMethods(contacts: ContactMethods) {
+    this.contactMethods = contacts;
+    this.email = contacts?.email?.value ? contacts.email.value : null;
   }
 
   setOrganizationsURL(url: string) {
@@ -201,8 +207,8 @@ export class Organization implements iAccount {
     return new Organizations();
   }
 
-  setOrganizations(organizations: Array<OrganizationObject>) {
-    this.organizations = new Organizations(organizations);
+  setOrganizations(organizations: Organizations) {
+    this.organizations = organizations;
   }
 
   setReposURL(url: string) {
@@ -249,7 +255,11 @@ export class Organization implements iAccount {
     this.repoQueries = repoQueries;
   }
 
-  setPortfolio(portfolio: Portfolio | null) {
+  getPortfolio(portfolioObject: PortfolioObject) {
+    return new Portfolio(portfolioObject);
+  }
+
+  setPortfolio(portfolio: Portfolio) {
     this.portfolio = portfolio;
   }
 
@@ -312,13 +322,13 @@ export class Organization implements iAccount {
 
   fromJSON(json: Record<string, any>) {
     this.id = '0';
-    this.login = json.login ? json.login : null;
-    this.avatarURL = json.avatar_url ? json.avatar_url : null;
-    this.name = json.name ? json.name : null;
-    this.email =
-      json.contact_methods?.email && json.contact_methods.email !== ''
-        ? json.contact_methods.email
-        : null;
+    this.company = json?.company ? json.company : null;
+    this.login = json?.login ? json.login : null;
+    this.avatarURL = json?.avatar_url ? json.avatar_url : null;
+    this.name = json?.name ? json.name : null;
+    this.email = json?.contact_methods?.email
+      ? json.contact_methods.email
+      : null;
     this.phone = json.contact_methods?.phone
       ? json.contact_methods.phone
       : null;
@@ -344,6 +354,7 @@ export class Organization implements iAccount {
     if (!org) {
       return;
     }
+
     this.id = org.id;
     this.login = org.login;
     this.name = org.name;
@@ -378,6 +389,9 @@ export class Organization implements iAccount {
   }
 
   fromGitHub(data: GitHubUserAccount) {
+    if (!data) return;
+
+    console.log(data)
     this.id = data?.login ? data?.login : this.id;
     this.createdAt = data?.created_at ? data?.created_at : this.createdAt;
     this.updatedAt = data?.updated_at ? data?.updated_at : this.updatedAt;
@@ -410,10 +424,12 @@ export class Organization implements iAccount {
       bio: this.bio,
       name: this.name,
       company: this.company,
+      founded_on: this.founded,
       blog: this.blog,
       location: this.location,
       email: this.email,
       website: this.website,
+      starting_year: this.startingYear,
       phone: this.phone,
       contact_methods: this.contactMethods
         ? this.contactMethods.toContactMethodsObject()

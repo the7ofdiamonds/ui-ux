@@ -1,0 +1,42 @@
+.exit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: unset;
+    background-color: unset;
+    box-shadow: unset;
+    margin-right: -1rem;
+
+    i {
+        padding-left: 0;
+        background-color: white;
+        color: var(--color-error, black);
+        border-radius: 50%;
+        font-size: 1.85rem;
+        box-shadow: var(--box-shadow);
+    }
+
+    &.info {
+        i {
+            color: var(--color-info);
+        }
+    }
+
+    &.success {
+        i {
+            color: var(--color-success);
+        }
+    }
+
+    &.caution {
+        i {
+            color: var(--color-caution);
+        }
+    }
+
+    &.error {
+        i {
+            color: var(--color-error);
+        }
+    }
+}

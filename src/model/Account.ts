@@ -33,6 +33,7 @@ export type AccountObject = {
   bio: string | null;
   email: string | null;
   website: string | null;
+  starting_year: number | null;
   contact_methods: ContactMethodsObject | null;
   location: string | null;
   organizations_url: string | null;
@@ -56,6 +57,7 @@ export interface iAccount {
   bio: string | null;
   email: string | null;
   website: string | null;
+  startingYear: number | null;
   contactMethods: ContactMethods | null;
   location: string | null;
   organizationsURL: string | null;
@@ -84,7 +86,7 @@ export interface iAccount {
 }
 
 export class Account implements iAccount {
-  public id: string | null;
+  public id: string | number | null;
   public createdAt: string | null;
   public updatedAt: string | null;
   public type: string | null;
@@ -95,6 +97,7 @@ export class Account implements iAccount {
   public bio: string | null;
   public email: string | null;
   public website: string | null;
+  public startingYear: number | null;
   public contactMethods: ContactMethods | null = null;
   public location: string | null;
   public organizationsURL: string | null;
@@ -118,6 +121,7 @@ export class Account implements iAccount {
     this.location = data?.location ? data.location : null;
     this.email = data?.email ? data.email : null;
     this.website = data?.website ? data.website : null;
+    this.startingYear = data?.starting_year ? data.starting_year : null;
     this.contactMethods = data ? this.getContactMethods(data) : null;
     this.organizationsURL = data?.organizations_url
       ? data.organizations_url

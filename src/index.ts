@@ -86,6 +86,8 @@ export * from './model/Taxonomy';
 export * from './model/User';
 export * from './model/Version';
 
+export * from './model/Display';
+
 export * from './utils/Headers';
 export * from './utils/Location';
 export * from './utils/String';
@@ -95,10 +97,13 @@ export * from './views/badge/Badge';
 export * from './views/buttons/Button';
 export * from './views/buttons/ButtonImage';
 export * from './views/buttons/ButtonSubmit';
+export * from './views/buttons/exit/ButtonExit';
 
 export * from './views/checklist/CheckListComponent';
 export * from './views/colors/Colors';
 export * from './views/content/ContentComponent';
+export * from './views/copyright/CopyrightComponent';
+
 export * from './views/description/DescriptionComponent';
 export * from './views/document/DocumentComponent';
 

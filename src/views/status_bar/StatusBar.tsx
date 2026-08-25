@@ -1,42 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import styles from './StatusBar.module.scss';
 
-export type StatusBarVisibility = 'show' | 'hide';
-export type MessageType = 'info' | 'caution' | 'error' | 'success';
+import type { MessageType } from '../../model/Display';
 
 interface StatusBarProps {
-  show: StatusBarVisibility;
-  messageType: MessageType;
+  messageType: MessageType | null;
   message: string | null;
 }
 
-export const StatusBar: React.FC<StatusBarProps> = ({ show, messageType, message }) => {
-  const [showModal, setShowModal] = useState<StatusBarVisibility>(show);
-
-  const minimize = () => {
-    if (showModal == 'show') {
-      setShowModal('hide');
-    }
-
-    if (showModal == 'hide') {
-      setShowModal('show');
-    }
-  };
-
+export const StatusBar: React.FC<StatusBarProps> = ({ messageType, message }) => {
   return (
-    message && messageType && (<span className={`${styles['modal-overlay']} ${(showModal === 'show' || show === 'show') ? styles['show'] : styles['hide']}`}>
-      <div className={`${(showModal === 'show' || show === 'show') ? styles.show : styles.hide} ${styles.status}`}>
-        <div className={styles.close}>
-          <button onClick={minimize}>
-            <i className="fa-solid fa-circle-xmark"></i>
-          </button>
-        </div>
-
-        <div className={`${styles['status-bar']} ${styles.card} ${styles[messageType]}`} id="status_bar">
-          <h4>{message}</h4>
-        </div>
-      </div>
-    </span>)
+    message && messageType && (
+      <div className={`${styles['status-bar']} ${styles.card} ${styles[messageType]}`} id="status_bar">
+        <h4>{message}</h4>
+      </div>)
   );
 }

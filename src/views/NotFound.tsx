@@ -9,14 +9,20 @@ interface NotFoundProps {
 }
 
 export const NotFound: React.FC<NotFoundProps> = ({ title, children }) => {
+  const defaultTitle = "Page Not Found";
+
   useEffect(() => {
-    document.title = title;
+    if (title) {
+      document.title = title;
+    } else {
+      document.title = defaultTitle;
+    }
   }, []);
 
   return (
     <Section>
       <Main>
-        <h2>{title}</h2>
+        <h2>{title ? title : defaultTitle}</h2>
         {children}
       </Main>
     </Section>

@@ -16,6 +16,7 @@ export type UserObject = AccountObject & {
   username: string | null;
   first_name: string | null;
   last_name: string | null;
+  birthdate: string | null;
   title: string | null;
   bio: string | null;
   website: string | null;
@@ -34,6 +35,7 @@ export class User implements iAccount {
   public login: string | null;
   public name: string | null;
   public roles: Array<Role>;
+  public birthdate: string | null;
   public avatarURL: string | null;
   public bio: string | null;
   public email: string | null;
@@ -51,6 +53,7 @@ export class User implements iAccount {
   public lastName: string | null;
   public title: string | null;
   public website: string | null;
+  public startingYear: number | null;
   public story: string | null;
   public nickname: string | null;
   public nicename: string | null;
@@ -66,12 +69,14 @@ export class User implements iAccount {
     this.firstName = data?.first_name ? data.first_name : null;
     this.lastName = data?.last_name ? data.last_name : null;
     this.name = data?.name ? data.name : null;
+    this.birthdate = data?.birthdate ? data.birthdate : null;
     this.title = data?.title ? data.title : null;
     this.bio = data?.bio ? data.bio : null;
     this.email = data?.email ? data.email : null;
     this.phone = data?.phone ? data.phone : null;
     this.resume = data?.resume ? data.resume : null;
     this.website = data?.website ? data.website : null;
+    this.startingYear = data?.starting_year ? data.starting_year : null;
     this.story =
       data?.story && typeof data.story === 'string' ? data.story : null;
     this.nickname = data?.nickname ? data.nickname : null;
@@ -255,28 +260,28 @@ export class User implements iAccount {
   }
 
   fromGitHubGraphQL(userGQL: UserGQL) {
-    if (!userGQL) return;
+    const user = userGQL ? userGQL : null;
 
-    const user = userGQL?.viewer;
+    if (!user) return;
 
-    this.id = user.id ? user.id : null;
-    this.avatarURL = user.avatarUrl ? user.avatarUrl : null;
-    this.name = user.name ? user.name : null;
-    this.bio = user.bio ? user.bio : null;
-    this.email = user.email ? user.email : null;
-    this.login = user.login ? user.login : null;
+    this.id = user?.id ? user.id : null;
+    this.avatarURL = user?.avatarUrl ? user.avatarUrl : null;
+    this.name = user?.name ? user.name : null;
+    this.bio = user?.bio ? user.bio : null;
+    this.email = user?.email ? user.email : null;
+    this.login = user?.login ? user.login : null;
 
     if (
-      user.organizations &&
+      user?.organizations &&
       Array.isArray(user.organizations.nodes) &&
-      user.organizations.nodes.length > 0
+      user?.organizations.nodes.length > 0
     ) {
       if (!this.organizations) this.organizations = new Organizations();
       this.organizations.fromGitHubGraphQL(user.organizations.nodes);
     }
 
     if (
-      user.repositories &&
+      user?.repositories &&
       Array.isArray(user.repositories.nodes) &&
       user.repositories.nodes.length > 0
     ) {
@@ -364,6 +369,7 @@ export class User implements iAccount {
       roles: this.roles,
       first_name: this.firstName,
       last_name: this.lastName,
+      birthdate: this.birthdate,
       avatar_url: this.avatarURL,
       title: this.title,
       location: this.location,
@@ -372,6 +378,7 @@ export class User implements iAccount {
       phone: this.phone,
       resume: this.resume,
       website: this.website,
+      starting_year: this.startingYear,
       story: this.story,
       login: this.login,
       type: this.type,
