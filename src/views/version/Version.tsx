@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Version.module.scss';
+import styles from './Version.module.scss'
 
 interface VersionComponentProps {
     version?: string;

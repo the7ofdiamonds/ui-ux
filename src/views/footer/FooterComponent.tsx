@@ -8,7 +8,7 @@ interface FooterComponentProps {
 
 export const FooterComponent: React.FC<FooterComponentProps> = ({ children }) => {
   return (
-    <footer>
+    <footer className={styles.footer}>
       {children}
     </footer>
   );
