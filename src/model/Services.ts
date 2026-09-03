@@ -59,7 +59,7 @@ export class Services extends Offerings {
     if (offeringList.length <= 0) return [];
 
     const list: Array<Service> = offeringList
-      .filter((offering): offering is Offering => offering?.type === 'product')
+      .filter((offering): offering is Offering => offering?.type === 'service')
       .map((product: Offering) => {
         const prod = new Service();
         prod.fromOffering(product);
