@@ -1,5 +1,8 @@
 import type { Offered, OfferingObject } from './Offering';
+import type { StripeProductObject } from './Stripe';
+
 import { Offering } from './Offering';
+import { StripeProduct } from './Stripe';
 
 export type ProductObject = OfferingObject & {};
 // Add details from project details and etc.
@@ -8,6 +11,23 @@ export class Product extends Offering {
 
   constructor(product?: Partial<ProductObject>) {
     super({ ...product, type: 'product' });
+  }
+
+  override fromStripeProductObject(product: StripeProductObject | undefined | null) {
+    if (!product) return null;
+    super.fromStripeProductObject(product);
+    return this;
+  }
+
+  override fromStripeProduct(product: StripeProduct) {
+    if (!product) return null;
+    super.fromStripeProduct(product);
+    return this;
+  }
+
+  override fromOffering(offering: Offering): this {
+    super.fromOffering(offering);
+    return this;
   }
 
   toProductObject(): ProductObject {

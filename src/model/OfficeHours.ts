@@ -1,22 +1,44 @@
 import type { HoursObject } from "./Hours";
 import { Hours } from "./Hours";
 
-export class OfficeHours {
-    sun: Hours;
-    mon: Hours;
-    tue: Hours;
-    wed: Hours;
-    thu: Hours;
-    fri: Hours;
-    sat: Hours;
+export type OfficeHoursObject = {
+    sun: HoursObject | null;
+    mon: HoursObject | null;
+    tue: HoursObject | null;
+    wed: HoursObject | null;
+    thu: HoursObject | null;
+    fri: HoursObject | null;
+    sat: HoursObject | null;
+}
 
-    constructor(availability: Array<HoursObject>) {
-        this.sun = availability[0].day_of_week === 'sun' ? new Hours(availability[0]) : new Hours({ "open": false });
-        this.mon = availability[1].day_of_week === 'mon' ? new Hours(availability[1]) : new Hours({ "open": false });
-        this.tue = availability[2].day_of_week === 'tue' ? new Hours(availability[2]) : new Hours({ "open": false });
-        this.wed = availability[3].day_of_week === 'wed' ? new Hours(availability[3]) : new Hours({ "open": false });
-        this.thu = availability[4].day_of_week === 'thu' ? new Hours(availability[4]) : new Hours({ "open": false });
-        this.fri = availability[5].day_of_week === 'fri' ? new Hours(availability[5]) : new Hours({ "open": false });
-        this.sat = availability[6].day_of_week === 'sat' ? new Hours(availability[6]) : new Hours({ "open": false });
+export class OfficeHours {
+    sun: Hours | null;
+    mon: Hours | null;
+    tue: Hours | null;
+    wed: Hours | null;
+    thu: Hours | null;
+    fri: Hours | null;
+    sat: Hours | null;
+
+    constructor(availability: OfficeHoursObject) {
+        this.sun = availability.sun ? new Hours(availability.sun) : new Hours({ "open": false });
+        this.mon = availability.mon ? new Hours(availability.mon) : new Hours({ "open": false });
+        this.tue = availability.tue ? new Hours(availability.tue) : new Hours({ "open": false });
+        this.wed = availability.wed ? new Hours(availability.wed) : new Hours({ "open": false });
+        this.thu = availability.thu ? new Hours(availability.thu) : new Hours({ "open": false });
+        this.fri = availability.fri ? new Hours(availability.fri) : new Hours({ "open": false });
+        this.sat = availability.sat ? new Hours(availability.sat) : new Hours({ "open": false });
+    }
+
+    toOfficeHoursObject(): OfficeHoursObject {
+        return {
+            "sun": this.sun ? this.sun.toHoursObject() : null,
+            "mon": this.mon ? this.mon.toHoursObject() : null,
+            "tue": this.tue ? this.tue.toHoursObject() : null,
+            "wed": this.wed ? this.wed.toHoursObject() : null,
+            "thu": this.thu ? this.thu.toHoursObject() : null,
+            "fri": this.fri ? this.fri.toHoursObject() : null,
+            "sat": this.sat ? this.sat.toHoursObject() : null
+        }
     }
 }

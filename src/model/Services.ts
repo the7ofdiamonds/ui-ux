@@ -1,30 +1,24 @@
-import type { ImageObject } from './Image';
-import { Image } from './Image';
-import { Portfolio } from './Portfolio';
+import type { OfferingsObject } from './Offerings';
 import type { ServiceObject } from './Service';
+import type { StripeProductsResponse } from './Stripe';
+
+import { Image } from './Image';
+import { Offering } from './Offering';
+import { Offerings } from './Offerings';
+import { Portfolio } from './Portfolio';
 import { Service } from './Service';
 
-export type ServicesObject = {
-  id: string | number | null;
-  title: string | null;
-  description: string | null;
-  button_image: ImageObject | null;
-  button_link: string | null;
-  button_text: string | null;
-  list: ServiceObject[] | null;
-};
+export type ServicesObject = OfferingsObject<ServiceObject> & {};
 
-export class Services {
-  public id: string | number | null;
+export class Services extends Offerings {
   public title: string = 'services';
-  public description: string | null;
   public buttonImage: Image = new Image({ class_name: 'fas fa-power-off' });
   public buttonLink: string = '/services';
   public buttonText: string | 'start';
-  public list: Service[];
+  public override list: Service[];
 
   constructor(services?: ServicesObject) {
-    this.id = services?.id ? services.id : null;
+    super(services)
     this.title = services?.title ? services.title : 'services';
     this.description = services?.description ? services.description : null;
     this.buttonImage = services?.button_image
@@ -34,13 +28,18 @@ export class Services {
       ? services.button_link
       : '/services';
     this.buttonText = services?.button_text ? services.button_text : 'start';
-    this.list = services?.list
-      ? services.list.map((service) => new Service(service))
-      : [];
+    this.list = this.fromArrayServiceObject(services?.list);
   }
 
   setList(services: Array<Service>) {
     this.list = services;
+  }
+
+  filterService(id: string | number | null): Service | null {
+    if (!id) return null;
+    return (
+      this.list.find((service) => String(service.id) === String(id)) ?? null
+    );
   }
 
   fromPortfolio(portfolio: Portfolio) {
@@ -55,11 +54,39 @@ export class Services {
     }
   }
 
-  filterService(id: string | number | null): Service | null {
-    if (!id) return null;
-    return (
-      this.list.find((service) => String(service.id) === String(id)) ?? null
-    );
+  fromStripeProductsResponse(response: StripeProductsResponse | undefined | null) {
+    const offeringList = super.fromStripeProductsResponse(response);
+    if (offeringList.length <= 0) return [];
+
+    const list: Array<Service> = offeringList
+      .filter((offering): offering is Offering => offering?.type === 'product')
+      .map((product: Offering) => {
+        const prod = new Service();
+        prod.fromOffering(product);
+        return prod;
+      });
+
+    this.setList(list);
+
+    return list;
+  }
+
+  fromArrayServiceObject(data: Array<ServiceObject> | undefined | null): Array<Service> {
+    if (!data || !Array.isArray(data) || data.length <= 0) return [];
+
+    const list: Array<Service> = data
+      .filter((offering): offering is ServiceObject => offering?.type === 'service')
+      .map((service) => new Service(service));
+
+    this.setList(list);
+
+    return list;
+  }
+
+  listToArrayServiceObject(list: Array<Service> | null): Array<ServiceObject> | null {
+    if (!list || !Array.isArray(list) || list.length === 0) return null;
+    return list.filter((service): service is Service => service instanceof Service)
+      .map((service) => service.toServiceObject());
   }
 
   toServicesObject(): ServicesObject {

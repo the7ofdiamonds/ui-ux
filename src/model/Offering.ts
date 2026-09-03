@@ -1,15 +1,18 @@
-import { getActionWord } from './Actions';
 import type { FeaturesObject } from './Features';
-import { Features } from './Features';
 import type { GalleryObject } from './Gallery';
-import { Gallery } from './Gallery';
 import type { ImageObject } from './Image';
-import { Image } from './Image';
 import type { PricingObject } from './Pricing';
+import type { ProjectDetailsObject } from './ProjectDetails';
+import type { StripeProductObject } from './Stripe';
+
+import { getActionWord } from './Actions';
+import { Features } from './Features';
+import { Gallery } from './Gallery';
+import { Image } from './Image';
 import { Pricing } from './Pricing';
 import { Project } from './Project';
-import type { ProjectDetailsObject } from './ProjectDetails';
 import { ProjectDetails } from './ProjectDetails';
+import { StripeProduct } from './Stripe';
 
 export type Offered = 'service' | 'product' | false;
 
@@ -119,6 +122,54 @@ export class Offering {
     if (project?.details) {
       this.details = project.details;
     }
+  }
+
+  getGalleryFromStripeProductImages(images: Array<string> | null | undefined): Gallery | null {
+    if (!images || !Array.isArray(images) || images.length === 0) return null;
+    const gallery = new Gallery();
+    const previews: Array<Image> = images.map((imageURL) => {
+      return new Image({ url: imageURL });
+    });
+    gallery.setPreviews(previews)
+    return gallery;
+  }
+
+  fromStripeProductObject(product: StripeProductObject | undefined | null) {
+    if (!product) return null;
+
+    this.id = product?.id ? product.id : null;
+    this.name = product?.name ? product.name : null;
+    this.description = product?.description ? product.description : null;
+
+    return this;
+  }
+
+  fromStripeProduct(stripeProduct: StripeProduct): Offering | null {
+    this.id = stripeProduct?.id ? stripeProduct.id : null;
+    this.type = stripeProduct?.type === 'good' ? 'product' : stripeProduct?.type === 'service' ? 'service' : false;
+    // this.category = stripeProduct ? ? stripeProduct : null;
+    // this.title = stripeProduct ? ? stripeProduct : null;
+    this.name = stripeProduct?.name ? stripeProduct.name : null;
+    // this.subtitle = stripeProduct ? ? stripeProduct : null;
+    // this.promotionalText = stripeProduct ? ? stripeProduct : null;
+    this.description = stripeProduct?.description ? stripeProduct.description : null;
+    // this.features = stripeProduct ? ? stripeProduct : null;
+    // this.details = stripeProduct ? ? stripeProduct : null;
+    // this.contentURL = stripeProduct ? ? stripeProduct : null;
+    // this.content = stripeProduct ? ? stripeProduct : null;
+    // this.pricing = stripeProduct ? ? stripeProduct : null;
+    // this.icon = stripeProduct ? ? stripeProduct : null;
+    this.gallery = this.getGalleryFromStripeProductImages(stripeProduct?.images);
+    // this.buttonIcon = stripeProduct ? ? stripeProduct : null;
+    this.url = stripeProduct?.url ? stripeProduct.url : null;
+    // this.actionWord = stripeProduct ? ? stripeProduct : null;
+
+    return this;
+  }
+
+  fromOffering(offering: Offering): this {
+    Object.assign(this, offering);
+    return this;
   }
 
   toOfferingObject(): OfferingObject {

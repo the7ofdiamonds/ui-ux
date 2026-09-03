@@ -14,6 +14,8 @@ import {
   GitHubRepoQuery
 } from '../model/GitHubRepoQuery';
 import { Organizations } from '../model/Organizations';
+import type { OfficeHoursObject } from '../model/OfficeHours';
+import { OfficeHours } from '../model/OfficeHours';
 import type { PortfolioObject } from '../model/Portfolio';
 import { Portfolio } from '../model/Portfolio';
 import type { RoleObject } from './Role';
@@ -52,7 +54,7 @@ export interface OrganizationObject extends AccountObject {
   repo_queries: Array<GitHubRepoQueryObject> | null;
   portfolio: PortfolioObject | null;
   team: Array<UserObject> | null;
-  office_hours: Array<Hours> | null;
+  office_hours: OfficeHoursObject | null;
   products: ProductsObject | null;
   services: ServicesObject | null;
 }
@@ -85,7 +87,7 @@ export class Organization implements iAccount {
   public description: string | null;
   public blog: string | null;
   public team: Array<User> | null;
-  public officeHours: Array<Hours> | null;
+  public officeHours: OfficeHours | null;
   public products: Products | null;
   public services: Services | null;
 
@@ -131,7 +133,7 @@ export class Organization implements iAccount {
       ? new Organizations(data.organizations)
       : null;
 
-    this.officeHours = data?.office_hours ? data.office_hours : null;
+    this.officeHours = data?.office_hours ? new OfficeHours(data.office_hours) : null;
     this.products = data?.products ? new Products(data.products) : null;
     this.services = data?.services ? new Services(data.services) : null;
   }
@@ -267,7 +269,7 @@ export class Organization implements iAccount {
     this.skills = skills;
   }
 
-  setOfficeHours(officeHours: Array<Hours>) {
+  setOfficeHours(officeHours: OfficeHours) {
     this.officeHours = officeHours;
   }
 
@@ -448,7 +450,7 @@ export class Organization implements iAccount {
       organizations_url: null,
       organizations: null,
       team: this.team ? this.team.map((user) => user.toUserObject()) : null,
-      office_hours: this.officeHours,
+      office_hours: this.officeHours ? this.officeHours.toOfficeHoursObject(): null,
       products: this.products ? this.products.toProductsObject() : null,
       services: this.services ? this.services.toServicesObject() : null,
     };

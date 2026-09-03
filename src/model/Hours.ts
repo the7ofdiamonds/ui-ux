@@ -18,16 +18,6 @@ enum DayOfWeekFull {
   SAT = "saturday"
 }
 
-enum DayOfWeekFullCapital {
-  SUN = "Sunday",
-  MON = "Monday",
-  TUE = "Tuesday",
-  WED = "Wednesday",
-  THU = "Thursday",
-  FRI = "Friday",
-  SAT = "Saturday"
-}
-
 export type HoursObject = {
   start: string | null;
   end: string | null;
@@ -38,7 +28,7 @@ export type HoursObject = {
 export class Hours {
   start: string | null;
   end: string | null;
-  dayofweek: DayOfWeek | null;
+  dayofweek: DayOfWeekFull | null;
   open: boolean = true;
 
   constructor(hours: Partial<HoursObject>) {
@@ -52,23 +42,23 @@ export class Hours {
     this.open = open;
   }
 
-  getDayofweek(dayofweek: string | null | undefined): DayOfWeek | null {
+  getDayofweek(dayofweek: string | null | undefined): DayOfWeekFull | null {
     if (!dayofweek) return null;
 
-    if (dayofweek === 'sun') return DayOfWeek.SUN;
-    if (dayofweek === 'mon') return DayOfWeek.MON;
-    if (dayofweek === 'tue') return DayOfWeek.TUE;
-    if (dayofweek === 'wed') return DayOfWeek.WED;
-    if (dayofweek === 'thu') return DayOfWeek.THU;
-    if (dayofweek === 'fri') return DayOfWeek.FRI;
-    if (dayofweek === 'sat') return DayOfWeek.SAT;
+    if (dayofweek === DayOfWeek.SUN.toString() || dayofweek === DayOfWeekFull.SUN.toString()) return DayOfWeekFull.SUN;
+    if (dayofweek === DayOfWeek.MON.toString() || dayofweek === DayOfWeekFull.MON.toString()) return DayOfWeekFull.MON;
+    if (dayofweek === DayOfWeek.TUE.toString() || dayofweek === DayOfWeekFull.TUE.toString()) return DayOfWeekFull.TUE;
+    if (dayofweek === DayOfWeek.WED.toString() || dayofweek === DayOfWeekFull.WED.toString()) return DayOfWeekFull.WED;
+    if (dayofweek === DayOfWeek.THU.toString() || dayofweek === DayOfWeekFull.THU.toString()) return DayOfWeekFull.THU;
+    if (dayofweek === DayOfWeek.FRI.toString() || dayofweek === DayOfWeekFull.FRI.toString()) return DayOfWeekFull.FRI;
+    if (dayofweek === DayOfWeek.SAT.toString() || dayofweek === DayOfWeekFull.SAT.toString()) return DayOfWeekFull.SAT;
 
     return null;
   }
 
-  setDayofweek(dayofweek: DayOfWeek) {
-    this.dayofweek = dayofweek;
-  }
+  // setDayofweek(dayofweek: DayOfWeek) {
+  //   this.dayofweek = dayofweek;
+  // }
 
   setStart(start: string) {
     this.start = start;
@@ -76,5 +66,14 @@ export class Hours {
 
   setEnd(end: string) {
     this.end = end;
+  }
+
+  toHoursObject(): HoursObject {
+    return {
+      start: this.start,
+      end: this.end,
+      day_of_week: this.dayofweek ? this.dayofweek.toString() : null,
+      open: this.open ? this.open : false
+    }
   }
 }

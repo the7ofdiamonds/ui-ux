@@ -31,6 +31,17 @@ export type StripeProductObject = {
     url?: string | null;
 }
 
+export type StripeProductsResponse = {
+    data?: Array<StripeProductObject> | null;
+    has_more?: boolean | null;
+    object?: string | null;
+    url?: string | null;
+    error?: {
+        message?: string | null;
+        type?: string | null;
+    }
+};
+
 export class StripeProduct {
     id: string | null;
     object: string = 'product';
