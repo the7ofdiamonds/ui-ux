@@ -1,4 +1,4 @@
-export type Backend = 'Custom' | 'Firebase' | 'Stripe';
+export type Backend = 'Custom' | 'AWS' | 'Firebase' | 'Stripe';
 
 export type APIPANDSObject = {
     backend: Backend | null;
@@ -17,7 +17,7 @@ export class APIPANDS {
         this.url = api?.url ?? null;
     }
 
-    setBackend(backend: Backend){
+    setBackend(backend: Backend) {
         this.backend = backend;
     }
 

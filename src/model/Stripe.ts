@@ -1,3 +1,6 @@
+import type { ImageObject } from '@the7ofdiamonds/ui-ux';
+import { Image } from '@the7ofdiamonds/ui-ux';
+
 export type StripeProductType = 'good' | 'service';
 export type StripeProductFeature = { name: string; };
 export type StripeProductPackageDimensions = {
@@ -31,6 +34,49 @@ export type StripeProductObject = {
     url?: string | null;
 }
 
+export type CustomStripeProductMetadataObject = {
+    category: string | null;
+    title: string | null;
+    subtitle: string | null;
+    promotional_text: string | null;
+    content_url: string | null;
+    content: string | null;
+    pricing_id: string | null;
+    icon: ImageObject | null;
+    button_icon: ImageObject | null;
+    action_word: string | null;
+}
+
+export type CustomStripeProductObject = Omit<StripeProductObject, 'metadata'> & {
+    metadata: CustomStripeProductMetadataObject;
+}
+
+export class CustomStripeProductMetadata {
+    category: string | null;
+    title: string | null;
+    subtitle: string | null;
+    promotionalText: string | null;
+    contentURL: string | null;
+    content: string | null;
+    pricingID: string | null;
+    icon: Image | null;
+    buttonIcon: Image | null;
+    actionWord: string | null;
+
+    constructor(metadata: CustomStripeProductMetadataObject | Record<string, any>) {
+        this.category = metadata?.category ? metadata.category : null;
+        this.title = metadata?.title ? metadata.title : null;
+        this.subtitle = metadata?.subtitle ? metadata.subtitle : null;
+        this.promotionalText = metadata?.promotional_text ? metadata.promotional_text : null;
+        this.contentURL = metadata?.content_url ? metadata.content_url : null;
+        this.content = metadata?.content ? metadata.content : null;
+        this.pricingID = metadata?.pricing_id ? metadata.pricing_id : null;
+        this.icon = metadata?.icon ? new Image(metadata.icon) : null;
+        this.buttonIcon = metadata?.button_icon ? new Image(metadata.button_icon) : null;
+        this.actionWord = metadata?.action_word ? metadata.action_word : null;
+    }
+}
+
 export type StripeProductsResponse = {
     data?: Array<StripeProductObject> | null;
     has_more?: boolean | null;
@@ -40,6 +86,12 @@ export type StripeProductsResponse = {
         message?: string | null;
         type?: string | null;
     }
+};
+
+export type StripeProductDeletedResponse = {
+    id: string | null;
+    object: string | null;
+    deleted: boolean | null;
 };
 
 export class StripeProduct {
@@ -63,7 +115,7 @@ export class StripeProduct {
     url: string | null;
     livemode: boolean | null;
     attributes: string[] | null;
-    metadata: Record<string, any> | null;
+    metadata: CustomStripeProductMetadata | null;
 
     constructor(product: Partial<StripeProductObject>) {
         this.id = product?.id ? product.id : null;
@@ -76,7 +128,7 @@ export class StripeProduct {
         this.images = product?.images ? product.images : null;
         this.livemode = product?.livemode ? product.livemode : null;
         this.marketingFeatures = product?.marketing_features ? product.marketing_features : null;
-        this.metadata = product?.metadata ? product.metadata : null;
+        this.metadata = product?.metadata ? new CustomStripeProductMetadata(product.metadata) : null;
         this.name = product?.name ? product.name : null;
         this.packageDimensions = product?.package_dimensions ? product.package_dimensions : null;
         this.shippable = product?.shippable ? product.shippable : null;
