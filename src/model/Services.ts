@@ -60,15 +60,32 @@ export class Services extends Offerings {
 
     const list: Array<Service> = offeringList
       .filter((offering): offering is Offering => offering?.type === 'service')
-      .map((product: Offering) => {
-        const prod = new Service();
-        prod.fromOffering(product);
-        return prod;
+      .map((offering: Offering) => {
+        const service = new Service();
+        service.fromOffering(offering);
+        return service;
       });
 
     this.setList(list);
 
     return list;
+  }
+
+  fromOfferings(offerings: Offerings | undefined | null) {
+    const offeringList = offerings?.list;
+    if (!offeringList || offeringList.length <= 0) return [];
+
+    const list: Array<Service> = offeringList
+      .filter((offering): offering is Offering => offering?.type === 'service')
+      .map((offering: Offering) => {
+        const service = new Service();
+        service.fromOffering(offering);
+        return service;
+      });
+
+    this.setList(list);
+
+    return this;
   }
 
   fromArrayServiceObject(data: Array<ServiceObject> | undefined | null): Array<Service> {

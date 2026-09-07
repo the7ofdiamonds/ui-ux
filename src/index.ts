@@ -35,6 +35,7 @@ export * from './model/Issues';
 export * from './model/Link';
 export * from './model/Menu';
 export * from './model/Offering';
+export * from './model/Offerings';
 export * from './model/Organization';
 export * from './model/Organizations';
 export * from './model/OfficeHours';

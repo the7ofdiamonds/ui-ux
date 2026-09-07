@@ -140,6 +140,7 @@ export class Offering {
     this.id = product?.id ? product.id : null;
     this.name = product?.name ? product.name : null;
     this.description = product?.description ? product.description : null;
+    this.pricing = product?.default_price ? new Pricing({ id: product.default_price }) : null;
 
     return this;
   }
@@ -157,7 +158,7 @@ export class Offering {
     // this.details = stripeProduct ? ? stripeProduct : null;
     // this.contentURL = stripeProduct ? ? stripeProduct : null;
     // this.content = stripeProduct ? ? stripeProduct : null;
-    // this.pricing = stripeProduct ? ? stripeProduct : null;
+    this.pricing = stripeProduct?.stripePrice ? (new Pricing().fromStripePrice(stripeProduct.stripePrice) ?? null) : null;
     // this.icon = stripeProduct ? ? stripeProduct : null;
     this.gallery = this.getGalleryFromStripeProductImages(stripeProduct?.images);
     // this.buttonIcon = stripeProduct ? ? stripeProduct : null;

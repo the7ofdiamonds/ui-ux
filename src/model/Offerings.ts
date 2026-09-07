@@ -75,7 +75,7 @@ export class Offerings<T extends OfferingObject = OfferingObject> {
             .map((offering) => offering.toOfferingObject());
     }
 
-    toProductsObject(): OfferingsObject {
+    toOfferingsObject(): OfferingsObject {
         return {
             id: this.id,
             title: this.title,

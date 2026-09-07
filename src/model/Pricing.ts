@@ -1,3 +1,5 @@
+import type { StripePrice } from "./Stripe";
+
 export type SubscriptionInterval =
   | 'weekly'
   | 'monthly'
@@ -6,13 +8,13 @@ export type SubscriptionInterval =
   | 'lifetime';
 
 export const subscriptionIntervalLabels: Record<SubscriptionInterval, string> =
-  {
-    weekly: '/week',
-    monthly: '/month',
-    quarterly: '/quarter',
-    annual: '/year',
-    lifetime: 'lifetime',
-  };
+{
+  weekly: '/week',
+  monthly: '/month',
+  quarterly: '/quarter',
+  annual: '/year',
+  lifetime: 'lifetime',
+};
 
 export type PricingObject = {
   id: string | number | null;
@@ -65,20 +67,20 @@ export class Pricing {
     this.display = data?.display
       ? data.display
       : this.range
-      ? this.getDisplayRange(
+        ? this.getDisplayRange(
           this.startingPrice,
           this.maxPrice,
           this.locales,
           this.currency
         )
-      : this.subscription && this.interval
-      ? this.getDisplaySubscription(
-          this.price,
-          this.interval,
-          this.locales,
-          this.currency
-        )
-      : this.getDisplay(this.price, this.locales, this.currency);
+        : this.subscription && this.interval
+          ? this.getDisplaySubscription(
+            this.price,
+            this.interval,
+            this.locales,
+            this.currency
+          )
+          : this.getDisplay(this.price, this.locales, this.currency);
   }
 
   format(
@@ -90,11 +92,11 @@ export class Pricing {
   ): string | null {
     return price
       ? new Intl.NumberFormat(locales, {
-          style: 'currency',
-          currency: currency,
-          minimumFractionDigits: minFractionDigits,
-          maximumFractionDigits: maxFractionDigits,
-        }).format(price)
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: minFractionDigits,
+        maximumFractionDigits: maxFractionDigits,
+      }).format(price)
       : null;
   }
 
@@ -124,14 +126,14 @@ export class Pricing {
   ): string | null {
     return startingPrice && maxPrice
       ? `${this.format(startingPrice, locales, currency, 0)} - ${this.format(
-          maxPrice,
-          locales,
-          currency,
-          0
-        )}`
+        maxPrice,
+        locales,
+        currency,
+        0
+      )}`
       : startingPrice
-      ? `Starting At ${this.format(startingPrice, locales, currency, 0)}`
-      : null;
+        ? `Starting At ${this.format(startingPrice, locales, currency, 0)}`
+        : null;
   }
 
   formatSubscription(interval: SubscriptionInterval, price: string) {
@@ -159,6 +161,30 @@ export class Pricing {
     return displayPrice
       ? this.formatSubscription(interval, displayPrice)
       : null;
+  }
+
+  fromStripePrice(price: StripePrice | null| undefined) {
+    if (!price) return;
+    this.id = price?.id ? price.id : null;
+    this.price = price?.unitAmount ? price.unitAmount : null;
+    this.currency = price?.currency ? new String(price.currency).toLocaleUpperCase() : 'USD';
+    this.display = this.range
+      ? this.getDisplayRange(
+        this.startingPrice,
+        this.maxPrice,
+        this.locales,
+        this.currency
+      )
+      : this.subscription && this.interval
+        ? this.getDisplaySubscription(
+          this.price,
+          this.interval,
+          this.locales,
+          this.currency
+        )
+        : this.getDisplay(this.price, this.locales, this.currency);
+
+    return this;
   }
 
   toPricingObject(): PricingObject {

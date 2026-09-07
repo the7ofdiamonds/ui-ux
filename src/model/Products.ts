@@ -72,6 +72,23 @@ export class Products extends Offerings {
     return list;
   }
 
+  fromOfferings(offerings: Offerings | undefined | null) {
+    const offeringList = offerings?.list;
+    if (!offeringList || offeringList.length <= 0) return [];
+
+    const list: Array<Product> = offeringList
+      .filter((offering): offering is Offering => offering?.type === 'product')
+      .map((product: Offering) => {
+        const prod = new Product();
+        prod.fromOffering(product);
+        return prod;
+      });
+
+    this.setList(list);
+
+    return this;
+  }
+
   fromArrayProductObject(data: Array<ProductObject> | undefined | null): Array<Product> {
     if (!data || !Array.isArray(data) || data.length <= 0) return [];
 
