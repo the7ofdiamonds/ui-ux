@@ -166,7 +166,7 @@ export class Pricing {
   fromStripePrice(price: StripePrice | null| undefined) {
     if (!price) return;
     this.id = price?.id ? price.id : null;
-    this.price = price?.unitAmount ? price.unitAmount : null;
+    this.price = price?.unitAmount ? (price.unitAmount/100) : null;
     this.currency = price?.currency ? new String(price.currency).toLocaleUpperCase() : 'USD';
     this.display = this.range
       ? this.getDisplayRange(

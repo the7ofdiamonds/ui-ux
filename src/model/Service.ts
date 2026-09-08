@@ -16,6 +16,9 @@ export class Service extends Offering {
   constructor(service?: Partial<ServiceObject>) {
     super({ ...service, type: 'service' });
 
+    this.actionWord = service?.action_word
+      ? service.action_word
+      : 'request';
     this.onboardingLink = service?.onboarding_link
       ? service.onboarding_link
       : null;
@@ -25,17 +28,40 @@ export class Service extends Offering {
     if (!product) return null;
     super.fromStripeProductObject(product);
 
+    this.actionWord = product?.metadata?.action_word
+      ? product.metadata.action_word
+      : 'request';
+    this.onboardingLink = product?.metadata?.onboarding_link
+      ? product.metadata.onboarding_link
+      : null;
+
     return this;
   }
 
   override fromStripeProduct(product: StripeProduct) {
     if (!product) return null;
     super.fromStripeProduct(product);
+
+    this.actionWord = product?.metadata?.actionWord
+      ? product.metadata.actionWord
+      : 'request';
+    this.onboardingLink = product?.metadata?.onboardingLink
+      ? product.metadata.onboardingLink
+      : null;
+
     return this;
   }
 
   override fromOffering(offering: Offering): this {
     super.fromOffering(offering);
+
+    this.actionWord = offering?.actionWord
+      ? offering.actionWord
+      : 'request';
+    this.onboardingLink = offering?.onboardingLink
+      ? offering.onboardingLink
+      : null;
+
     return this;
   }
 

@@ -28,23 +28,24 @@ export type StripeProductObject = {
     shippable?: boolean | null;
     statement_descriptor?: string | null;
     tax_code?: string | null;
-    type: StripeProductType | null;
+    type: string | null;
     unit_label?: string | null;
     updated: number | null;
     url?: string | null;
 }
 
 export type CustomStripeProductMetadataObject = {
+    type: string | null;
     category: string | null;
     title: string | null;
     subtitle: string | null;
     promotional_text: string | null;
     content_url: string | null;
     content: string | null;
-    pricing_id: string | null;
-    icon: ImageObject | null;
+    icon: Partial<ImageObject> | null;
     button_icon: ImageObject | null;
     action_word: string | null;
+    onboarding_link: string | null;
 }
 
 export type CustomStripeProductObject = Omit<StripeProductObject, 'metadata'> & {
@@ -52,28 +53,31 @@ export type CustomStripeProductObject = Omit<StripeProductObject, 'metadata'> & 
 }
 
 export class CustomStripeProductMetadata {
+    type: string | null;
     category: string | null;
     title: string | null;
     subtitle: string | null;
     promotionalText: string | null;
     contentURL: string | null;
     content: string | null;
-    pricingID: string | null;
     icon: Image | null;
     buttonIcon: Image | null;
     actionWord: string | null;
+    onboardingLink: string | null;
 
     constructor(metadata: CustomStripeProductMetadataObject | Record<string, any>) {
+        this.type = metadata?.type ? metadata.type : null;
         this.category = metadata?.category ? metadata.category : null;
         this.title = metadata?.title ? metadata.title : null;
         this.subtitle = metadata?.subtitle ? metadata.subtitle : null;
         this.promotionalText = metadata?.promotional_text ? metadata.promotional_text : null;
         this.contentURL = metadata?.content_url ? metadata.content_url : null;
         this.content = metadata?.content ? metadata.content : null;
-        this.pricingID = metadata?.pricing_id ? metadata.pricing_id : null;
-        this.icon = metadata?.icon ? new Image(metadata.icon) : null;
+        this.icon = metadata?.icon ? new Image({class_name: metadata.icon}) : null;
         this.buttonIcon = metadata?.button_icon ? new Image(metadata.button_icon) : null;
         this.actionWord = metadata?.action_word ? metadata.action_word : null;
+        this.onboardingLink = metadata?.onboarding_link ? metadata.onboarding_link : null;
+        console.log(metadata?.icon)
     }
 }
 
@@ -209,7 +213,7 @@ export class StripePrice {
 export class StripeProduct {
     id: string | null;
     object: string | null;
-    type: StripeProductType | null;
+    type: string | null;
     active: boolean | null;
     created: number | null;
     updated: number | null;
@@ -247,7 +251,7 @@ export class StripeProduct {
         this.shippable = product?.shippable ? product.shippable : null;
         this.statementDescriptor = product?.statement_descriptor ? product.statement_descriptor : null;
         this.taxCode = product?.tax_code ? product.tax_code : null;
-        this.type = product?.type ? product.type : null;
+        this.type = product?.metadata?.type ? product.metadata.type : null;
         this.unitLabel = product?.unit_label ? product.unit_label : null;
         this.updated = product?.updated ? product.updated : null;
         this.url = product?.url ? product.url : null;

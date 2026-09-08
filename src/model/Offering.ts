@@ -14,7 +14,8 @@ import { Project } from './Project';
 import { ProjectDetails } from './ProjectDetails';
 import { StripeProduct } from './Stripe';
 
-export type Offered = 'service' | 'product' | false;
+const OFFERING = ['service', 'product'];
+export type Offered = typeof OFFERING[number] | false;
 
 export type OfferingObject = {
   id: string | number | null;
@@ -35,6 +36,7 @@ export type OfferingObject = {
   button_icon: ImageObject | null;
   url: string | null;
   action_word: string | null;
+  onboarding_link: string | null;
 };
 
 export class Offering {
@@ -56,10 +58,11 @@ export class Offering {
   public buttonIcon: Image | null;
   public url: string | null;
   public actionWord: string | null;
+  public onboardingLink: string | null;
 
   constructor(offering?: Partial<OfferingObject>) {
     this.id = offering?.id ? offering.id : null;
-    this.type = offering?.type ? offering.type : false;
+    this.type = this.isOffered(offering?.type) ? offering.type : false;
     this.category = offering?.category ? offering.category : null;
     this.title = offering?.title ? offering.title : null;
     this.name = offering?.name ? offering.name : null;
@@ -80,6 +83,7 @@ export class Offering {
       : null;
     this.actionWord = offering?.action_word ? offering.action_word : null;
     this.url = this.getUrl(offering?.url);
+    this.onboardingLink = offering?.onboarding_link ? offering.onboarding_link : null;
   }
 
   getUrl(url: string | undefined | null) {
@@ -96,8 +100,8 @@ export class Offering {
 
   fromProject(project: Project) {
     this.id = project?.id ? project.id : null;
-    this.title = project?.title ? project.title : null;
     this.name = project?.name ? project.name : null;
+    this.title = project?.title ? project.title : this.name;
     this.subtitle = project?.subtitle ? project.subtitle : null;
     this.promotionalText = project?.promotionalText
       ? project.promotionalText
@@ -106,7 +110,7 @@ export class Offering {
 
     if (project?.solution) {
       const solution = project.solution;
-      this.type = solution?.available ? solution.available : false;
+      this.type = this.isOffered(solution?.available) ? solution.available : false;
       this.category = solution?.category ? solution.category : null;
       this.features = solution.features ? solution.features : null;
       this.contentURL = solution?.contentURL ? solution.contentURL.url : null;
@@ -134,36 +138,51 @@ export class Offering {
     return gallery;
   }
 
+  isOffered(value: unknown): value is Offered {
+    return typeof value === 'string' && (OFFERING as readonly string[]).includes(value);
+  }
+
   fromStripeProductObject(product: StripeProductObject | undefined | null) {
     if (!product) return null;
 
     this.id = product?.id ? product.id : null;
+    this.type = this.isOffered(product?.metadata?.type) ? product.metadata.type : false;
     this.name = product?.name ? product.name : null;
     this.description = product?.description ? product.description : null;
     this.pricing = product?.default_price ? new Pricing({ id: product.default_price }) : null;
+    this.category = product?.metadata?.category ? product.metadata.category : null;
+    this.title = product?.metadata?.title ? product.metadata.title : this.name;
+    this.subtitle = product?.metadata?.subtitle ? product.metadata.subtitle : null;
+    this.promotionalText = product?.metadata?.promotional_text ? product.metadata.promotional_text : null;
+    this.contentURL = product?.metadata?.content_url ? product.metadata.content_url : null;
+    this.content = product?.metadata?.content ? product.metadata.content : null;
+    console.log(product?.metadata?.icon)
+    this.icon = product?.metadata?.icon ? new Image(product.metadata.icon) : null;
+    this.buttonIcon = product?.metadata?.button_icon ? new Image(product.metadata.button_icon) : null;
+    this.actionWord = product?.metadata?.action_word ? product.metadata.action_word : null;
 
     return this;
   }
 
   fromStripeProduct(stripeProduct: StripeProduct): Offering | null {
     this.id = stripeProduct?.id ? stripeProduct.id : null;
-    this.type = stripeProduct?.type === 'good' ? 'product' : stripeProduct?.type === 'service' ? 'service' : false;
-    // this.category = stripeProduct ? ? stripeProduct : null;
-    // this.title = stripeProduct ? ? stripeProduct : null;
+    this.type = this.isOffered(stripeProduct?.metadata?.type) ? stripeProduct.metadata.type : false;
+    this.category = stripeProduct?.metadata?.category ? stripeProduct.metadata.category : null;
     this.name = stripeProduct?.name ? stripeProduct.name : null;
-    // this.subtitle = stripeProduct ? ? stripeProduct : null;
-    // this.promotionalText = stripeProduct ? ? stripeProduct : null;
+    this.title = stripeProduct?.metadata?.title ? stripeProduct.metadata.title : this.name;
+    this.subtitle = stripeProduct?.metadata?.subtitle ? stripeProduct.metadata.subtitle : null;
+    this.promotionalText = stripeProduct?.metadata?.promotionalText ? stripeProduct.metadata.promotionalText : null;
     this.description = stripeProduct?.description ? stripeProduct.description : null;
     // this.features = stripeProduct ? ? stripeProduct : null;
     // this.details = stripeProduct ? ? stripeProduct : null;
-    // this.contentURL = stripeProduct ? ? stripeProduct : null;
-    // this.content = stripeProduct ? ? stripeProduct : null;
+    this.contentURL = stripeProduct?.metadata?.contentURL ? stripeProduct.metadata.contentURL : null;
+    this.content = stripeProduct?.metadata?.content ? stripeProduct.metadata.content : null;
     this.pricing = stripeProduct?.stripePrice ? (new Pricing().fromStripePrice(stripeProduct.stripePrice) ?? null) : null;
-    // this.icon = stripeProduct ? ? stripeProduct : null;
+    this.icon = stripeProduct?.metadata?.icon ? stripeProduct.metadata.icon : null;
     this.gallery = this.getGalleryFromStripeProductImages(stripeProduct?.images);
-    // this.buttonIcon = stripeProduct ? ? stripeProduct : null;
+    this.buttonIcon = stripeProduct?.metadata?.buttonIcon ? stripeProduct.metadata.buttonIcon : null;
     this.url = stripeProduct?.url ? stripeProduct.url : null;
-    // this.actionWord = stripeProduct ? ? stripeProduct : null;
+    this.actionWord = stripeProduct?.metadata?.actionWord ? stripeProduct.metadata.actionWord : null;
 
     return this;
   }
@@ -193,6 +212,7 @@ export class Offering {
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       url: this.url,
       action_word: this.actionWord,
+      onboarding_link: this.onboardingLink
     };
   }
 }

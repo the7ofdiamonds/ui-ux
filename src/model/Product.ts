@@ -8,25 +8,37 @@ export type ProductObject = OfferingObject & {};
 // Add details from project details and etc.
 export class Product extends Offering {
   readonly type: Offered = 'product';
+  public actionWord: string = 'buy';
 
   constructor(product?: Partial<ProductObject>) {
     super({ ...product, type: 'product' });
+
+    this.actionWord = product?.action_word ? product.action_word : 'buy';
   }
 
   override fromStripeProductObject(product: StripeProductObject | undefined | null) {
     if (!product) return null;
     super.fromStripeProductObject(product);
+
+    this.actionWord = product?.metadata?.action_word ? product.metadata.action_word : 'buy';
+
     return this;
   }
 
   override fromStripeProduct(product: StripeProduct) {
     if (!product) return null;
     super.fromStripeProduct(product);
+
+    this.actionWord = product?.metadata?.actionWord ? product.metadata.actionWord : 'buy';
+
     return this;
   }
 
   override fromOffering(offering: Offering): this {
     super.fromOffering(offering);
+
+    this.actionWord = offering?.actionWord ? offering.actionWord : 'buy';
+
     return this;
   }
 
@@ -49,7 +61,8 @@ export class Product extends Offering {
       url: this.url,
       action_word: this.actionWord,
       contentURL: this.contentURL,
-      details: null
+      details: null,
+      onboarding_link: this.onboardingLink
     };
   }
 }

@@ -9,7 +9,7 @@ interface IconComponentProps {
 }
 
 export const IconComponent: React.FC<IconComponentProps> = ({ icon }) => {
-
+console.log(icon)
   return (
     <>
       {
