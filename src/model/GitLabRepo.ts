@@ -2,7 +2,7 @@ import type { OwnerObject } from './Owner';
 import { Owner } from './Owner'
 import type { RepoContentsObject } from './RepoContents';
 import { RepoContents } from './RepoContents';
-import { RepoContent } from './RepoContent';
+import { Content } from './Content';
 import type { ContributorsObject } from '../model/Contributors';
 import { Contributors } from '../model/Contributors';
 import type {

@@ -1,76 +1,76 @@
-import type { RepoContentObject } from '../model/RepoContent';
-import { RepoContent } from '../model/RepoContent';
+import type { ContentObject } from '../model/Content';
+import { Content } from '../model/Content';
 
 export interface RepoContentsObject {
-  solution: RepoContentObject | null;
-  design: RepoContentObject | null;
-  development: RepoContentObject | null;
-  delivery: RepoContentObject | null;
-  problem: RepoContentObject | null;
-  details: RepoContentObject | null;
-  story: RepoContentObject | null;
+  solution: ContentObject | null;
+  design: ContentObject | null;
+  development: ContentObject | null;
+  delivery: ContentObject | null;
+  problem: ContentObject | null;
+  details: ContentObject | null;
+  story: ContentObject | null;
 }
 
 export class RepoContents {
-  solution: RepoContent | null;
-  design: RepoContent | null;
-  development: RepoContent | null;
-  delivery: RepoContent | null;
-  problem: RepoContent | null;
-  details: RepoContent | null;
-  story: RepoContent | null;
+  solution: Content | null;
+  design: Content | null;
+  development: Content | null;
+  delivery: Content | null;
+  problem: Content | null;
+  details: Content | null;
+  story: Content | null;
 
   constructor(data?: Partial<RepoContentsObject>) {
-    this.solution = data?.solution ? new RepoContent(data.solution) : null;
-    this.design = data?.design ? new RepoContent(data.design) : null;
+    this.solution = data?.solution ? new Content(data.solution) : null;
+    this.design = data?.design ? new Content(data.design) : null;
     this.development = data?.development
-      ? new RepoContent(data.development)
+      ? new Content(data.development)
       : null;
-    this.delivery = data?.delivery ? new RepoContent(data.delivery) : null;
-    this.problem = data?.problem ? new RepoContent(data.problem) : null;
-    this.details = data?.details ? new RepoContent(data.details) : null;
-    this.story = data?.story ? new RepoContent(data.story) : null;
+    this.delivery = data?.delivery ? new Content(data.delivery) : null;
+    this.problem = data?.problem ? new Content(data.problem) : null;
+    this.details = data?.details ? new Content(data.details) : null;
+    this.story = data?.story ? new Content(data.story) : null;
   }
 
-  setSolution(solution: RepoContent) {
+  setSolution(solution: Content) {
     this.solution = solution;
   }
 
-  setDesign(design: RepoContent) {
+  setDesign(design: Content) {
     this.design = design;
   }
 
-  setDevelopment(development: RepoContent) {
+  setDevelopment(development: Content) {
     this.development = development;
   }
 
-  setDelivery(delivery: RepoContent) {
+  setDelivery(delivery: Content) {
     this.delivery = delivery;
   }
 
-  setProblem(problem: RepoContent) {
+  setProblem(problem: Content) {
     this.problem = problem;
   }
 
-  setDetails(details: RepoContent) {
+  setDetails(details: Content) {
     this.details = details;
   }
 
-  setStory(story: RepoContent) {
+  setStory(story: Content) {
     this.story = story;
   }
 
   toRepoContentsObject(): RepoContentsObject {
     return {
-      solution: this.solution ? this.solution.toRepoContentObject() : null,
-      design: this.design ? this.design.toRepoContentObject() : null,
+      solution: this.solution ? this.solution.toContentObject() : null,
+      design: this.design ? this.design.toContentObject() : null,
       development: this.development
-        ? this.development.toRepoContentObject()
+        ? this.development.toContentObject()
         : null,
-      delivery: this.delivery ? this.delivery.toRepoContentObject() : null,
-      problem: this.problem ? this.problem.toRepoContentObject() : null,
-      details: this.details ? this.details.toRepoContentObject() : null,
-      story: this.story ? this.story.toRepoContentObject() : null,
+      delivery: this.delivery ? this.delivery.toContentObject() : null,
+      problem: this.problem ? this.problem.toContentObject() : null,
+      details: this.details ? this.details.toContentObject() : null,
+      story: this.story ? this.story.toContentObject() : null,
     };
   }
 }

@@ -6,6 +6,8 @@ import type { ColorsObject } from '../model/Colors';
 import { Colors } from '../model/Colors';
 import type { CheckListObject } from '../model/CheckList';
 import { CheckList } from '../model/CheckList'
+import { Content } from '../model/Content';
+import type { ContentObject } from '../model/Content';
 import type { ContentURLObject } from '../model/ContentURL';
 import { ContentURL } from '../model/ContentURL';
 import { Task } from '../model/Task';
@@ -19,6 +21,7 @@ export type ProjectDesignObject = {
   check_list: CheckListObject | null;
   colors: ColorsObject | null;
   content_url: string | null;
+  content: ContentObject | null;
 };
 
 export type ProjectDesignDataObject = {
@@ -27,6 +30,7 @@ export type ProjectDesignDataObject = {
   check_list: CheckListObject | null;
   colors: ColorsObject | null;
   content_url: string | null;
+  content: ContentObject | null;
 };
 
 export class ProjectDesign {
@@ -35,6 +39,7 @@ export class ProjectDesign {
   checkList: CheckList | null;
   colors: Colors | null;
   contentURL: ContentURL | null;
+  content: Content | null;
 
   constructor(data?: Partial<ProjectDesignObject>) {
     this.id = data?.id ? data.id : null;
@@ -50,6 +55,7 @@ export class ProjectDesign {
     this.contentURL = data?.content_url
       ? new ContentURL({ url: data.content_url })
       : null;
+    this.content = data?.content ? new Content(data.content) : null;
   }
 
   setID(id: string | number) {
@@ -70,6 +76,10 @@ export class ProjectDesign {
 
   setContentURL(contentURL: ContentURL) {
     this.contentURL = contentURL;
+  }
+
+  setContent(content: Content) {
+    this.content = content;
   }
 
   fromRepo(repo: Repo) {
@@ -125,6 +135,7 @@ export class ProjectDesign {
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       colors: this.colors ? this.colors.toColorsObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 
@@ -135,6 +146,7 @@ export class ProjectDesign {
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       colors: this.colors ? this.colors.toColorsObject() : null,
       content_url: this.contentURL?.url ? this.contentURL.url : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 }

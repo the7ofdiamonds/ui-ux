@@ -5,9 +5,11 @@ import { marked } from 'marked';
 
 import styles from './Content.module.scss';
 
+import type { Content } from '../../model/Content';
+
 interface ContentComponentProps<T> {
   id?: string | null;
-  content?: string | null;
+  content?: Content | null;
   query?: T;
   dispatch?: ThunkDispatch<any, any, any>;
   getFile?: AsyncThunk<string | null, T, {}>;
@@ -18,6 +20,12 @@ export const ContentComponent = <T,>({ id, content, query, dispatch, getFile, ti
   const [contentQuery, setContentQuery] = useState<T | null>(null);
   const [file, setFile] = useState<string | null>(null);
   const [html, setHTML] = useState<string | object | null>(null);
+
+    useEffect(() => {
+    if (content?.text) {
+      setFile(content?.text);
+    }
+  }, [content?.text]);
 
   useEffect(() => {
     if (!content && query) {

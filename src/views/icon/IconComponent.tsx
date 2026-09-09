@@ -9,13 +9,9 @@ interface IconComponentProps {
 }
 
 export const IconComponent: React.FC<IconComponentProps> = ({ icon }) => {
-console.log(icon)
   return (
-    <>
-      {
-        icon?.className && (
-          <i className={`${icon.className} ${styles.icon}`} aria-label={icon.title ?? ''} aria-hidden="false"></i>
-        )}
-    </>
+    icon?.className && (
+      <i className={`${icon.className} ${styles.icon}`} aria-label={icon.title ?? ''} aria-hidden="false"></i>
+    )
   );
 }

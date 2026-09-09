@@ -2,6 +2,8 @@ import type { GalleryObject } from '../model/Gallery';
 import { Gallery } from '../model/Gallery';
 
 import { DocumentURL } from '../model/DocumentURL';
+import { Content } from '../model/Content';
+import type { ContentObject } from '../model/Content';
 import { ContentURL } from '../model/ContentURL';
 import { Repo } from '../model/Repo';
 import type { ProjectDataObject } from '../model/Project';
@@ -27,6 +29,7 @@ export type ProjectProblemObject = {
   tried_solutions: string | null;
   tried_solutions_results: string | null;
   ideal_resolution: string | null;
+  content: ContentObject | null;
 };
 
 export type ProjectProblemDataObject = {
@@ -34,6 +37,7 @@ export type ProjectProblemDataObject = {
   gallery: GalleryObject | null;
   content_url: string | null;
   whitepaper_url: string | null;
+  content: ContentObject | null;
 };
 
 export class ProjectProblem {
@@ -57,12 +61,13 @@ export class ProjectProblem {
   triedSolutions: string | null;
   triedSolutionsResults: string | null;
   idealResolution: string | null;
+  content: Content | null;
 
   constructor(data?: Partial<ProjectProblemObject>) {
     this.id = data?.id ? data.id : null;
     this.gallery = data?.gallery ? new Gallery(data.gallery) : null;
     this.contentURL = data?.content_url
-      ? new ContentURL({url:data.content_url})
+      ? new ContentURL({ url: data.content_url })
       : null;
     this.whitepaperURL = data?.whitepaper_url
       ? new DocumentURL(data.whitepaper_url)
@@ -97,6 +102,7 @@ export class ProjectProblem {
     this.idealResolution = data?.ideal_resolution
       ? data.ideal_resolution
       : null;
+    this.content = data?.content ? new Content(data.content) : null;
   }
 
   setID(id: string | number) {
@@ -115,13 +121,17 @@ export class ProjectProblem {
     this.whitepaperURL = whitepaperURL;
   }
 
+  setContent(content: Content) {
+    this.content = content;
+  }
+
   fromRepo(repo: Repo) {
     if (
       repo.contents &&
       repo.contents.problem &&
       repo.contents.problem.downloadURL
     ) {
-      this.setContentURL(new ContentURL({url: repo.contents.problem.downloadURL}));
+      this.setContentURL(new ContentURL({ url: repo.contents.problem.downloadURL }));
     }
 
     return this;
@@ -136,8 +146,8 @@ export class ProjectProblem {
         this.setGallery(gallery);
       }
 
-      if (data.problem.whitepaper_url) {
-        this.setWhitepaperURL(data.problem.whitepaper_url);
+      if (data.problem?.whitepaper_url) {
+        this.setWhitepaperURL(new DocumentURL(data.problem.whitepaper_url));
       }
     }
   }
@@ -164,6 +174,7 @@ export class ProjectProblem {
       tried_solutions: this.triedSolutions,
       tried_solutions_results: this.triedSolutionsResults,
       ideal_resolution: this.idealResolution,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 
@@ -173,6 +184,7 @@ export class ProjectProblem {
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
       whitepaper_url: this.whitepaperURL?.url ? this.whitepaperURL.url : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 }

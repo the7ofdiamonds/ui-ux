@@ -66,7 +66,6 @@ export * from './model/ProjectVersion';
 export * from './model/ProjectVersions';
 export * from './model/Repo';
 export * from './model/RepoAPIURL';
-export * from './model/RepoContent';
 export * from './model/RepoContentQuery';
 export * from './model/RepoContentURL';
 export * from './model/RepoContents';
@@ -103,6 +102,7 @@ export * from './views/buttons/ButtonImage';
 export * from './views/buttons/ButtonSubmit';
 export * from './views/buttons/exit/ButtonExit';
 
+export * from './views/card/CardComponent';
 export * from './views/checklist/CheckListComponent';
 export * from './views/colors/Colors';
 export * from './views/content/ContentComponent';
@@ -126,13 +126,15 @@ export * from './views/edit/skills/EditSkills';
 export * from './views/edit/subtitle/EditSubtitle';
 export * from './views/edit/title/EditTitle';
 
+export * from './views/feature/FeatureComponent';
 export * from './views/features/FeaturesComponent';
 
 export * from './views/footer/FooterComponent';
 export * from './views/gallery/GalleryComponent';
 
-export * from './views/header/HeaderComponent';
-export * from './views/header/HeaderTaxonomyComponent';
+export * from './views/header/navigation/HeaderNavigationComponent';
+export * from './views/header/image/HeaderImageComponent';
+export * from './views/header/taxonomy/HeaderTaxonomyComponent';
 
 export * from './views/icon/IconComponent';
 export * from './views/image/ImageComponent';

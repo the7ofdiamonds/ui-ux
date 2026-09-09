@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 
-import { ImageComponent } from '../../views/image/ImageComponent';
+import { ImageComponent } from '../../image/ImageComponent';
 
-import { Image } from '../../model/Image';
-import { Menu } from '../../model/Menu';
+import { Image } from '../../../model/Image';
+import { Menu } from '../../../model/Menu';
 
-import styles from './Header.module.scss';
+import styles from './HeaderNavigation.module.scss';
 
-interface HeaderComponentProps {
+interface HeaderNavigationComponentProps {
   branding: string | Image;
   leftMenu: Menu | null;
   centerMenu: Menu | null;
   rightMenu: Menu | null;
 }
 
-export const HeaderComponent: React.FC<HeaderComponentProps> = ({ branding, leftMenu, centerMenu, rightMenu }) => {
+export const HeaderNavigationComponent: React.FC<HeaderNavigationComponentProps> = ({ branding, leftMenu, centerMenu, rightMenu }) => {
   const [dropdown, setDropdown] = useState('hide');
 
   const goHome = () => {

@@ -1,5 +1,7 @@
 import { ContentURL } from '../model/ContentURL';
 import { RepoSize } from '../model/RepoSize';
+import { Content } from '../model/Content';
+import type { ContentObject } from '../model/Content';
 import type { ContributorObject } from '../model/Contributor';
 import { Contributor } from '../model/Contributor';
 import { Repo } from '../model/Repo';
@@ -13,18 +15,18 @@ export type ProjectDetailsObject = {
   id: string | number | null;
   privacy: string | null;
   client_id: string | null;
-  content: string | null;
   team_list: ContributorsObject | null;
   story: string | null;
   repo_size: String | null;
   owner: Partial<OwnerObject> | null;
+  content: ContentObject | null;
 };
 
 export type ProjectDetailsDataObject = {
   id: string | number | null;
   privacy: string | null;
   client_id: string | null;
-  content: string | null;
+  content: ContentObject | null;
   team_list: Array<string> | null;
   story: string | null;
   owner: Partial<OwnerObject> | null;
@@ -35,20 +37,20 @@ export class ProjectDetails {
   privacy: string | null;
   teamList: Contributors | null;
   repoSize: String | null;
-  content: ContentURL | null;
   story: ContentURL | null;
   clientID: string | null;
   owner: Owner | null;
+  content: Content | null;
 
   constructor(data?: Partial<ProjectDetailsObject>) {
     this.id = data?.id ? data.id : null;
     this.privacy = data?.privacy ? data.privacy : null;
     this.teamList = data?.team_list?.list && data?.team_list?.list.length > 0 ? new Contributors(data.team_list) : null;
     this.repoSize = data?.repo_size ? data.repo_size : null;
-    this.content = data?.content ? new ContentURL({ url: data.content }) : null;
     this.story = data?.story ? new ContentURL({ url: data.story }) : null;
     this.clientID = data?.client_id ? data.client_id : null;
     this.owner = data?.owner ? new Owner(data.owner) : null;
+    this.content = data?.content ? new Content(data.content) : null;
   }
 
   setID(id: string | number) {
@@ -61,10 +63,6 @@ export class ProjectDetails {
 
   setClientID(id: string) {
     this.clientID = id;
-  }
-
-  setContentURL(content: ContentURL) {
-    this.content = content;
   }
 
   setOwner(owner: Owner) {
@@ -98,6 +96,10 @@ export class ProjectDetails {
     this.teamList.set(team);
   }
 
+  setContent(content: Content) {
+    this.content = content;
+  }
+
   hasData(): boolean {
     if (
       this.privacy || this.teamList ||
@@ -120,12 +122,9 @@ export class ProjectDetails {
     }
 
     if (
-      repo.contents &&
-      repo.contents.details &&
-      repo.contents.details.size > 0 &&
-      repo.contents.details.downloadURL
+      repo?.contents?.details 
     ) {
-      this.setContentURL(new ContentURL({ url: repo.contents.details.downloadURL }));
+      this.setContent(repo.contents.details);
     }
 
     if (
@@ -149,7 +148,7 @@ export class ProjectDetails {
       this.setTeamList(repo.contributors.list);
     }
 
-    if(repo?.owner) this.setOwner(repo?.owner)
+    if (repo?.owner) this.setOwner(repo?.owner)
 
     return this;
   }
@@ -171,7 +170,7 @@ export class ProjectDetails {
       id: this.id,
       privacy: this.privacy,
       client_id: this.clientID,
-      content: this.content ? this.content.url : null,
+      content: this.content ? this.content.toContentObject() : null,
       team_list: this.teamList ? this.teamList.toContributorsObject() : null,
       story: this.story ? this.story.url : null,
       repo_size: this.repoSize ? this.repoSize : null,
@@ -184,7 +183,7 @@ export class ProjectDetails {
       id: this.id,
       privacy: this.privacy,
       client_id: this.clientID,
-      content: this.content ? this.content.url : null,
+      content: this.content ? this.content.toContentObject() : null,
       team_list: this.teamList
         ? this.teamList.list
           .map((contributor) => contributor.id)

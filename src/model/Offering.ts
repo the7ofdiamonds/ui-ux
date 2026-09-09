@@ -3,6 +3,7 @@ import type { GalleryObject } from './Gallery';
 import type { ImageObject } from './Image';
 import type { PricingObject } from './Pricing';
 import type { ProjectDetailsObject } from './ProjectDetails';
+import type { ProjectQueryObject } from './ProjectQuery';
 import type { StripeProductObject } from './Stripe';
 
 import { getActionWord } from './Actions';
@@ -12,7 +13,10 @@ import { Image } from './Image';
 import { Pricing } from './Pricing';
 import { Project } from './Project';
 import { ProjectDetails } from './ProjectDetails';
+import { ProjectQuery } from './ProjectQuery';
 import { StripeProduct } from './Stripe';
+import type { ContentObject } from './Content';
+import { Content } from './Content';
 
 const OFFERING = ['service', 'product'];
 export type Offered = typeof OFFERING[number] | false;
@@ -29,7 +33,7 @@ export type OfferingObject = {
   features: FeaturesObject | null;
   details: Partial<ProjectDetailsObject> | null;
   contentURL: string | null;
-  content: string | null;
+  content: ContentObject | null;
   pricing: Partial<PricingObject> | null;
   icon: ImageObject | null;
   gallery: Partial<GalleryObject> | null;
@@ -37,6 +41,7 @@ export type OfferingObject = {
   url: string | null;
   action_word: string | null;
   onboarding_link: string | null;
+  project_query: ProjectQueryObject | null;
 };
 
 export class Offering {
@@ -51,7 +56,7 @@ export class Offering {
   public features: Features | null;
   public details: ProjectDetails | null;
   public contentURL: string | null;
-  public content: string | null;
+  public content: Content | null;
   public pricing: Pricing | null;
   public icon: Image | null;
   public gallery: Gallery | null;
@@ -59,6 +64,7 @@ export class Offering {
   public url: string | null;
   public actionWord: string | null;
   public onboardingLink: string | null;
+  public projectQuery: ProjectQuery | null;
 
   constructor(offering?: Partial<OfferingObject>) {
     this.id = offering?.id ? offering.id : null;
@@ -74,7 +80,7 @@ export class Offering {
     this.features = offering?.features ? new Features(offering.features) : null;
     this.details = offering?.details ? new ProjectDetails(offering.details) : null;
     this.contentURL = offering?.contentURL ? offering.contentURL : null;
-    this.content = offering?.content ? offering.content : null;
+    this.content = offering?.content ? new Content(offering.content) : null;
     this.pricing = offering?.pricing ? new Pricing(offering.pricing) : null;
     this.icon = offering?.icon ? new Image(offering.icon) : null;
     this.gallery = offering?.gallery ? new Gallery(offering.gallery) : null;
@@ -84,6 +90,7 @@ export class Offering {
     this.actionWord = offering?.action_word ? offering.action_word : null;
     this.url = this.getUrl(offering?.url);
     this.onboardingLink = offering?.onboarding_link ? offering.onboarding_link : null;
+    this.projectQuery = offering?.project_query ? new ProjectQuery(offering.project_query) : null;
   }
 
   getUrl(url: string | undefined | null) {
@@ -94,13 +101,13 @@ export class Offering {
         : null;
   }
 
-  setContent(content: string | null) {
+  setContent(content: Content | null) {
     this.content = content;
   }
 
   fromProject(project: Project) {
-    this.id = project?.id ? project.id : null;
-    this.name = project?.name ? project.name : null;
+    // this.id = project?.id ? project.id : null;
+    // this.name = project?.name ? project.name : null;
     this.title = project?.title ? project.title : this.name;
     this.subtitle = project?.subtitle ? project.subtitle : null;
     this.promotionalText = project?.promotionalText
@@ -110,22 +117,26 @@ export class Offering {
 
     if (project?.solution) {
       const solution = project.solution;
-      this.type = this.isOffered(solution?.available) ? solution.available : false;
-      this.category = solution?.category ? solution.category : null;
-      this.features = solution.features ? solution.features : null;
-      this.contentURL = solution?.contentURL ? solution.contentURL.url : null;
-      this.pricing = solution?.pricing ? solution.pricing : null;
-      this.icon = solution?.icon ? solution.icon : null;
-      this.gallery = solution?.gallery ? solution.gallery : null;
-      this.buttonIcon = solution?.buttonIcon ? solution.buttonIcon : null;
-      this.actionWord =
-        solution?.actionWord ?? getActionWord(solution?.category);
-      this.url = this.getUrl(solution.projectURLs?.homepage?.url);
+      // this.type = this.isOffered(solution?.available) ? solution.available : false;
+      // this.category = solution?.category ? solution.category : null;
+      // this.features = solution.features ? solution.features : null;
+      this.content = solution?.content ? solution.content : null;
+      // this.pricing = solution?.pricing ? solution.pricing : null;
+      // this.icon = solution?.icon ? solution.icon : null;
+      // this.gallery = solution?.gallery ? solution.gallery : null;
+      // this.buttonIcon = solution?.buttonIcon ? solution.buttonIcon : null;
+      // this.actionWord =
+      //   solution?.actionWord ?? getActionWord(solution?.category);
+      // this.url = this.getUrl(solution.projectURLs?.homepage?.url);
     }
 
     if (project?.details) {
       this.details = project.details;
     }
+
+    this.projectQuery = project?.query ? project.query : null;
+
+    return this;
   }
 
   getGalleryFromStripeProductImages(images: Array<string> | null | undefined): Gallery | null {
@@ -156,10 +167,15 @@ export class Offering {
     this.promotionalText = product?.metadata?.promotional_text ? product.metadata.promotional_text : null;
     this.contentURL = product?.metadata?.content_url ? product.metadata.content_url : null;
     this.content = product?.metadata?.content ? product.metadata.content : null;
-    console.log(product?.metadata?.icon)
     this.icon = product?.metadata?.icon ? new Image(product.metadata.icon) : null;
     this.buttonIcon = product?.metadata?.button_icon ? new Image(product.metadata.button_icon) : null;
     this.actionWord = product?.metadata?.action_word ? product.metadata.action_word : null;
+    this.projectQuery = product?.metadata?.repo_type && product?.metadata?.owner && product?.metadata?.repo
+      ? new ProjectQuery({
+        repo_type: product.metadata.repo_type,
+        owner: product.metadata.owner,
+        repo: product.metadata.repo,
+      }) : null;
 
     return this;
   }
@@ -173,7 +189,7 @@ export class Offering {
     this.subtitle = stripeProduct?.metadata?.subtitle ? stripeProduct.metadata.subtitle : null;
     this.promotionalText = stripeProduct?.metadata?.promotionalText ? stripeProduct.metadata.promotionalText : null;
     this.description = stripeProduct?.description ? stripeProduct.description : null;
-    // this.features = stripeProduct ? ? stripeProduct : null;
+    this.features = stripeProduct?.features ? (new Features().fromStripeFeatures(stripeProduct.features)) : null;
     // this.details = stripeProduct ? ? stripeProduct : null;
     this.contentURL = stripeProduct?.metadata?.contentURL ? stripeProduct.metadata.contentURL : null;
     this.content = stripeProduct?.metadata?.content ? stripeProduct.metadata.content : null;
@@ -183,6 +199,7 @@ export class Offering {
     this.buttonIcon = stripeProduct?.metadata?.buttonIcon ? stripeProduct.metadata.buttonIcon : null;
     this.url = stripeProduct?.url ? stripeProduct.url : null;
     this.actionWord = stripeProduct?.metadata?.actionWord ? stripeProduct.metadata.actionWord : null;
+    this.projectQuery = stripeProduct?.metadata?.projectQuery ? stripeProduct.metadata.projectQuery : null;
 
     return this;
   }
@@ -205,14 +222,15 @@ export class Offering {
       features: this.features ? this.features.toFeaturesObject() : null,
       details: this.details ? this.details.toDetailsObject() : null,
       contentURL: this.contentURL,
-      content: this.content,
+      content: this.content ? this.content.toContentObject() : null,
       pricing: this.pricing ? this.pricing?.toPricingObject() : null,
       icon: this.icon ? this.icon.toImageObject() : null,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       button_icon: this.buttonIcon ? this.buttonIcon.toImageObject() : null,
       url: this.url,
       action_word: this.actionWord,
-      onboarding_link: this.onboardingLink
+      onboarding_link: this.onboardingLink,
+      project_query: this.projectQuery ? this.projectQuery?.toProjectQueryObject() : null
     };
   }
 }

@@ -160,7 +160,7 @@ export class Project {
     this.description = repo.description;
 
     if (
-      repo.contents?.solution?.downloadURL ||
+      repo.contents?.solution ||
       repo?.homepage ||
       repo?.issues
     ) {
@@ -172,9 +172,9 @@ export class Project {
     if (
       repo.createdAt ||
       repo.updatedAt ||
-      repo.contents?.design?.downloadURL ||
-      repo.contents?.development?.downloadURL ||
-      repo.contents?.delivery?.downloadURL ||
+      repo.contents?.design ||
+      repo.contents?.development ||
+      repo.contents?.delivery ||
       repo.issues ||
       repo.skills ||
       repo.tags ||
@@ -187,15 +187,15 @@ export class Project {
 
     }
 
-    if (repo.contents?.problem?.downloadURL) {
+    if (repo.contents?.problem) {
       const problem = new ProjectProblem();
       problem.fromRepo(repo);
       this.setProblem(problem);
     }
 
     if (
-      repo.contents?.details?.downloadURL ||
-      repo.contents?.story?.downloadURL ||
+      repo.contents?.details ||
+      repo.contents?.story ||
       repo.size ||
       repo.contributors ||
       repo.owner

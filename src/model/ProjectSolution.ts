@@ -10,6 +10,8 @@ import {
   ProjectURLs
 } from '../model/ProjectURLs';
 import { ContentURL } from '../model/ContentURL';
+import { Content } from '../model/Content';
+import type { ContentObject } from '../model/Content';
 import { Repo } from '../model/Repo';
 import type { ProjectDataObject } from '../model/Project';
 import { Features } from './Features';
@@ -31,6 +33,7 @@ export type ProjectSolutionObject = {
   content_url: string | null;
   project_urls: ProjectURLsObject | null;
   available: Offered | null;
+  content: ContentObject | null;
 };
 
 export type ProjectSolutionDataObject = {
@@ -45,6 +48,7 @@ export type ProjectSolutionDataObject = {
   content_url: string | null;
   project_urls: ProjectURLsDataObject | null;
   available: Offered | null;
+  content: ContentObject | null;
 };
 
 export class ProjectSolution {
@@ -59,6 +63,7 @@ export class ProjectSolution {
   contentURL: ContentURL | null;
   projectURLs: ProjectURLs | null;
   available: Offered = false;
+  content: Content | null;
 
   constructor(data?: Partial<ProjectSolutionObject>) {
     this.id = data?.id ? data.id : null;
@@ -81,6 +86,7 @@ export class ProjectSolution {
         ? new ProjectURLs(data.project_urls)
         : null;
     this.available = data?.available ? data.available : false;
+    this.content = data?.content ? new Content(data.content) : null;
   }
 
   setID(id: string | number) {
@@ -143,9 +149,14 @@ export class ProjectSolution {
     this.available = available;
   }
 
+  setContent(content: Content) {
+    this.content = content;
+  }
+
   fromRepo(repo: Repo) {
-    if (repo.contents?.solution?.downloadURL) {
-      this.setContentURL(new ContentURL({ url: repo.contents.solution.downloadURL }));
+    if (repo.contents?.solution) {
+      // this.setContentURL(new ContentURL({ url: repo.contents.solution.downloadURL }));
+      this.setContent(repo.contents.solution);
     }
 
     if (repo?.homepage) {
@@ -221,6 +232,7 @@ export class ProjectSolution {
         ? this.projectURLs.toProjectURLsObject()
         : null,
       available: this.available,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 
@@ -244,6 +256,7 @@ export class ProjectSolution {
         ? this.projectURLs.toProjectURLsDataObject()
         : null,
       available: this.available,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 }

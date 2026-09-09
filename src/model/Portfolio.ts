@@ -233,7 +233,7 @@ export class Portfolio {
 
     if (login) {
       Array.from(this.projects).forEach((project: Project) => {
-        if (project?.owner?.login === login) {
+        if (project?.details?.owner?.login === login) {
           updatedProjects.add(project);
         }
       });

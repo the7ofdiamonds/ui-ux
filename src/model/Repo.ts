@@ -2,7 +2,7 @@ import type { OwnerObject } from './Owner';
 import { Owner } from './Owner'
 import type { RepoContentsObject } from './RepoContents';
 import { RepoContents } from './RepoContents';
-import { RepoContent } from './RepoContent';
+import { Content } from './Content';
 import type { ContributorsObject } from '../model/Contributors';
 import { Contributors } from '../model/Contributors';
 import type {
@@ -23,6 +23,7 @@ import type { GitLabRepoObject } from '../model/GitLabRepo';
 import { Commits } from './Commits';
 import type { CommitObject } from "./Commit";
 import { Tags, type TagsObject } from './Tags';
+import type { BlobObject } from './Blob';
 
 export type RepositoryGQL = {
   id: string;
@@ -36,6 +37,13 @@ export type RepositoryGQL = {
   issues: {
     nodes: IssueGQL;
   };
+  solution: BlobObject | null;
+  problem: BlobObject | null;
+  design: BlobObject | null;
+  development: BlobObject | null;
+  delivery: BlobObject | null;
+  details: BlobObject | null;
+  story: BlobObject | null;
 };
 
 export interface RepoObject {
@@ -158,6 +166,29 @@ export class Repo {
 
     this.skills = skills;
     this.path = repo.owner?.login && repo.name ? `${repo.owner?.login}/${repo.name}` : null;
+
+    let repoContents: RepoContents | null = null;
+
+    const solution = repo?.solution ? new Content({ name: 'TheSolution.md', size: repo.solution.byteSize, text: repo.solution.text }) : null;
+    const design = repo?.design ? new Content({ name: 'Design.md', size: repo.design.byteSize, text: repo.design.text }) : null;
+    const development = repo?.development ? new Content({ name: 'Development.md', size: repo.development.byteSize, text: repo.development.text }) : null;
+    const delivery = repo?.delivery ? new Content({ name: 'Delivery.md', size: repo.delivery.byteSize, text: repo.delivery.text }) : null;
+    const problem = repo?.problem ? new Content({ name: 'TheProblem.md', size: repo.problem.byteSize, text: repo.problem.text }) : null;
+    const details = repo?.details ? new Content({ name: 'TheDetails.md', size: repo.details.byteSize, text: repo.details.text }) : null;
+    const story = repo?.story ? new Content({ name: 'story.md', size: repo.story.byteSize, text: repo.story.text }) : null;
+
+    if (solution || design || development || delivery || problem || details || story) {
+      repoContents = new RepoContents();
+      if (solution) repoContents.setSolution(solution);
+      if (design) repoContents.setDesign(design);
+      if (development) repoContents.setDevelopment(development);
+      if (delivery) repoContents.setDelivery(delivery);
+      if (problem) repoContents.setProblem(problem);
+      if (details) repoContents.setDetails(details);
+      if (story) repoContents.setStory(story);
+    }
+
+    this.contents = repoContents;
   }
 
   fromGitHub(repo: GitHubRepo) {
@@ -229,13 +260,13 @@ export class Repo {
     ) {
       this.contents ? this.contents : (this.contents = new RepoContents());
 
-      this.contents.setSolution(new RepoContent(contentsObject.solution));
-      this.contents.setDesign(new RepoContent(contentsObject.design));
-      this.contents.setDevelopment(new RepoContent(contentsObject.development));
-      this.contents.setDelivery(new RepoContent(contentsObject.delivery));
-      this.contents.setProblem(new RepoContent(contentsObject.problem));
-      this.contents.setDetails(new RepoContent(contentsObject.details));
-      this.contents.setStory(new RepoContent(contentsObject.story));
+      this.contents.setSolution(new Content(contentsObject.solution));
+      this.contents.setDesign(new Content(contentsObject.design));
+      this.contents.setDevelopment(new Content(contentsObject.development));
+      this.contents.setDelivery(new Content(contentsObject.delivery));
+      this.contents.setProblem(new Content(contentsObject.problem));
+      this.contents.setDetails(new Content(contentsObject.details));
+      this.contents.setStory(new Content(contentsObject.story));
     }
   }
 
@@ -243,29 +274,30 @@ export class Repo {
     if (Array.isArray(contentsObject) && contentsObject.length > 0) {
       contentsObject.forEach((content) => {
         this.contents ? this.contents : (this.contents = new RepoContents());
+        console.log(this?.contents)
 
         if (content.type === 'file' && content.size > 7) {
           switch (content.name) {
             case 'TheSolution.md':
-              this.contents.setSolution(new RepoContent(content));
+              this.contents.setSolution(new Content(content));
               break;
             case 'Design.md':
-              this.contents.setDesign(new RepoContent(content));
+              this.contents.setDesign(new Content(content));
               break;
             case 'Development.md':
-              this.contents.setDevelopment(new RepoContent(content));
+              this.contents.setDevelopment(new Content(content));
               break;
             case 'Delivery.md':
-              this.contents.setDelivery(new RepoContent(content));
+              this.contents.setDelivery(new Content(content));
               break;
             case 'TheProblem.md':
-              this.contents.setProblem(new RepoContent(content));
+              this.contents.setProblem(new Content(content));
               break;
             case 'Details.md':
-              this.contents.setDetails(new RepoContent(content));
+              this.contents.setDetails(new Content(content));
               break;
             case 'Story.md':
-              this.contents.setStory(new RepoContent(content));
+              this.contents.setStory(new Content(content));
               break;
           }
         }

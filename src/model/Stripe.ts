@@ -1,5 +1,9 @@
+import type { ContentObject } from './Content';
+import { Content } from './Content';
 import type { ImageObject } from './Image';
 import { Image } from './Image';
+import type { ProjectQueryObject } from './ProjectQuery';
+import { ProjectQuery } from './ProjectQuery';
 
 export type StripeProductType = 'good' | 'service';
 export type StripeProductFeature = { name: string; };
@@ -41,11 +45,14 @@ export type CustomStripeProductMetadataObject = {
     subtitle: string | null;
     promotional_text: string | null;
     content_url: string | null;
-    content: string | null;
+    content: ContentObject | null;
     icon: Partial<ImageObject> | null;
     button_icon: ImageObject | null;
     action_word: string | null;
     onboarding_link: string | null;
+    repo_type: string | null;
+    owner: string | null;
+    repo: string | null;
 }
 
 export type CustomStripeProductObject = Omit<StripeProductObject, 'metadata'> & {
@@ -59,11 +66,13 @@ export class CustomStripeProductMetadata {
     subtitle: string | null;
     promotionalText: string | null;
     contentURL: string | null;
-    content: string | null;
+    content: Content | null;
     icon: Image | null;
     buttonIcon: Image | null;
     actionWord: string | null;
     onboardingLink: string | null;
+    projectQuery: ProjectQuery | null;
+
 
     constructor(metadata: CustomStripeProductMetadataObject | Record<string, any>) {
         this.type = metadata?.type ? metadata.type : null;
@@ -73,11 +82,15 @@ export class CustomStripeProductMetadata {
         this.promotionalText = metadata?.promotional_text ? metadata.promotional_text : null;
         this.contentURL = metadata?.content_url ? metadata.content_url : null;
         this.content = metadata?.content ? metadata.content : null;
-        this.icon = metadata?.icon ? new Image({class_name: metadata.icon}) : null;
+        this.icon = metadata?.icon ? new Image({ class_name: metadata.icon }) : null;
         this.buttonIcon = metadata?.button_icon ? new Image(metadata.button_icon) : null;
         this.actionWord = metadata?.action_word ? metadata.action_word : null;
         this.onboardingLink = metadata?.onboarding_link ? metadata.onboarding_link : null;
-        console.log(metadata?.icon)
+        this.projectQuery = metadata?.repo_type && metadata?.owner && metadata?.repo ? new ProjectQuery({
+            repo_type: metadata.repo_type,
+            owner: metadata.owner,
+            repo: metadata.repo,
+        }) : null;
     }
 }
 

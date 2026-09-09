@@ -2,6 +2,8 @@ import type { GalleryObject } from '../model/Gallery';
 import { Gallery } from '../model/Gallery';
 import type { CheckListObject } from '../model/CheckList';
 import { CheckList } from '../model/CheckList';
+import { Content } from '../model/Content';
+import type { ContentObject } from '../model/Content';
 import { ContentURL } from '../model/ContentURL';
 import { Task } from '../model/Task';
 import { Repo } from '../model/Repo';
@@ -13,6 +15,7 @@ export type ProjectDeliveryObject = {
   check_list: CheckListObject | null;
   gallery: GalleryObject | null;
   content_url: string | null;
+  content: ContentObject | null;
 };
 
 export type ProjectDeliveryDataObject = {
@@ -20,6 +23,7 @@ export type ProjectDeliveryDataObject = {
   check_list: CheckListObject | null;
   gallery: GalleryObject | null;
   content_url: string | null;
+  content: ContentObject | null;
 };
 
 export class ProjectDelivery {
@@ -27,6 +31,7 @@ export class ProjectDelivery {
   checkList: CheckList | null;
   gallery: Gallery | null;
   contentURL: ContentURL | null;
+  content: Content | null;
 
   constructor(data?: ProjectDeliveryObject | Partial<ProjectDeliveryObject>) {
     this.id = data?.id ? data.id : null;
@@ -35,6 +40,7 @@ export class ProjectDelivery {
     this.contentURL = data?.content_url
       ? new ContentURL({ url: data.content_url })
       : null;
+    this.content = data?.content ? new Content(data.content) : null;
   }
 
   setID(id: string | number) {
@@ -51,6 +57,10 @@ export class ProjectDelivery {
 
   setContentURL(contentURL: ContentURL) {
     this.contentURL = contentURL;
+  }
+
+  setContent(content: Content) {
+    this.content = content;
   }
 
   fromRepo(repo: Repo) {
@@ -99,6 +109,7 @@ export class ProjectDelivery {
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 
@@ -108,6 +119,7 @@ export class ProjectDelivery {
       check_list: this.checkList ? this.checkList.toCheckListObject() : null,
       gallery: this.gallery ? this.gallery.toGalleryObject() : null,
       content_url: this.contentURL ? this.contentURL.url : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 }

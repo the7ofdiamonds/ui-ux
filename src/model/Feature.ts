@@ -12,7 +12,7 @@ export class Feature {
   description: string | null;
   version: Version | null;
 
-  constructor(data?: FeatureObject) {
+  constructor(data?: Partial<FeatureObject>) {
     this.id = data?.id ? data.id : null;
     this.description = data?.description ? data.description : null;
     this.version = data?.version ? new Version(data.version) : null;

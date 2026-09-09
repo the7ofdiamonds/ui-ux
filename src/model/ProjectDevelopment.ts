@@ -18,6 +18,8 @@ import {
 import type { ProjectSkillsObject } from '../model/ProjectSkills';
 import type { CheckListObject } from '../model/CheckList';
 import { CheckList } from '../model/CheckList';
+import { Content } from '../model/Content';
+import type { ContentObject } from '../model/Content';
 import { ContentURL } from '../model/ContentURL';
 import { RepoURL } from '../model/RepoURL';
 import { FeaturesRoadmap } from '../model/FeaturesRoadmap';
@@ -34,6 +36,7 @@ export type ProjectDevelopmentObject = {
   skills: ProjectSkillsObject | null;
   check_list: CheckListObject | null;
   versions_list: ProjectVersionsObject | null;
+  content: ContentObject | null;
 };
 
 export type ProjectDevelopmentDataObject = {
@@ -44,6 +47,7 @@ export type ProjectDevelopmentDataObject = {
   skills: ProjectSkillsDataObject | null;
   check_list: CheckListObject | null;
   versions_list: ProjectVersionsObject | null;
+  content: ContentObject | null;
 };
 
 export class ProjectDevelopment {
@@ -55,6 +59,7 @@ export class ProjectDevelopment {
   checkList: CheckList | null;
   versionsList: ProjectVersions = new ProjectVersions();
   roadmap: FeaturesRoadmap | null = null;
+  content: Content | null;
 
   constructor(data?: Partial<ProjectDevelopmentObject>) {
     this.id = data?.id ? data.id : null;
@@ -71,6 +76,7 @@ export class ProjectDevelopment {
     this.versionsList = data?.versions_list
       ? new ProjectVersions(data.versions_list)
       : new ProjectVersions();
+    this.content = data?.content ? new Content(data.content) : null;
   }
 
   setID(id: string | number) {
@@ -81,6 +87,10 @@ export class ProjectDevelopment {
     this.gallery = gallery;
   }
 
+  setContent(content: Content) {
+    this.content = content;
+  }
+
   toArrayTask(data: Array<TaskObject>) {
     const checkList: Array<Task> = [];
 
@@ -89,10 +99,6 @@ export class ProjectDevelopment {
     });
 
     return checkList;
-  }
-
-  setContentURL(url: string) {
-    this.contentURL = new ContentURL(url);
   }
 
   setSkills(skills: ProjectSkills) {
@@ -192,6 +198,7 @@ export class ProjectDevelopment {
       versions_list: this.versionsList
         ? this.versionsList.toProjectVersionsObject()
         : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 
@@ -206,6 +213,7 @@ export class ProjectDevelopment {
       versions_list: this.versionsList
         ? this.versionsList.toProjectVersionsObject()
         : null,
+      content: this.content ? this.content.toContentObject() : null
     };
   }
 }

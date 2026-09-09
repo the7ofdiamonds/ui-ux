@@ -2,6 +2,8 @@ import type { FeatureObject } from './Feature';
 import { Feature } from './Feature';
 import { Version } from './Version';
 
+import type { StripeProductFeature } from './Stripe';
+
 export type FeaturesObject = {
   id: string | number | null;
   list: Array<FeatureObject> | null;
@@ -45,6 +47,17 @@ export class Features {
         return aFeature.order(bFeature.version ?? new Version('1.0.0'))
       })
       : [];
+  }
+
+  fromStripeFeatures(stripeFeatures: Array<StripeProductFeature>) {
+    const features = Array.isArray(stripeFeatures) && stripeFeatures.length > 0
+      ? stripeFeatures.map((feature: StripeProductFeature, index) => {
+        return new Feature({ id: index, description: feature.name })
+      }) : [];
+
+    this.list = new Set(features);
+
+    return this;
   }
 
   toFeaturesObject(): FeaturesObject {
