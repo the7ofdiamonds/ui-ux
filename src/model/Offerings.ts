@@ -1,10 +1,10 @@
 import type { ImageObject } from "./Image";
 import type { OfferingObject } from "./Offering";
-import type { StripeProductObject, StripeProductsResponse } from './Stripe';
+import type { StripeProductObject, StripeProductsResponse } from './StripeProduct';
 
 import { Image } from "./Image";
 import { Offering } from "./Offering";
-import { StripeProduct } from './Stripe';
+import { StripeProduct } from './StripeProduct';
 
 export type OfferingsObject<T = OfferingObject> = {
     id: string | number | null;

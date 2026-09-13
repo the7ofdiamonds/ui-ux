@@ -81,6 +81,8 @@ export * from './model/SiteMap';
 export * from './model/Skill';
 export * from './model/Skills';
 export * from './model/Stripe';
+export * from './model/StripePrice';
+export * from './model/StripeProduct';
 export * from './model/SubIssueSummary';
 export * from './model/Tag';
 export * from './model/Task';

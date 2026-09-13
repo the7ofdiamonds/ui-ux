@@ -1,6 +1,6 @@
 import type { OfferingsObject } from './Offerings';
 import type { ProductObject } from './Product';
-import type { StripeProductsResponse } from './Stripe';
+import type { StripeProductsResponse } from './StripeProduct';
 
 import { Image } from './Image';
 import { Offering } from './Offering';

@@ -1,8 +1,8 @@
 import type { Offered, OfferingObject } from './Offering';
-import type { StripeProductObject } from './Stripe';
+import type { StripeProductObject } from './StripeProduct';
 
 import { Offering } from './Offering';
-import { StripeProduct } from './Stripe';
+import { StripeProduct } from './StripeProduct';
 
 export type ProductObject = OfferingObject & {};
 // Add details from project details and etc.

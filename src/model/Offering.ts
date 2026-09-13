@@ -4,7 +4,7 @@ import type { ImageObject } from './Image';
 import type { PricingObject } from './Pricing';
 import type { ProjectDetailsObject } from './ProjectDetails';
 import type { ProjectQueryObject } from './ProjectQuery';
-import type { StripeProductObject } from './Stripe';
+import type { StripeProductObject } from './StripeProduct';
 
 import { getActionWord } from './Actions';
 import { Features } from './Features';
@@ -14,7 +14,7 @@ import { Pricing } from './Pricing';
 import { Project } from './Project';
 import { ProjectDetails } from './ProjectDetails';
 import { ProjectQuery } from './ProjectQuery';
-import { StripeProduct } from './Stripe';
+import { StripeProduct } from './StripeProduct';
 import type { ContentObject } from './Content';
 import { Content } from './Content';
 
