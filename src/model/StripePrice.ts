@@ -21,6 +21,7 @@ const TIER_MODE = ['graduated', 'volume'];
 export type StripePriceTiersMode = typeof TIER_MODE[number];
 
 export type StripePriceTierObject = {
+    id?: string | null;
     flat_amount: number | bigint | null;
     flat_amount_decimal: string | null;
     unit_amount: number | null;
@@ -85,14 +86,23 @@ export class StripePriceRecurring {
 
 export type StripePricesResponse = StripeResponse<StripePriceObject>;
 
+export function isValidStripePrice(amount: number | bigint | undefined | null) {
+    return typeof amount === 'number' || typeof amount === 'bigint';
+}
+
+export function formatStripePrice(amount: number | bigint | undefined | null): number {
+    if (!isValidStripePrice(amount) || amount === 0) return 0;
+    return Number(amount) / 100;
+}
+
 export class StripePriceMetadata {
     id: string | number | null;
     locales: string | null;
     minFractionDigits: number | null;
     maxFractionDigits: number | null;
     range: boolean = false;
-    startingPrice: number | null;
-    maxPrice: number | null;
+    startingPrice: number | bigint | null;
+    maxPrice: number | bigint | null;
 
     constructor(metadata: Partial<StripePriceMetadataObject>) {
         this.id = metadata?.id ? metadata.id : null;
@@ -100,12 +110,32 @@ export class StripePriceMetadata {
         this.minFractionDigits = metadata?.min_fraction_digits ? metadata.min_fraction_digits : null;
         this.maxFractionDigits = metadata?.max_fraction_digits ? metadata.max_fraction_digits : null;
         this.range = metadata?.range ? metadata.range : false;
-        this.startingPrice = metadata?.starting_price ? metadata.starting_price : null;
-        this.maxPrice = metadata?.max_price ? metadata.max_price : null;
+        this.startingPrice = this.getValidStripePriceFromStripePriceMetadataObject(metadata?.starting_price);
+        this.maxPrice = this.getValidStripePriceFromStripePriceMetadataObject(metadata?.max_price);
+    }
+
+    getValidStripePriceFromStripePriceMetadataObject(price: string | number | bigint | undefined | null): number | bigint | null {
+
+        if (!(typeof price === 'string') && !(typeof price === 'number') && !(typeof price === 'bigint')) return null;
+        let amount: number | bigint | null = null;
+
+        if (typeof price === 'string') {
+            const number = Number(price);
+            amount = Number.isSafeInteger(number)
+                ? number
+                : BigInt(price);
+        } else {
+            amount = price;
+        }
+
+        if (!isValidStripePrice(amount)) return null;
+
+        return formatStripePrice(amount);
     }
 }
 
 export class StripePriceTier {
+    id: string | null;
     flatAmount: number | bigint | null;
     flatAmountDecimal: string | null;
     unitAmount: number | null;
@@ -113,7 +143,8 @@ export class StripePriceTier {
     upTo: number | null;
 
     constructor(tier: Partial<StripePriceTierObject>) {
-        this.flatAmount = typeof tier?.flat_amount === 'number' || typeof tier?.flat_amount === 'bigint' ? tier.flat_amount : null;
+        this.id = typeof tier?.id === 'string' ? tier.id : null;
+        this.flatAmount = isValidStripePrice(tier?.flat_amount) ? formatStripePrice(tier.flat_amount) : null;
         this.flatAmountDecimal = typeof tier?.flat_amount_decimal === 'string' ? tier.flat_amount_decimal : null;
         this.unitAmount = typeof tier?.unit_amount === 'number' ? tier.unit_amount : null;
         this.unitAmountDecimal = typeof tier?.unit_amount_decimal === 'string' ? tier.unit_amount_decimal : null;
@@ -159,11 +190,15 @@ export class StripePrice {
         this.recurring = price?.recurring ? new StripePriceRecurring(price.recurring) : null;
         this.taxBehavior = price?.tax_behavior ? price.tax_behavior : null;
         this.tiersMode = price?.tiers_mode ? price.tiers_mode : null;
-        this.tiers = price?.tiers && Array.isArray(price.tiers) && price.tiers.length > 0
-            ? price.tiers.map((tier) => new StripePriceTier(tier)) : null;
+        this.tiers = this.getStripePriceTiers(price?.tiers);
         this.transformQuantity = price?.transform_quantity ? price.transform_quantity : null;
         this.type = isStripePriceType(price?.type) ? price.type : null;
-        this.unitAmount = price?.unit_amount ? price.unit_amount : null;
+        this.unitAmount = isValidStripePrice(price?.unit_amount) ? formatStripePrice(price.unit_amount) : null;
         this.unitAmountDecimal = price?.unit_amount_decimal ? price.unit_amount_decimal : null;
+    }
+
+    getStripePriceTiers(tiers: Array<StripePriceTierObject> | undefined | null): Array<StripePriceTier> | null {
+        if (!tiers || !Array.isArray(tiers) || tiers.length === 0) return null;
+        return tiers.map((tier) => new StripePriceTier({ id: this.id, ...tier }));
     }
 }

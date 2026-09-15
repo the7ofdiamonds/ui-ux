@@ -1,6 +1,9 @@
-import { StripePrice, isStripePriceType, isStripePriceRecurringInterval, isStripePriceRecurringUsageType } from "./StripePrice";
+import { StripePrice, isStripePriceType, isStripePriceRecurringInterval, isStripePriceRecurringUsageType, StripePriceTier } from "./StripePrice";
+import { Price } from './Price';
 import type { PricingTierObject } from "./PricingTier";
 import { PricingTier } from "./PricingTier";
+import type { PricingTiersObject } from "./PricingTiers";
+import { PricingTiers } from "./PricingTiers";
 
 const SUBSCRIPTION_INTERVAL = [
   'daily',
@@ -9,7 +12,7 @@ const SUBSCRIPTION_INTERVAL = [
   'quarterly',
   'annual',
   'lifetime'
-];
+] as const;
 export type SubscriptionInterval = typeof SUBSCRIPTION_INTERVAL[number];
 
 export const subscriptionIntervalLabels: Record<SubscriptionInterval, string> =
@@ -36,7 +39,6 @@ export type PricingObject = {
   subscription: boolean;
   interval: SubscriptionInterval | null;
   tiers: Array<PricingTierObject> | null;
-  display: string | null;
 };
 
 export class Pricing {
@@ -46,51 +48,57 @@ export class Pricing {
   currency: string = 'USD';
   minFractionDigits: number = 2;
   maxFractionDigits: number = 12;
-  price: number | bigint | null;
-  startingPrice: number | bigint | null;
-  maxPrice: number | bigint | null;
+  price: Price | null;
+  startingPrice: Price | null;
+  maxPrice: Price | null;
   range: boolean = false;
   subscription: boolean = false;
   interval: SubscriptionInterval | null = null;
-  tiers: Array<PricingTier> | null;
-  display: string | null;
+  tiers: PricingTiers | null;
 
   constructor(data?: Partial<PricingObject>) {
     this.id = data?.id ? data?.id : null;
     this.priceID = data?.price_id ? data.price_id : null;
-    this.locales = data?.locales ? data.locales : 'us';
+    this.locales = data?.locales ? data.locales : 'en-US';
     this.currency = data?.currency ? data.currency : 'USD';
     this.minFractionDigits = data?.min_fraction_digits ? data.min_fraction_digits : 2;
     this.maxFractionDigits = data?.max_fraction_digits ? data.max_fraction_digits : 12;
-    this.price = this.isValidPrice(data?.price) ? data.price : null;
-    this.startingPrice = this.isValidPrice(data?.starting_price) ? data.starting_price : null;
-    this.maxPrice = this.isValidPrice(data?.max_price) ? data.max_price : null;
-    this.range = data?.range ? data.range : false;
+    this.price = this.getPrice(data?.price);
     this.subscription = data?.subscription ? data.subscription : false;
     this.interval = data?.interval ? data.interval : null;
     this.tiers = this.getTiers(data?.tiers);
-    this.display = data?.display ? data.display : this.getDisplay();
+    this.startingPrice = this.getStartingPrice(data?.starting_price);
+    this.maxPrice = this.getMaxPrice(data?.max_price);
+    this.range = this.startingPrice && this.maxPrice ? true : false;
   }
 
   isValidPrice(price: number | bigint | undefined | null) {
     return typeof price === 'number' || typeof price === 'bigint';
   }
 
-  format(
-    price: number | bigint | undefined | null,
-    locales?: string | undefined | null,
-    currency?: string | undefined | null,
-    minFractionDigits?: number | undefined | null,
-    maxFractionDigits?: number | undefined | null
-  ): string | null {
-    return this.isValidPrice(price)
-      ? new Intl.NumberFormat(locales ?? this.locales, {
-        style: 'currency',
-        currency: currency ?? this.currency,
-        minimumFractionDigits: minFractionDigits ?? this.minFractionDigits,
-        maximumFractionDigits: maxFractionDigits ?? this.maxFractionDigits,
-      }).format(price)
-      : 'Free';
+  getPrice(amount: number | bigint | undefined | null): Price | null {
+    let price: Price | null = null;
+
+    if (this.isValidPrice(amount)) {
+      price = new Price();
+      price.setID(this.id)
+      price.setPriceID(this.priceID)
+      price.setLocales(this.locales)
+      price.setCurrency(this.currency)
+      price.setMinFractionDigits(this.minFractionDigits)
+      price.setMaxFractionDigits(this.maxFractionDigits)
+      price.setAmount(amount)
+    }
+
+    return price;
+  }
+
+  getStartingPrice(amount: number | bigint | undefined | null): Price | null {
+    return this.getPrice(this.tiers?.startingAt ?? amount);
+  }
+
+  getMaxPrice(amount: number | bigint | undefined | null): Price | null {
+    return this.getPrice(this.tiers?.maxPrice ?? amount);
   }
 
   getDisplayRange(
@@ -98,31 +106,34 @@ export class Pricing {
     maxPrice: number | bigint | undefined | null,
     locales?: string | null,
     currency?: string | null,
+    minFractionDigits?: number | null,
+    maxFractionDigits?: number | null
   ): string | null {
-    const locale = locales ?? this.locales;
-    const currencyCode = currency ?? this.currency;
+    let starting: Price | null = null;
+    let max: Price | null = null;
 
-    if (this.isValidPrice(startingPrice) && this.isValidPrice(maxPrice)) {
-      return `${this.format(
-        startingPrice,
-        locale,
-        currencyCode,
-        0
-      )} - ${this.format(
-        maxPrice,
-        locale,
-        currencyCode,
-        0
-      )}`;
+    starting = this.getPrice(startingPrice);
+    if (starting) {
+      if (locales) starting.setLocales(locales)
+      if (currency) starting.setCurrency(currency)
+      if (minFractionDigits) starting.setMinFractionDigits(minFractionDigits)
+      if (maxFractionDigits) starting.setMaxFractionDigits(maxFractionDigits)
     }
 
-    if (this.isValidPrice(startingPrice)) {
-      return `Starting At ${this.format(
-        startingPrice,
-        locale,
-        currencyCode,
-        0
-      )}`;
+    max = this.getPrice(maxPrice);
+    if (max) {
+      if (locales) max.setLocales(locales)
+      if (currency) max.setCurrency(currency)
+      if (minFractionDigits) max.setMinFractionDigits(minFractionDigits)
+      if (maxFractionDigits) max.setMaxFractionDigits(maxFractionDigits)
+    }
+
+    if (starting && max) {
+      return `${starting.format()} - ${max.format()}`;
+    }
+
+    if (starting) {
+      return `Starting At ${starting.format()}`;
     }
 
     return null;
@@ -137,21 +148,15 @@ export class Pricing {
 
     if (this.range && (this.startingPrice || this.maxPrice)) {
       cost = this.getDisplayRange(
-        this.startingPrice,
-        this.maxPrice,
+        this.startingPrice?.amount,
+        this.maxPrice?.amount,
         this.locales,
         this.currency
       )
     }
 
     if (!this.range && this.price) {
-      cost = this.format(
-        this.price,
-        this.locales,
-        this.currency,
-        this.minFractionDigits,
-        this.maxFractionDigits
-      );
+      cost = this.price.format();
     }
 
     if (cost && this.subscription && this.interval) {
@@ -163,9 +168,9 @@ export class Pricing {
     return cost;
   }
 
-  getTiers(tiers: Array<PricingTierObject> | undefined | null): Array<PricingTier> | null {
+  getTiers(tiers: Array<PricingTierObject> | undefined | null): PricingTiers | null {
     return tiers && Array.isArray(tiers) && tiers.length > 0
-      ? tiers.map((tier) => new PricingTier(tier))
+      ? new PricingTiers({ id: this.id, price_id: this.priceID, tiers: tiers })
       : null;
   }
 
@@ -188,9 +193,14 @@ export class Pricing {
     }
   }
 
-  formatStripePrice(amount: number | null): number {
-    if (!amount || amount === 0) return 0;
-    return amount / 100;
+  getPriceFromStripePrice(amount: number | bigint | undefined | null): Price | null {
+    return this.getPrice(amount);
+  }
+
+  fromStripeTiers(tiers: Array<StripePriceTier> | undefined | null): PricingTiers | null {
+    return Array.isArray(tiers) && tiers.length > 0
+      ? new PricingTiers().fromStripePriceTiers(tiers)
+      : null;
   }
 
   fromStripePrice(price: StripePrice | null | undefined) {
@@ -201,14 +211,14 @@ export class Pricing {
     this.currency = price?.currency ? new String(price.currency).toLocaleUpperCase() : this.currency;
     this.minFractionDigits = price?.metadata?.minFractionDigits ? price.metadata.minFractionDigits : this.minFractionDigits;
     this.maxFractionDigits = price?.metadata?.maxFractionDigits ? price.metadata.maxFractionDigits : this.maxFractionDigits;
-    this.price = price?.unitAmount ? this.formatStripePrice(price.unitAmount) : null;
-    this.startingPrice = price?.metadata?.startingPrice ? this.formatStripePrice(price.metadata.startingPrice) : null;
-    this.maxPrice = price?.metadata?.maxPrice ? this.formatStripePrice(price.metadata.maxPrice) : null;
+    this.price = this.getPriceFromStripePrice(price?.unitAmount);
+    this.startingPrice = this.getPriceFromStripePrice(price?.metadata?.startingPrice);
+    this.maxPrice = this.getPriceFromStripePrice(price?.metadata?.maxPrice);
     this.range = price?.metadata?.range ? price.metadata.range : false;
     this.subscription = isStripePriceType(price?.type) && price.type === 'recurring'
       ? true : false;
     this.interval = isStripePriceRecurringInterval(price?.recurring?.interval) ? this.getIntervalFromPrice(price.recurring.interval) : null;
-    this.display = this.getDisplay();
+    this.tiers = this.fromStripeTiers(price?.tiers);
 
     return this;
   }
@@ -221,14 +231,13 @@ export class Pricing {
       currency: this.currency,
       min_fraction_digits: this.minFractionDigits,
       max_fraction_digits: this.maxFractionDigits,
-      price: this.price,
-      starting_price: this.startingPrice,
-      max_price: this.maxPrice,
+      price: this.price ? this.price.amount : null,
+      starting_price: this.startingPrice ? this.startingPrice.amount : null,
+      max_price: this.maxPrice ? this.maxPrice.amount : null,
       range: this.range,
       subscription: this.subscription,
       interval: this.interval,
-      tiers: this.tiers ? this.tiers.map((tier) => tier.toPricingTierObject()) : null,
-      display: this.display,
+      tiers: this.tiers ? this.tiers.toArrayPricingTierObject() : null
     };
   }
 }
