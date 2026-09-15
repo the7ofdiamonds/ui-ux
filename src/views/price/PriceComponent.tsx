@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Price } from '@the7ofdiamonds/ui-ux';
+import { Price } from '../../model/Price';
 
 import styles from './Price.module.scss';
 
